@@ -1,0 +1,19 @@
+#wrapper {
+  display: flex;
+  height: 100vh;
+}
+
+#sidebar {
+  width: 220px;
+  min-height: 100vh;
+}
+
+#page-content-wrapper {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+.nav-link:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}

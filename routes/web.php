@@ -5,8 +5,10 @@ use App\Http\Controllers\Auth\ForgetPasswordContoller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SignalController;
 
-use function Pest\Laravel\get;
+// use function Pest\Laravel\get;
 
 Route::get('/', function () {
     return view('welcome');
@@ -23,6 +25,13 @@ Route::post('/login-store',[LoginController::class, 'StoreLoginForm'])->name('lo
 Route::get('/login',[LoginController::class, 'ShowLogin'])->name('login.index');
 
 
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
+Route::prefix('admin')->group(function () { 
+    Route::resource('signals',SignalController::class)->names('admin.signals');
+}); 
 
 Route::get('password/reset', [ForgetPasswordContoller::class, 'showLinkRequestForm'])->name('password.request');
 Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEmail'])->name('password.email');
