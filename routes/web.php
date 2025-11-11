@@ -13,6 +13,7 @@ Route::get('/', function () {
 })->name('home');
 
 
+
 Route::get('/register',[RegisterController::class, 'ShowRegister'])->name('register.index');
 Route::post('/register-store',[RegisterController::class, 'storeRegisterForm'])->name('register.store');
 Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.code');
@@ -20,6 +21,7 @@ Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.c
 
 Route::post('/login-store',[LoginController::class, 'StoreLoginForm'])->name('login.store');
 Route::get('/login',[LoginController::class, 'ShowLogin'])->name('login.index');
+
 
 
 Route::get('password/reset', [ForgetPasswordContoller::class, 'showLinkRequestForm'])->name('password.request');
