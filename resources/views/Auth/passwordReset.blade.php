@@ -17,7 +17,7 @@
         crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}">
 </head>
 
 <body>
@@ -26,7 +26,7 @@
         <div class="heading">
             <div class="link">
                 <a href="{{ url()->previous() }}"><i class="fa-solid fa-arrow-left-long"></i></a>
-                <a href="#">Register</a>
+                <a href="#">Password Reset</a>
             </div>
             <select id="dropdown">
                 <option value="">English</option>
@@ -40,31 +40,15 @@
 
         <!-- Form -->
         <div class="form-container">
-            <form action="{{ route('register.store') }}" method="POST">
+            <form action="{{ route('password.update') }}" method="POST">
                 @csrf
-                {{-- Email --}}
-                <div class="mb-3">
-                    <label class="form-label">Your Mailbox</label>
-                    <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
-                        name="email" value="{{ old('email') }}" placeholder="Enter your email">
-                    @error('email')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                    @enderror
-                </div>
 
-                {{-- Verification Code --}}
-                <div class="mb-3">
-                    <label class="form-label">E-mail Verification Code</label>
-                    <div class="verify-div">
-                        <input type="text" class="form-control @error('code') is-invalid @enderror" id="code"
-                            name="code" placeholder="Enter verification code" value="{{ old('code') }}">
-                        <button type="button" class="btn btn-primary" id="sendCodeBtn">Send</button>
-                    </div>
-                    @error('code')
-                    <div class="text-danger mt-1 small">{{ $message }}</div>
-                    @enderror
-                </div>
+                <input type="hidden" name="token" value="{{ $token }}">
 
+                <div class="mb-3">
+                    <label>Email</label>
+                    <input type="email" name="email" value="{{ $email ?? old('email') }}" class="form-control" required>
+                </div>
                 {{-- Password --}}
                 <div class="mb-3">
                     <label class="form-label">Your Password</label>
@@ -81,22 +65,9 @@
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
                         placeholder="Confirm password">
                 </div>
-                {{-- Confirm Password --}}
-                <div class="mb-3">
-                    <label class="form-label">Enter Invitation Code</label>
-                    <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
-                        placeholder="Invitation code">
-                </div>
-                {{-- Remember Me --}}
-                <div class="form-check mb-3">
-                    <input type="checkbox" name="remember" class="form-check-input" id="remember" {{ old('remember')
-                        ? 'checked' : '' }}>
-                    <label class="form-check-label" for="remember">Remember me</label>
-                </div>
 
-                <button type="submit" class="formbtn1">Register</button>
-                <a href="{{ route('login.index') }}"><button type="button" class="formbtn2">Already Have An
-                        Account?</button></a>
+                <button type="submit" class="formbtn1">Reset</button>
+
             </form>
         </div>
     </div>
