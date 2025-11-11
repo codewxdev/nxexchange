@@ -4,8 +4,10 @@ use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\SignalController;
 
-use function Pest\Laravel\get;
+// use function Pest\Laravel\get;
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +20,12 @@ Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.c
 
 
 Route::get('/login',[LoginController::class, 'ShowLogin'])->name('login.index');
+
+
+Route::get('/admin/dashboard', function () {
+    return view('admin.dashboard');
+})->name('admin.dashboard');
+Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
+Route::prefix('admin')->group(function () { 
+    Route::resource('signals',SignalController::class)->names('admin.signals');
+}); 
