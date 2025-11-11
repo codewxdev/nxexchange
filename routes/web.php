@@ -20,6 +20,7 @@ Route::post('/register-store',[RegisterController::class, 'storeRegisterForm'])-
 Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.code');
 
 
+Route::post('/login-store',[LoginController::class, 'StoreLoginForm'])->name('login.store');
 Route::get('/login',[LoginController::class, 'ShowLogin'])->name('login.index');
 
 
