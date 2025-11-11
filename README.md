@@ -1,2 +1,0 @@
-# nxexchange
-Crypto Trading
