@@ -63,11 +63,11 @@
                         placeholder="Confirm password">
                 </div>
                 {{-- Confirm Password --}}
-                <div class="mb-3">
+                {{-- <div class="mb-3">
                     <label class="form-label">Enter Invitation Code</label>
                     <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
                         placeholder="Invitation code">
-                </div>
+                </div> --}}
                 {{-- Remember Me --}}
                 <div class="form-check mb-3">
                     <input type="checkbox" name="remember" class="form-check-input" id="remember" {{ old('remember')

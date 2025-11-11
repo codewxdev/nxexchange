@@ -11,7 +11,7 @@ use App\Http\Controllers\SignalController;
 // use function Pest\Laravel\get;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('index');
 })->name('home');
 
 
