@@ -33,7 +33,7 @@
         </div>
 
         <!-- Form -->
-        <div class="form-container">
+        <div class="form-container p-4">
            <form action="{{ route('login.store') }}" method="POST">
         @csrf
         {{-- Email --}}
@@ -55,6 +55,7 @@
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>
+        <a href="{{ route('password.request') }}">Forget Password</a>
 
         <button type="submit" class="formbtn1">Login</button>
         <a href="{{ route('register.index') }}"><button type="button" class="formbtn2">Don't Have An Account?</button></a> 

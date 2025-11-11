@@ -24,7 +24,7 @@ class RegisterController extends Controller
     function storeRegisterForm(Request $request)
     {
 
-        dd($request->all());
+       
         $request->validate([ 
             'email' => 'required|email|unique:users,email',
             'code' => 'required|numeric',
@@ -64,7 +64,7 @@ class RegisterController extends Controller
         // Clear code after success
         Session::forget(['verification_code', 'verification_email']);
 
-        return redirect('/')->with('success', 'Registration successful!');
+        return redirect(route('login.index'))->with('success', 'Registration successful!');
     }
 
 
