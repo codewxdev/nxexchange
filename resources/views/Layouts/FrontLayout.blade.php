@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+        integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <title>Hello, world!</title>
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">  
+
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Market</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Trade</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Assets</a>
+                    </li>
+
+                </ul>
+                <div class="btns">
+                    <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
+                   <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register now</button></a>  
+                </div>
+                <select name="" id="language">
+                    <option value="en">English</option>
+                    <option value="fr">French</option>
+                    <option value="de">Duch</option>
+                    <option value="de">Duch</option>
+                </select>
+            </div>
+        </div>
+    </nav>
+
+    @yield('content')
+
+    <footer class="brand-footer">
+        <div class="container py-5">
+            <div class="row">
+                <!-- Logo & Description -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a href="#" class="footer-logo">
+                        <img src="{{ asset('assets/images/logo2.png') }}" alt="Logo" />
+                    </a>
+                    <p class="footer-desc mt-3">
+                        NxExchange is your one-stop cryptocurrency platform offering safe, high-yield investments and
+                        global coverage.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">Market</a></li>
+                        <li><a href="#">Trade</a></li>
+                        <li><a href="#">Assets</a></li>
+                        <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Support</a></li>
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Terms & Privacy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">Subscribe to Our Newsletter</h5>
+                    <p>Get the latest crypto updates, market news, and exclusive offers.</p>
+                    <form class="newsletter-form d-flex mt-3">
+                        <input type="email" placeholder="Enter your email" />
+                        <button type="submit">Subscribe</button>
+                    </form>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom text-center mt-4">
+                <p>&copy; 2025 NxExchange. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
+
+    <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
+    <!-- Option 1: Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
+    </script>
+
+
+</body>
+
+</html>
