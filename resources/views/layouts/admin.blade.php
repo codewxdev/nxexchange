@@ -12,10 +12,22 @@
 
     {{-- Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    <style>
+        .dropdown-menu {
+            background-color: #212529;
+        }
+
+        .dropdown-item {
+            color: #fff;
+        }
+
+        .dropdown-item:hover {
+            background-color: #343a40;
+        }
+    </style>
 </head>
 
 <body>
-
     {{-- Sidebar --}}
     <div class="d-flex" id="wrapper">
         <div class="bg-dark text-white p-3" id="sidebar">
@@ -27,13 +39,24 @@
                             class="bi bi-people"></i> Users</a></li>
                 <li class="nav-item"><a href="{{ route('admin.signals.index') }}" class="nav-link text-white"><i
                             class="bi bi-lightning"></i> Signals</a></li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle text-white" href="#" id="transactionDropdown"
+                        role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-lightning"></i> Transaction
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="transactionDropdown">
+                        <li><a class="dropdown-item" href="{{ url('deposit') }}">Deposit</a></li>
+                        <li><a class="dropdown-item" href="{{ url('withdraw') }}">Withdraw</a></li>
+                        <li><a class="dropdown-item" href="{{ url('transfer') }}">Transfer</a></li>
+                    </ul>
+                </li>
 
                 <li class="nav-item"><a href="#" class="nav-link text-white"><i
                             class="bi bi-currency-bitcoin"></i> Trades</a></li>
                 <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-wallet2"></i>
                         Wallets</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-graph-up"></i>
-                        Reports</a></li>
+                {{-- <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-graph-up"></i>
+                        Reports</a></li> --}}
             </ul>
         </div>
 
