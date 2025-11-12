@@ -13,14 +13,15 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">  
+    <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt=""
+                    width="80px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -42,7 +43,8 @@
                 </ul>
                 <div class="btns">
                     <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
-                   <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register now</button></a>  
+                    <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
+                            now</button></a>
                 </div>
                 <select name="" id="language">
                     <option value="en">English</option>
@@ -127,6 +129,7 @@
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
 
+    @stack('scripts')
 
 </body>
 

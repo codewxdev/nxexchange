@@ -9,6 +9,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\DepositController;
 use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\TransferController;
+use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\SignalController;
 
 // use function Pest\Laravel\get;
@@ -38,9 +39,10 @@ Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
 })->name('admin.dashboard');
 Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
-Route::prefix('admin')->group(function () { 
+Route::prefix('admin')->group(function () {
     Route::resource('signals',SignalController::class)->names('admin.signals');
-}); 
+});
+
 Route::get('deposit', [DepositController::class, 'index'])->name('deposits.index');
 Route::post('/deposits/store', [DepositController::class, 'store'])->name('deposits.store');
 Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraws.index');
@@ -48,3 +50,6 @@ Route::post('/withdrawals/store', [WithdrawController::class, 'store'])->name('w
 Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
 Route::post('/transfers/store', [TransferController::class, 'store'])->name('transfers.store');
 
+
+Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
+Route::get('/crypto-data', [CryptoController::class, 'fetchData'])->name('crypto.data');

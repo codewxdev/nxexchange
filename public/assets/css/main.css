@@ -221,6 +221,7 @@
             border-collapse: collapse;
             color: #fff;
             min-width: 700px;
+            max-height: 200px;
             background-color: #1a1a1a;
             border-radius: 10px;
             overflow: hidden;
