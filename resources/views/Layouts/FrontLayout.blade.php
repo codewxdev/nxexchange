@@ -20,8 +20,7 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt=""
-                    width="80px"></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -29,7 +28,6 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Market</a>
                     </li>
@@ -41,7 +39,25 @@
                     </li>
 
                 </ul>
-                <div class="btns">
+                <ul class="navbar-nav  mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Share</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Set</a>
+                    </li>
+                     <li class="nav-item">
+                        <span>C</span><a class="nav-link active" aria-current="page" href="#">codeworx@developers.com</a>
+                    </li>
+                </ul>
+                {{-- <div class="btns">
                     <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
                     <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
                             now</button></a>
@@ -51,7 +67,7 @@
                     <option value="fr">French</option>
                     <option value="de">Duch</option>
                     <option value="de">Duch</option>
-                </select>
+                </select> --}}
             </div>
         </div>
     </nav>
