@@ -16,50 +16,42 @@
                         <thead>
                             <tr>
                                 <th>User Email</th>
-                                <th>Action Type</th>
-                                <th class="text-end">Amount</th>
-                                <th>Date & Time</th>
+                                <th>Level</th>
+                                <th>Account Status</th>
+                                <th>KYC Status</th>
+                                <th class="text-end">Exchange Balance</th>
+                                <th class="text-end">Trade Balance</th>
+                                <th>Registered At</th>
+                                <th>Last Login</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {{-- Assuming the data passed to the view is now called $recentActivities for clarity --}}
-                            @foreach ($users as $activity)
+                            @foreach ($users as $user)
                                 @php
-                                    // Placeholder logic for dynamic styling based on action type
-                                    $actionType = 'Deposit'; // Replace with $activity->action_type if data is dynamic
-                                    $amount = '$200'; // Replace with $activity->amount
-                                    $userEmail = 'john@example.com'; // Replace with $activity->user_email
-                                    $date = '2025-11-10 14:30'; // Replace with $activity->created_at or similar
-
-                                    // Determine badge color based on action
+                                    // Example action/amount logic if needed, can be replaced with actual activity data
+                                    $actionType = $user->account_status; // just for badge example
                                     $badgeColor = match ($actionType) {
-                                        'Deposit', 'Win' => 'bg-success',
-                                        'Withdrawal', 'Loss' => 'bg-danger',
-                                        'Transfer' => 'bg-info',
+                                        'active' => 'bg-success',
+                                        'locked' => 'bg-warning',
+                                        'deactivated' => 'bg-danger',
                                         default => 'bg-secondary',
                                     };
                                 @endphp
                                 <tr>
-                                    <td>{{ $userEmail }}</td>
-                                    <td>
-                                        <span class="badge {{ $badgeColor }}">{{ $actionType }}</span>
+                                    <td>{{ $user->email }}</td>
+                                    <td>{{ $user->level }}</td>
+                                    <td><span class="badge {{ $badgeColor }}">{{ ucfirst($user->account_status) }}</span>
                                     </td>
-                                    <td class="text-end">
-                                        <strong>{{ $amount }}</strong>
-                                    </td>
-                                    <td>{{ $date }}</td>
+                                    <td>{{ ucfirst(str_replace('_', ' ', $user->kyc_status)) }}</td>
+                                    <td class="text-end">${{ number_format($user->exchange_balance, 2) }}</td>
+                                    <td class="text-end">${{ number_format($user->trade_balance, 2) }}</td>
+                                    <td>{{ $user->registered_at->format('Y-m-d H:i') }}</td>
+                                    <td>{{ optional($user->last_login_at)?->format('Y-m-d H:i') ?? 'Never' }}</td>
                                 </tr>
                             @endforeach
-
-                            {{-- Example of another row using placeholder logic --}}
-                            {{-- <tr>
-                                <td>alice@example.com</td>
-                                <td><span class="badge bg-danger">Withdrawal</span></td>
-                                <td class="text-end"><strong>$500</strong></td>
-                                <td>2025-11-10 15:45</td>
-                            </tr> --}}
                         </tbody>
                     </table>
+
                 </div>
             </div>
         </div>

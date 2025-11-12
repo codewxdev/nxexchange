@@ -17,7 +17,7 @@ class SignalController extends Controller
         return view('admin.signals.index', compact('signals'));
     }
 
-    
+
     public function create()
     {
         return view('admin.signals.create');
@@ -40,7 +40,7 @@ class SignalController extends Controller
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
             'is_active' => $request->has('is_active'),
-            'admin_id' => Auth::guard('admin')->id(), // Assuming 'admin' guard
+            'admin_id' => Auth::id(),
         ]);
 
         return redirect()->route('admin.signals.index')->with('success', 'New signal created successfully.');

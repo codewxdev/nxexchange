@@ -6,6 +6,9 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\DepositController;
+use App\Http\Controllers\WithdrawController;
+use App\Http\Controllers\TransferController;
 use App\Http\Controllers\SignalController;
 
 // use function Pest\Laravel\get;
@@ -23,7 +26,13 @@ Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.c
 
 Route::post('/login-store',[LoginController::class, 'StoreLoginForm'])->name('login.store');
 Route::get('/login',[LoginController::class, 'ShowLogin'])->name('login.index');
+Route::get('password/reset', [ForgetPasswordContoller::class, 'showLinkRequestForm'])->name('password.request');
+Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEmail'])->name('password.email');
 
+Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
+Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
+
+// dashboard route start here
 
 Route::get('/admin/dashboard', function () {
     return view('admin.dashboard');
@@ -32,9 +41,10 @@ Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
 Route::prefix('admin')->group(function () { 
     Route::resource('signals',SignalController::class)->names('admin.signals');
 }); 
+Route::get('deposit', [DepositController::class, 'index'])->name('deposits.index');
+Route::post('/deposits/store', [DepositController::class, 'store'])->name('deposits.store');
+Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraws.index');
+Route::post('/withdrawals/store', [WithdrawController::class, 'store'])->name('withdrawals.store');
+Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
+Route::post('/transfers/store', [TransferController::class, 'store'])->name('transfers.store');
 
-Route::get('password/reset', [ForgetPasswordContoller::class, 'showLinkRequestForm'])->name('password.request');
-Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEmail'])->name('password.email');
-
-Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
-Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
