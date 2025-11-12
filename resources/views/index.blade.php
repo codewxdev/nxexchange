@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://js.pusher.com/7.2/pusher.min.js"></script>
+    <script src="{{ asset('js/crypto-websocket.js') }}"></script>
     <title>Hello, world!</title>
     <style>
         /* ===== Global Theme Colors ===== */
@@ -722,7 +724,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt=""
+                    width="80px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -800,7 +803,7 @@
     </div>
 
     <!-- ===== Live Crypto Section ===== -->
-    <div class="crypto-section py-5">
+    {{-- <div class="crypto-section py-5">
         <div class="container text-center">
             <h2 class="crypto-title mb-2">Live Cryptocurrency Prices</h2>
             <p class="crypto-subtitle mb-4">Track real-time token performance, market movement, and price insights</p>
@@ -850,7 +853,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -860,7 +864,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -870,7 +875,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -880,7 +886,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -890,7 +897,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -900,7 +908,8 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
@@ -910,13 +919,41 @@
                         </tr>
                         <tr>
                             <td class="token-cell">
-                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28" alt="USDT"> USDT
+                                <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" width="28"
+                                    alt="USDT"> USDT
                             </td>
                             <td>$1.00</td>
                             <td class="text-muted">0.00%</td>
                             <td>$1.01</td>
                             <td>$0.99</td>
                             <td>102.12M</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> --}}
+    <div class="crypto-section py-5">
+        <div class="container text-center">
+            <h2 class="crypto-title mb-2">Live Cryptocurrency Prices</h2>
+            <p class="crypto-subtitle mb-4">Track real-time token performance, market movement, and price insights</p>
+
+            <div class="table-responsive">
+                <table class="table crypto-table mb-0">
+                    <thead>
+                        <tr>
+                            <th>Token</th>
+                            <th>Last Price</th>
+                            <th>24h Change</th>
+                            <th>24h High</th>
+                            <th>24h Low</th>
+                            <th>24h Volume</th>
+                        </tr>
+                    </thead>
+                    <tbody id="crypto-table-body">
+                        <!-- Data will be populated by JavaScript -->
+                        <tr>
+                            <td colspan="6" class="text-center">Loading live data...</td>
                         </tr>
                     </tbody>
                 </table>
@@ -1122,7 +1159,105 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
     </script>
+    <script>
+        // resources/js/crypto-websocket.js
 
+        class CryptoPriceTracker {
+            constructor() {
+                this.pusher = null;
+                this.channel = null;
+                this.initWebSocket();
+            }
+
+            initWebSocket() {
+                // Connect to Laravel WebSocket server
+                this.pusher = new Pusher('your-pusher-app-key', {
+                    wsHost: window.location.hostname,
+                    wsPort: 6001,
+                    wssPort: 6001,
+                    forceTLS: false,
+                    enabledTransports: ['ws', 'wss'],
+                    cluster: 'mt1'
+                });
+
+                this.channel = this.pusher.subscribe('crypto-prices');
+
+                this.channel.bind('price.updated', (data) => {
+                    this.updateTable(data);
+                });
+            }
+
+            updateTable(cryptoData) {
+                const tableBody = document.getElementById('crypto-table-body');
+
+                if (!tableBody) return;
+
+                let html = '';
+
+                cryptoData.forEach(crypto => {
+                    const changeClass = crypto.change_24h >= 0 ? 'text-success' : 'text-danger';
+                    const changeSymbol = crypto.change_24h >= 0 ? '+' : '';
+
+                    html += `
+                <tr>
+                    <td class="token-cell">
+                        <img src="${crypto.icon_url}" width="28" height="28" alt="${crypto.symbol}">
+                        <span class="ms-2">${crypto.symbol}</span>
+                    </td>
+                    <td class="price-cell">$${this.formatNumber(crypto.price)}</td>
+                    <td class="${changeClass}">
+                        ${changeSymbol}${crypto.change_24h.toFixed(2)}%
+                    </td>
+                    <td>$${this.formatNumber(crypto.high_24h)}</td>
+                    <td>$${this.formatNumber(crypto.low_24h)}</td>
+                    <td>${this.formatVolume(crypto.volume_24h)}</td>
+                </tr>
+            `;
+                });
+
+                tableBody.innerHTML = html;
+
+                // Add animation for price changes
+                this.animatePriceChanges();
+            }
+
+            formatNumber(num) {
+                if (num >= 1000) {
+                    return num.toLocaleString('en-US', {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2
+                    });
+                }
+                return num.toFixed(2);
+            }
+
+            formatVolume(volume) {
+                if (volume >= 1000000) {
+                    return (volume / 1000000).toFixed(2) + 'M';
+                } else if (volume >= 1000) {
+                    return (volume / 1000).toFixed(2) + 'K';
+                }
+                return volume.toFixed(2);
+            }
+
+            animatePriceChanges() {
+                const priceCells = document.querySelectorAll('.price-cell');
+                priceCells.forEach(cell => {
+                    cell.style.transition = 'all 0.3s ease';
+                    cell.style.backgroundColor = 'rgba(76, 175, 80, 0.1)';
+
+                    setTimeout(() => {
+                        cell.style.backgroundColor = 'transparent';
+                    }, 300);
+                });
+            }
+        }
+
+        // Initialize when document is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            new CryptoPriceTracker();
+        });
+    </script>
 
 </body>
 
