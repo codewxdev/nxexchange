@@ -1,6 +1,6 @@
 :root {
     /* ====== COLORS ====== */
-    --color-primary: #0d6efd;
+    --color-primary: #010101;
     --color-primary-dark: #0b5ed7;
     --color-bg-main: #f3f6fa;
     --color-bg-white: #ffffff;
@@ -129,11 +129,13 @@ a{
 .verify-div button {
     white-space: nowrap;
     font-weight: 500;
+    background-color: #F46523;
+    border: none;
 }
 
 /* ====== BUTTONS ====== */
 .formbtn1 {
-    background: var(--color-primary);
+    background: #F46523;
     color: var(--color-text-white);
     padding: 10px;
     border: none;
