@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AssetController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgetPasswordContoller;
 use App\Http\Controllers\Auth\LoginController;
@@ -20,6 +21,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::get('/trade',[TradeController::class, 'index'])->name('trade.index');
+Route::get('/asset',[AssetController::class, 'index'])->name('asset.index');
 
 
 

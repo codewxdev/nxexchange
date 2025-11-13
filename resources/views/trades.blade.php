@@ -780,6 +780,7 @@
             padding: 15px 20px;
             text-align: center;
             transition: 0.3s ease;
+            margin-right: 10px;
         }
 
         .trade-stats .stat-box:hover {
@@ -793,7 +794,7 @@
         }
 
         .trade-stats h2 {
-            font-size: 1.4rem;
+            font-size: 1.2rem;
             margin: 6px 0 0;
         }
 
