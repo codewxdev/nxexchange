@@ -6,8 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Deposit extends Model
 {
-    protected $fillable = [
-        'user_id', 'amount', 'payment_gateway', 'status'
+    protected $guarded = [];
+
+   protected $fillable = [
+        'user_id',
+        'amount',
+        'payment_gateway',
+        'status',
+        'transaction_id',
     ];
 
     public function user()

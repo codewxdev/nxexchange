@@ -9,6 +9,13 @@
     {{-- Tailwind or Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+    <!-- In <head> -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Before </body> -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
 
     {{-- Icons --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
@@ -45,7 +52,7 @@
                         <i class="bi bi-lightning"></i> Transaction
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="transactionDropdown">
-                        <li><a class="dropdown-item" href="{{ url('deposit') }}">Deposit</a></li>
+                        <li><a class="dropdown-item" href="{{ route('deposits.index') }}">Deposit</a></li>
                         <li><a class="dropdown-item" href="{{ url('withdraw') }}">Withdraw</a></li>
                         <li><a class="dropdown-item" href="{{ url('transfer') }}">Transfer</a></li>
                     </ul>

@@ -3,8 +3,8 @@
 @section('title', isset($signal) ? 'Edit Signal' : 'Create New Signal')
 
 @section('content')
-    <h4>Transfer Form</h4>
-    <form action="{{ route('transfers.store') }}" method="POST">
+
+    {{-- <form action="{{ route('transfers.store') }}" method="POST">
         @csrf
         <input type="hidden" name="user_id" value="{{ auth()->id() }}">
         <div>
@@ -30,14 +30,11 @@
             <input type="checkbox" name="volume_incomplete" value="1">
         </div>
         <button type="submit">Submit Transfer</button>
-    </form>
+    </form> --}}
     <div class="container-fluid">
-        <h2 class="mb-4">Deposit Detail</h2>
+        <h2 class="mb-4">Transfer Amount Detail</h2>
 
         <div class="card shadow mb-4">
-            <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Platform Activity</h6>
-            </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover table-striped" id="transferTable">
