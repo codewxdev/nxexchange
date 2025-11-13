@@ -15,13 +15,41 @@
     <title>Hello, world!</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
 
+    <style>
+        .user-dropdown {
+            position: relative;
+        }
+
+        .animate-dropdown {
+            opacity: 0;
+            transform: translateY(-10px);
+            transition: all 0.3s ease;
+            display: none;
+            min-width: 220px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            top: 47px;
+        }
+
+        .user-dropdown.show .animate-dropdown {
+            display: block;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+ 
+        .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+
+    @stack('style')
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt=""
-                    width="80px"></a>
+            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -29,18 +57,58 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Market</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Trade</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('trade.index') }}">Trade</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Assets</a>
                     </li>
 
                 </ul>
+                @if (auth()->user())
+                <ul class="navbar-nav  mb-2 mb-lg-0">
+
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Transaction</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Share</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Help</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Set</a>
+                    </li>
+                    <li class="nav-item dropdown user-dropdown d-flex">
+                        <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
+                        <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
+                            {{ auth()->user()->email }}
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-end animate-dropdown" aria-labelledby="userDropdown">
+                            <div class="px-3 py-2">
+                                <p><strong>ID:</strong> {{ auth()->user()->id }}</p>
+                                <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
+                                <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
+                                <!-- Add more info as needed -->
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                                    @csrf
+                                </form>
+                            </div>
+                        </div>
+                    </li>
+
+                </ul>
+                @else
                 <div class="btns">
                     <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
                     <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
@@ -52,6 +120,8 @@
                     <option value="de">Duch</option>
                     <option value="de">Duch</option>
                 </select>
+                @endif
+
             </div>
         </div>
     </nav>
@@ -120,6 +190,25 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        const dropdownToggle = document.getElementById('userDropdown');
+        const dropdownMenu = dropdownToggle.nextElementSibling;
+
+        dropdownToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            dropdownToggle.parentElement.classList.toggle('show');
+        });
+
+        // Click outside to close
+        document.addEventListener('click', function(e) {
+            if (!dropdownToggle.parentElement.contains(e.target)) {
+                dropdownToggle.parentElement.classList.remove('show');
+            }
+        });
+    });
+    </script>
 
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
 

@@ -11,12 +11,15 @@ use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\SignalController;
+use App\Http\Controllers\TradeController;
 
 // use function Pest\Laravel\get;
 
 Route::get('/', function () {
     return view('index');
 })->name('home');
+
+Route::get('/trade',[TradeController::class, 'index'])->name('trade.index');
 
 
 
@@ -32,6 +35,8 @@ Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEma
 
 Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
+
+Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
 
 // dashboard route start here
 
