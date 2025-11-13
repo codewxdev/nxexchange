@@ -33,6 +33,8 @@ Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEma
 Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
 
+Route::post('/logout',[LoginController::class, 'logout'])->name('logout');
+
 // dashboard route start here
 
 Route::get('/admin/dashboard', function () {

@@ -32,6 +32,20 @@ class LoginController extends Controller
 
 
     }
+
+
+    public function logout(Request $request)
+    {
+        // Laravel logout
+        Auth::logout();
+
+        // Session invalidate & token regenerate (security best practice)
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        // Redirect after logout
+        return redirect()->route('login.index')->with('status', 'You have been logged out successfully.');
+    }
 }
 
 
