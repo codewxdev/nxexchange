@@ -3,15 +3,28 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Cache; // ✅ Add Cache facade
+
+
 
 class TradeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+  public function index()
     {
-        return view('trades');
+        $currencies = Cache::remember('currencies_data', now()->addMinutes(2), function () {
+            $response = Http::get('https://api.coingecko.com/api/v3/coins/markets', [
+                'vs_currency' => 'usd',
+                'ids' => 'bitcoin,ethereum,tether,solana,cardano,toncoin,avalanche,polkadot,dogecoin,shiba-inu,tron,litecoin,uniswap,chainlink,stellar,vechain,filecoin,theta-network,monero,ethereum-classic',
+            ]);
+
+            return $response->json();
+        });
+
+        return view('trades', compact('currencies'));
     }
 
     /**

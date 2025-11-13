@@ -5,101 +5,46 @@
         <div class="row m-0">
 
             <!-- ===== Left Column: Market List ===== -->
+
             <div class="col-lg-3 col-md-4 market-sidebar">
-                <div class="selected-coin">
-                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt="" width="40px" height="40px">
-                    <span>BTC</span>
+                <!-- Selected Coin -->
+                <div class="selected-coin d-flex align-items-center mb-3">
+                    <img id="selected-coin-img" src="{{ $currencies[0]['image'] }}" alt="" width="40" height="40">
+                    <span id="selected-coin-name" class="ms-2 fw-bold">{{ strtoupper($currencies[0]['symbol']) }}</span>
                 </div>
+
                 <h3 class="market-title">Markets</h3>
+
                 <div class="market-list">
-
-                    <div class="market-item active">
-                        <img src="{{ asset('assets/images/bitcoin.png') }}" alt="BTC" />
-                        <div class="info">
-                            <h5>BTC / USDT</h5>
-                            <p>$102,808.63 <span class="change positive">+0.63%</span></p>
+                    @foreach ($currencies as $index => $coin)
+                        <div class="market-item {{ $index === 0 ? 'active' : '' }}" data-name="{{ ucfirst($coin['name']) }}"
+                            data-symbol="{{ strtoupper($coin['symbol']) }}" data-image="{{ $coin['image'] }}"
+                            data-price="{{ number_format($coin['current_price'], 2) }}"
+                            data-change="{{ number_format($coin['price_change_percentage_24h'], 2) }}"
+                            data-high="{{ number_format($coin['high_24h'], 2) }}"
+                            data-low="{{ number_format($coin['low_24h'], 2) }}"
+                            data-volume="{{ number_format($coin['total_volume'], 2) }}"
+                            data-marketcap="{{ number_format($coin['market_cap'], 2) }}">
+                            <img src="{{ $coin['image'] }}" alt="{{ $coin['name'] }}" />
+                            <div class="info">
+                                <h5>{{ ucfirst($coin['name']) }}</h5>
+                                <p>
+                                    ${{ number_format($coin['current_price'], 2) }}
+                                    <span
+                                        class="change {{ $coin['price_change_percentage_24h'] > 0 ? 'text-success' : 'text-danger' }}">
+                                        {{ number_format($coin['price_change_percentage_24h'], 2) }}%
+                                    </span>
+                                </p>
+                            </div>
                         </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/usdc.png') }}" alt="USDC" />
-                        <div class="info">
-                            <h5>USDC / USDT</h5>
-                            <p>$0.9999 <span class="change positive">+0.00%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/ethereum.png') }}" alt="ETH" />
-                        <div class="info">
-                            <h5>ETH / USDT</h5>
-                            <p>$3,245.25 <span class="change negative">-1.12%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/xrp.png') }}" alt="XRP" />
-                        <div class="info">
-                            <h5>XRP / USDT</h5>
-                            <p>$0.532 <span class="change positive">+0.45%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/solana.png') }}" alt="SOL" />
-                        <div class="info">
-                            <h5>SOL / USDT</h5>
-                            <p>$179.52 <span class="change positive">+2.31%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/ada.png') }}" alt="ADA" />
-                        <div class="info">
-                            <h5>ADA / USDT</h5>
-                            <p>$0.625 <span class="change negative">-0.55%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/doge.png') }}" alt="DOGE" />
-                        <div class="info">
-                            <h5>DOGE / USDT</h5>
-                            <p>$0.155 <span class="change positive">+0.24%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/dot.png') }}" alt="DOT" />
-                        <div class="info">
-                            <h5>DOT / USDT</h5>
-                            <p>$6.98 <span class="change positive">+0.17%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/ltc.png') }}" alt="LTC" />
-                        <div class="info">
-                            <h5>LTC / USDT</h5>
-                            <p>$81.42 <span class="change negative">-0.21%</span></p>
-                        </div>
-                    </div>
-
-                    <div class="market-item">
-                        <img src="{{ asset('assets/images/avax.png') }}" alt="AVAX" />
-                        <div class="info">
-                            <h5>AVAX / USDT</h5>
-                            <p>$38.56 <span class="change positive">+1.04%</span></p>
-                        </div>
-                    </div>
-
+                    @endforeach
                 </div>
             </div>
 
             <!-- ===== Right Column (Graph / Trading Area) ===== -->
             <div class="col-lg-9 col-md-8 trade-graph-area">
                 <!-- ===== Top Stats ===== -->
-                <div class="trade-stats d-flex flex-wrap justify-content-between align-items-center mb-3">
+                {{-- <div class="trade-stats d-flex flex-wrap justify-content-between align-items-center mb-3">
                     <div class="stat-box">
                         <span>Last Price</span>
                         <h2>$103,093.78 <small class="text-success">+0.84%</small></h2>
@@ -115,6 +60,29 @@
                     <div class="stat-box">
                         <span>Volume (BTC)</span>
                         <h2>15,239.21</h2>
+                    </div>
+                </div> --}}
+                <div class="trade-stats d-flex flex-wrap justify-content-between align-items-center mb-3">
+                    <div class="stat-box">
+                        <span>Last Price</span>
+                        <h2 id="last-price">${{ number_format($currencies[0]['current_price'], 2) }}
+                            <small id="price-change"
+                                class="{{ $currencies[0]['price_change_percentage_24h'] > 0 ? 'text-success' : 'text-danger' }}">
+                                {{ number_format($currencies[0]['price_change_percentage_24h'], 2) }}%
+                            </small>
+                        </h2>
+                    </div>
+                    <div class="stat-box">
+                        <span>24h High</span>
+                        <h2 id="high-price">${{ number_format($currencies[0]['high_24h'], 2) }}</h2>
+                    </div>
+                    <div class="stat-box">
+                        <span>24h Low</span>
+                        <h2 id="low-price">${{ number_format($currencies[0]['low_24h'], 2) }}</h2>
+                    </div>
+                    <div class="stat-box">
+                        <span>Volume</span>
+                        <h2 id="volume">${{ number_format($currencies[0]['total_volume'], 2) }}</h2>
                     </div>
                 </div>
 
@@ -145,13 +113,21 @@
                 </div>
 
                 <!-- ===== Mini Stats Row ===== -->
-                <div class="mini-stats d-flex flex-wrap justify-content-between align-items-center mb-4">
+                {{-- <div class="mini-stats d-flex flex-wrap justify-content-between align-items-center mb-4">
                     <div>Time: 2025-11-29 04:24</div>
                     <div>Open: 103,463</div>
                     <div>High: 104,335.00</div>
                     <div>Low: 108,3838</div>
                     <div>Close: 105,228</div>
                     <div>Volume: 105,228</div>
+                </div> --}}
+                <div class="mini-stats d-flex flex-wrap justify-content-between align-items-center mb-4">
+                    <div>Market Cap: <span id="marketcap">${{ number_format($currencies[0]['market_cap'], 2) }}</span>
+                    </div>
+                    <div>Open: <span id="open">${{ number_format($currencies[0]['current_price'], 2) }}</span></div>
+                    <div>High: <span id="mini-high">${{ number_format($currencies[0]['high_24h'], 2) }}</span></div>
+                    <div>Low: <span id="mini-low">${{ number_format($currencies[0]['low_24h'], 2) }}</span></div>
+                    <div>Volume: <span id="mini-volume">{{ number_format($currencies[0]['total_volume'], 2) }}</span></div>
                 </div>
 
                 <!-- ===== Chart Container ===== -->
@@ -250,6 +226,348 @@
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const marketItems = document.querySelectorAll('.market-item');
+            const selectedImg = document.getElementById('selected-coin-img');
+            const selectedName = document.getElementById('selected-coin-name');
+            const lastPrice = document.getElementById('last-price');
+            const priceChange = document.getElementById('price-change');
+            const highPrice = document.getElementById('high-price');
+            const lowPrice = document.getElementById('low-price');
+            const volume = document.getElementById('volume');
+            const marketCap = document.getElementById('marketcap');
+            const miniHigh = document.getElementById('mini-high');
+            const miniLow = document.getElementById('mini-low');
+            const miniVolume = document.getElementById('mini-volume');
+            const open = document.getElementById('open');
+
+            // Initialize chart
+            const chartOptions = {
+                chart: {
+                    type: 'candlestick',
+                    height: 420,
+                    background: '#0f172a',
+                    toolbar: {
+                        show: true
+                    }
+                },
+                title: {
+                    text: 'NXExchange Market Trend',
+                    align: 'left',
+                    style: {
+                        color: '#fff'
+                    }
+                },
+                series: [{
+                    data: []
+                }], // empty initially
+                xaxis: {
+                    type: 'datetime',
+                    labels: {
+                        style: {
+                            colors: '#ccc'
+                        }
+                    }
+                },
+                yaxis: {
+                    labels: {
+                        style: {
+                            colors: '#ccc'
+                        }
+                    }
+                },
+                grid: {
+                    borderColor: '#334155'
+                },
+                tooltip: {
+                    theme: 'dark'
+                },
+                plotOptions: {
+                    candlestick: {
+                        colors: {
+                            upward: '#22c55e',
+                            downward: '#ef4444'
+                        },
+                        wick: {
+                            useFillColor: true
+                        }
+                    }
+                }
+            };
+
+            const chart = new ApexCharts(document.querySelector("#chart"), chartOptions);
+            chart.render();
+
+            // Update coin info and chart
+            function updateCoinInfo(coinData) {
+                // Update stats
+                selectedImg.src = coinData.image;
+                selectedName.textContent = coinData.symbol.toUpperCase();
+                lastPrice.innerHTML = `$${coinData.current_price.toLocaleString()}`;
+                priceChange.textContent = `${coinData.price_change_percentage_24h.toFixed(2)}%`;
+                priceChange.className = coinData.price_change_percentage_24h > 0 ? 'text-success' : 'text-danger';
+                highPrice.textContent = `$${coinData.high_24h.toLocaleString()}`;
+                lowPrice.textContent = `$${coinData.low_24h.toLocaleString()}`;
+                volume.textContent = `$${coinData.total_volume.toLocaleString()}`;
+                marketCap.textContent = `$${coinData.market_cap.toLocaleString()}`;
+                open.textContent = `$${coinData.current_price.toLocaleString()}`;
+                miniHigh.textContent = `$${coinData.high_24h.toLocaleString()}`;
+                miniLow.textContent = `$${coinData.low_24h.toLocaleString()}`;
+                miniVolume.textContent = `$${coinData.total_volume.toLocaleString()}`;
+
+                // Generate chart data (for demo using random candles around current price)
+                const chartData = [];
+                let base = coinData.current_price;
+                for (let i = 0; i < 30; i++) { // last 30 periods
+                    const openPrice = base + (Math.random() * 10 - 5);
+                    const closePrice = openPrice + (Math.random() * 10 - 5);
+                    const highPriceCandle = Math.max(openPrice, closePrice) + Math.random() * 5;
+                    const lowPriceCandle = Math.min(openPrice, closePrice) - Math.random() * 5;
+                    base = closePrice;
+                    chartData.push({
+                        x: new Date(Date.now() - (29 - i) * 60 * 1000), // assuming 1-min intervals
+                        y: [openPrice.toFixed(2), highPriceCandle.toFixed(2), lowPriceCandle.toFixed(2),
+                            closePrice.toFixed(2)
+                        ]
+                    });
+                }
+
+                chart.updateSeries([{
+                    data: chartData
+                }]);
+            }
+
+            // Restore last selected coin or select first
+            let savedCoin = localStorage.getItem('selectedCoin');
+            if (savedCoin) {
+                updateCoinInfo(JSON.parse(savedCoin));
+            } else {
+                const firstCoin = marketItems[0];
+                firstCoin.classList.add('active');
+                updateCoinInfo({
+                    id: firstCoin.dataset.id,
+                    image: firstCoin.dataset.image,
+                    symbol: firstCoin.dataset.symbol,
+                    current_price: parseFloat(firstCoin.dataset.price),
+                    price_change_percentage_24h: parseFloat(firstCoin.dataset.change),
+                    high_24h: parseFloat(firstCoin.dataset.high),
+                    low_24h: parseFloat(firstCoin.dataset.low),
+                    total_volume: parseFloat(firstCoin.dataset.volume),
+                    market_cap: parseFloat(firstCoin.dataset.marketcap)
+                });
+            }
+
+            // Click event to select coin
+            marketItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    marketItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                    const coinData = {
+                        id: this.dataset.id,
+                        image: this.dataset.image,
+                        symbol: this.dataset.symbol,
+                        current_price: parseFloat(this.dataset.price),
+                        price_change_percentage_24h: parseFloat(this.dataset.change),
+                        high_24h: parseFloat(this.dataset.high),
+                        low_24h: parseFloat(this.dataset.low),
+                        total_volume: parseFloat(this.dataset.volume),
+                        market_cap: parseFloat(this.dataset.marketcap)
+                    };
+                    updateCoinInfo(coinData);
+                    localStorage.setItem('selectedCoin', JSON.stringify(coinData));
+                });
+            });
+        });
+    </script>
+
+    {{-- <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const marketItems = document.querySelectorAll('.market-item');
+            const selectedImg = document.getElementById('selected-coin-img');
+            const selectedName = document.getElementById('selected-coin-name');
+            const lastPrice = document.getElementById('last-price');
+            const priceChange = document.getElementById('price-change');
+            const highPrice = document.getElementById('high-price');
+            const lowPrice = document.getElementById('low-price');
+            const volume = document.getElementById('volume');
+            const marketCap = document.getElementById('marketcap');
+            const miniHigh = document.getElementById('mini-high');
+            const miniLow = document.getElementById('mini-low');
+            const miniVolume = document.getElementById('mini-volume');
+            const open = document.getElementById('open');
+
+            // Function to update all stats
+            function updateCoinInfo(coinData) {
+                selectedImg.src = coinData.image;
+                selectedName.textContent = coinData.symbol.toUpperCase();
+
+                lastPrice.innerHTML = `$${coinData.current_price.toLocaleString()}`;
+                priceChange.textContent = `${coinData.price_change_percentage_24h.toFixed(2)}%`;
+                priceChange.className = coinData.price_change_percentage_24h > 0 ? 'text-success' : 'text-danger';
+
+                highPrice.textContent = `$${coinData.high_24h.toLocaleString()}`;
+                lowPrice.textContent = `$${coinData.low_24h.toLocaleString()}`;
+                volume.textContent = `$${coinData.total_volume.toLocaleString()}`;
+
+                marketCap.textContent = `$${coinData.market_cap.toLocaleString()}`;
+                open.textContent = `$${coinData.current_price.toLocaleString()}`;
+                miniHigh.textContent = `$${coinData.high_24h.toLocaleString()}`;
+                miniLow.textContent = `$${coinData.low_24h.toLocaleString()}`;
+                miniVolume.textContent = `$${coinData.total_volume.toLocaleString()}`;
+            }
+
+            // Restore last selected coin from localStorage
+            let savedCoin = localStorage.getItem('selectedCoin');
+            if (savedCoin) {
+                const coinData = JSON.parse(savedCoin);
+                updateCoinInfo(coinData);
+
+                // Set active class
+                marketItems.forEach(item => {
+                    if (item.dataset.id === coinData.id) {
+                        item.classList.add('active');
+                    } else {
+                        item.classList.remove('active');
+                    }
+                });
+            } else {
+                // If no saved coin, select first one by default
+                const firstCoin = marketItems[0];
+                firstCoin.classList.add('active');
+                updateCoinInfo({
+                    id: firstCoin.dataset.id,
+                    image: firstCoin.dataset.image,
+                    symbol: firstCoin.dataset.symbol,
+                    current_price: parseFloat(firstCoin.dataset.price),
+                    price_change_percentage_24h: parseFloat(firstCoin.dataset.change),
+                    high_24h: parseFloat(firstCoin.dataset.high),
+                    low_24h: parseFloat(firstCoin.dataset.low),
+                    total_volume: parseFloat(firstCoin.dataset.volume),
+                    market_cap: parseFloat(firstCoin.dataset.marketcap)
+                });
+            }
+
+            // Click event for selecting a coin
+            marketItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    marketItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const coinData = {
+                        id: this.dataset.id,
+                        image: this.dataset.image,
+                        symbol: this.dataset.symbol,
+                        current_price: parseFloat(this.dataset.price),
+                        price_change_percentage_24h: parseFloat(this.dataset.change),
+                        high_24h: parseFloat(this.dataset.high),
+                        low_24h: parseFloat(this.dataset.low),
+                        total_volume: parseFloat(this.dataset.volume),
+                        market_cap: parseFloat(this.dataset.marketcap)
+                    };
+
+                    updateCoinInfo(coinData);
+
+                    // Save selected coin in localStorage
+                    localStorage.setItem('selectedCoin', JSON.stringify(coinData));
+                });
+            });
+
+            // Optional: Auto-update data every 6 seconds without reload
+            setInterval(async () => {
+                // Fetch latest data from server endpoint
+                const response = await fetch(
+                    '/api/coin-data'); // Laravel route returning JSON for all coins
+                const data = await response.json();
+
+                const currentCoin = JSON.parse(localStorage.getItem('selectedCoin'));
+                if (currentCoin) {
+                    const updatedCoin = data.find(c => c.id === currentCoin.id);
+                    if (updatedCoin) {
+                        updateCoinInfo(updatedCoin);
+                    }
+                }
+            }, 6000);
+        });
+    </script> --}}
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const intervalButtons = document.querySelectorAll('.interval-btn');
+            const outOrder = document.querySelector('.info-row div:nth-child(1) h6');
+            const countdown = document.querySelector('.info-row div:nth-child(2) h6');
+            const timePeriod = document.querySelector('.info-row div:nth-child(3) h6');
+
+            // Default interval: 60S
+            let selectedInterval = '60S';
+            let countdownValue = 5; // seconds
+            let countdownTimer;
+
+            function updateInfoRow(interval) {
+                // Example logic for out order time
+                const now = new Date();
+                outOrder.textContent = now.toLocaleString();
+
+                // Set countdown based on interval
+                switch (interval) {
+                    case '60S':
+                        countdownValue = 60;
+                        break;
+                    case '120S':
+                        countdownValue = 120;
+                        break;
+                    case '5M':
+                        countdownValue = 300;
+                        break;
+                    case '10M':
+                        countdownValue = 600;
+                        break;
+                    case '1H':
+                        countdownValue = 3600;
+                        break;
+                    case '24H':
+                        countdownValue = 86400;
+                        break;
+                }
+                countdown.textContent = countdownValue + 's';
+
+                // Set time period
+                const end = new Date(now.getTime() + countdownValue * 1000);
+                const formatTime = date =>
+                    `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                timePeriod.textContent = `${formatTime(now)} ~ ${formatTime(end)}`;
+
+                // Clear existing countdown if any
+                if (countdownTimer) clearInterval(countdownTimer);
+
+                // Start countdown
+                countdownTimer = setInterval(() => {
+                    countdownValue--;
+                    countdown.textContent = countdownValue + 's';
+                    if (countdownValue <= 0) {
+                        clearInterval(countdownTimer);
+                    }
+                }, 1000);
+            }
+
+            // Set default on page load
+            updateInfoRow(selectedInterval);
+
+            // Click event for interval buttons
+            intervalButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    intervalButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedInterval = this.textContent;
+                    updateInfoRow(selectedInterval);
+                });
+            });
+        });
+    </script>
+
+
+
+    {{-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script>
         // Generate random trading data (profits & losses)
         function generateData(count) {
             const series = [];
@@ -335,7 +653,7 @@
 
         const chart = new ApexCharts(document.querySelector("#chart"), options);
         chart.render();
-    </script>
+    </script> --}}
 @endpush
 
 @push('style')

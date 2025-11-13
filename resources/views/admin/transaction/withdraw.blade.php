@@ -17,7 +17,8 @@
                                 <th>#</th>
                                 <th>User Email</th>
                                 <th>Amount</th>
-                                <th>Withdraw Fee </th>
+                                <th> Fee </th>
+                                <th>Net Amount</th>
                                 <th>Address </th>
                                 <th>Transaction ID</th>
                                 <th>Status</th>
@@ -38,14 +39,17 @@
                                     };
 
                                     // Calculate fee (5%)
-                                    $fee = $withdraw->amount * 0.05;
+                                    // $fee = $withdraw->amount * 0.05;
+
                                 @endphp
 
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ optional($withdraw->user)->email ?? 'N/A' }}</td>
                                     <td class="text-end">${{ number_format($withdraw->amount, 2) }}</td>
-                                    <td class="text-end">${{ number_format($fee, 2) }}</td>
+                                    <td class="text-end">${{ number_format($withdraw->withdrawal_fee, 2) }}</td>
+                                    <td class="text-end">
+                                        ${{ number_format($withdraw->amount - $withdraw->withdrawal_fee, 2) }}</td>
                                     <td>{{ $withdraw->address }}</td>
                                     <td>{{ $withdraw->transaction_id ?? 'N/A' }}</td>
                                     <td>

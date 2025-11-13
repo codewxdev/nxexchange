@@ -45,6 +45,9 @@ class WithdrawController extends Controller
 {
     $withdraw->update([
         'status' => $request->status,
+        'approved_at' => $request->status === 'approved' ? now() : null,
+        'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
+
     ]);
 
     return redirect()->back()->with('success', 'Withdraw status updated!');

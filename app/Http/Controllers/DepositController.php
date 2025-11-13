@@ -34,6 +34,7 @@ class DepositController extends Controller
 {
     $deposit->update([
         'status' => $request->status,
+        'confirmation_time' => $request->status === 'approved' ? now() : null,
     ]);
 
     return redirect()->back()->with('success', 'Deposit status updated!');
