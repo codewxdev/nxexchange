@@ -42,6 +42,8 @@
             background-color: #f8f9fa;
         }
     </style>
+
+    @stack('style')
 </head>
 
 <body>
@@ -59,7 +61,7 @@
                         <a class="nav-link active" aria-current="page" href="#">Market</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Trade</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('trade.index') }}">Trade</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Assets</a>

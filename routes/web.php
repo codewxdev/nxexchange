@@ -11,12 +11,15 @@ use App\Http\Controllers\WithdrawController;
 use App\Http\Controllers\TransferController;
 use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\SignalController;
+use App\Http\Controllers\TradeController;
 
 // use function Pest\Laravel\get;
 
 Route::get('/', function () {
     return view('index');
 })->name('home');
+
+Route::get('/trade',[TradeController::class, 'index'])->name('trade.index');
 
 
 
