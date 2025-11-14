@@ -172,7 +172,7 @@
                                 </div>
 
                                 <div class="mini-info d-flex justify-content-between mb-1">
-                                    <span>Minimum: <b id="buy-minimum">0.00000001 USDT</b></span>
+                                    <span>Minimum: <b id="buy-minimum">0.01 USDT</b></span>
                                     <span>Available: <b id="buy-available">
                                             {{ number_format($wallet->exchange_account_balance ?? 0, 8) }} USDT
                                         </b></span>
@@ -219,7 +219,7 @@
                                 </div>
 
                                 <div class="mini-info d-flex justify-content-between mb-3">
-                                    <span>Minimum: <b id="sell-minimum">0.00000001 USDT</b></span>
+                                    <span>Minimum: <b id="sell-minimum">0.01 USDT</b></span>
                                     <span>Available: <b id="sell-available">
                                             {{ number_format($wallet->exchange_account_balance ?? 0, 8) }} USDT
                                         </b></span>
@@ -514,8 +514,9 @@
                 const calculatedStake = buyBalance * 0.01;
                 const minimumStake = 0.01;
 
-                // Frontend validation: Minimum trade is 0.01 USDT
-                if (calculatedStake < minimumStake) {
+                // Frontend validation: Minimum trade is 0.01 USDT (strict check - round to 2 decimals)
+                const stakeRounded = Math.round(calculatedStake * 100) / 100;
+                if (stakeRounded < minimumStake) {
                     alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
                     return;
                 }
@@ -664,8 +665,9 @@
                 const calculatedStake = sellBalance * 0.01;
                 const minimumStake = 0.01;
 
-                // Frontend validation: Minimum trade is 0.01 USDT
-                if (calculatedStake < minimumStake) {
+                // Frontend validation: Minimum trade is 0.01 USDT (strict check - round to 2 decimals)
+                const stakeRounded = Math.round(calculatedStake * 100) / 100;
+                if (stakeRounded < minimumStake) {
                     alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
                     return;
                 }

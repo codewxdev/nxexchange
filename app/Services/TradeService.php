@@ -42,10 +42,11 @@ class TradeService
                 throw new RuntimeException('Unable to calculate stake from zero balance.');
             }
 
-            // Minimum trade amount is 0.01 USDT
+            // Minimum trade amount is 0.01 USDT (strict check)
             $minimumStake = '0.01';
+            // Compare with 2 decimal precision to ensure minimum of 0.01 USDT
             if (bccomp($stake, $minimumStake, 2) < 0) {
-                throw new RuntimeException('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance is less than 0.01 USDT.');
+                throw new RuntimeException('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance ('.number_format((float)$stake, 8).' USDT) is less than 0.01 USDT.');
             }
 
             if (bccomp($wallet->exchange_account_balance, $stake, 8) < 0) {
