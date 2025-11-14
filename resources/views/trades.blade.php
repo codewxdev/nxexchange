@@ -19,12 +19,12 @@
                     @foreach ($currencies as $index => $coin)
                         <div class="market-item {{ $index === 0 ? 'active' : '' }}" data-name="{{ ucfirst($coin['name']) }}"
                             data-symbol="{{ strtoupper($coin['symbol']) }}" data-image="{{ $coin['image'] }}"
-                            data-price="{{ number_format($coin['current_price'], 2) }}"
-                            data-change="{{ number_format($coin['price_change_percentage_24h'], 2) }}"
-                            data-high="{{ number_format($coin['high_24h'], 2) }}"
-                            data-low="{{ number_format($coin['low_24h'], 2) }}"
-                            data-volume="{{ number_format($coin['total_volume'], 2) }}"
-                            data-marketcap="{{ number_format($coin['market_cap'], 2) }}">
+                            data-price="{{ $coin['current_price'] }}"
+                            data-change="{{ $coin['price_change_percentage_24h'] }}"
+                            data-high="{{ $coin['high_24h'] }}"
+                            data-low="{{ $coin['low_24h'] }}"
+                            data-volume="{{ $coin['total_volume'] }}"
+                            data-marketcap="{{ $coin['market_cap'] }}">
                             <img src="{{ $coin['image'] }}" alt="{{ $coin['name'] }}" />
                             <div class="info">
                                 <h5>{{ ucfirst($coin['name']) }}</h5>
@@ -74,15 +74,15 @@
                     </div>
                     <div class="stat-box">
                         <span>24h High</span>
-                        <h2 id="high-price">${{ number_format($currencies[0]['high_24h'], 2) }}</h2>
+                        <h2 id="high-price">${{ number_format($currencies[0]['high_24h'], 4) }}</h2>
                     </div>
                     <div class="stat-box">
                         <span>24h Low</span>
-                        <h2 id="low-price">${{ number_format($currencies[0]['low_24h'], 2) }}</h2>
+                        <h2 id="low-price">${{ number_format($currencies[0]['low_24h'], 4) }}</h2>
                     </div>
                     <div class="stat-box">
                         <span>Volume</span>
-                        <h2 id="volume">${{ number_format($currencies[0]['total_volume'], 2) }}</h2>
+                        <h2 id="volume">${{ number_format($currencies[0]['total_volume'], 4) }}</h2>
                     </div>
                 </div>
 
@@ -142,33 +142,48 @@
                         <!-- ===== BUY SECTION ===== -->
                         <div class="col-md-6 buy-card">
                             <h4 class="title">Buy BTC</h4>
-                            <div class="signals mb-3">
-                                <select class="form-select ">
-                                    @foreach ($signalBuys as $signal)
-                                        <option value="{{ $signal->id }}" class="text-dark">
-                                            {{ $signal->crypto_symbol }} → {{ $signal->direction }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                            <form id="buy-trade-form" data-direction="Call" data-crypto="BTC"
+                                data-balance="{{ $wallet->exchange_account_balance ?? 0 }}">
+                                @csrf
 
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control" placeholder="Enter amount to buy">
-                            </div>
+                                <div class="signals mb-3">
+                                    <select class="form-select" name="signal_id">
+                                        <option value="">No Signal (Self)</option>
+                                        @foreach ($signalBuys as $signal)
+                                            <option value="{{ $signal->id }}" class="text-dark">
+                                                {{ $signal->crypto_symbol }} → {{ $signal->direction }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <div class="percentages d-flex justify-content-between mb-3">
-                                <button>1%</button>
-                                <button>3%</button>
-                                <button>7%</button>
-                                <button>25%</button>
-                            </div>
+                                <input type="hidden" name="percentage" id="buy-percentage-input" value="1">
 
-                            <div class="mini-info d-flex justify-content-between">
-                                <span>Minimum: <b>0.00</b></span>
-                                <span>Available: <b>0.00 USDT</b></span>
-                            </div>
+                                <div class="input-group mb-3">
+                                    <input type="number" step="0.00000001" class="form-control" id="stake-input"
+                                        placeholder="Enter amount (or use percentage buttons)">
+                                </div>
 
-                            <button class="action-btn buy">Buy Now</button>
+                                <div class="percentages d-flex justify-content-between mb-3">
+                                    <button type="button" class="percent-btn active" data-percent="1">1%</button>
+                                    <button type="button" class="percent-btn" data-percent="3">3%</button>
+                                    <button type="button" class="percent-btn" data-percent="7">7%</button>
+                                    <button type="button" class="percent-btn" data-percent="25">25%</button>
+                                </div>
+
+                                <div class="mini-info d-flex justify-content-between mb-1">
+                                    <span>Minimum: <b id="buy-minimum">0.00000001 USDT</b></span>
+                                    <span>Available: <b id="buy-available">
+                                            {{ number_format($wallet->exchange_account_balance ?? 0, 8) }} USDT
+                                        </b></span>
+                                </div>
+                                <div class="mini-info d-flex justify-content-between mb-3">
+                                    <span>Selected Stake: <b id="buy-stake-amount">--</b></span>
+                                    <span>Selected %: <b id="buy-selected-percent">1%</b></span>
+                                </div>
+
+                                <button type="submit" class="action-btn buy" id="buy-btn">Buy Now</button>
+                            </form>
                         </div>
 
                         <!-- ===== SELL SECTION ===== -->
@@ -177,6 +192,7 @@
                             <div class="signals mb-3">
 
                                 <select class="form-select">
+                                    <option value="">No Signal (Self)</option>
                                     @foreach ($signalSells as $signal)
                                         <option value="{{ $signal->id }}" class="text-dark">
                                             {{ $signal->crypto_symbol }} → {{ $signal->direction }}
@@ -190,10 +206,10 @@
                             </div>
 
                             <div class="percentages d-flex justify-content-between mb-3">
-                                <button>1%</button>
-                                <button>3%</button>
-                                <button>7%</button>
-                                <button>25%</button>
+                                <button type="button">1%</button>
+                                <button type="button">3%</button>
+                                <button type="button">7%</button>
+                                <button type="button">25%</button>
                             </div>
 
                             <div class="mini-info d-flex justify-content-between">
@@ -227,6 +243,7 @@
         </div>
     </div>
 @endsection
+
 
 @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
@@ -381,6 +398,146 @@
                     updateCoinInfo(coinData);
                     localStorage.setItem('selectedCoin', JSON.stringify(coinData));
                 });
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tradeRoute = @json(route('trade.execute'));
+            const buyForm = document.getElementById('buy-trade-form');
+
+            if (!buyForm) {
+                return;
+            }
+
+            const percentageInput = document.getElementById('buy-percentage-input');
+            const stakeInput = document.getElementById('stake-input');
+            const stakeAmountText = document.getElementById('buy-stake-amount');
+            const selectedPercentText = document.getElementById('buy-selected-percent');
+            const availableText = document.getElementById('buy-available');
+            const percentButtons = buyForm.querySelectorAll('.percent-btn');
+            const csrfInput = buyForm.querySelector('input[name="_token"]');
+
+            let buyBalance = parseFloat(buyForm.dataset.balance || '0');
+
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+            const formatAmount = (value) => Number(value || 0).toFixed(8);
+
+            const updateStakeDisplay = (percent) => {
+                const stake = buyBalance * (percent / 100);
+                if (stakeAmountText) {
+                    stakeAmountText.textContent = `${formatAmount(stake)} USDT`;
+                }
+                if (selectedPercentText) {
+                    selectedPercentText.textContent = `${percent}%`;
+                }
+                if (stakeInput) {
+                    stakeInput.value = formatAmount(stake);
+                }
+            };
+
+            const setActivePercentage = (percent) => {
+                percentageInput.value = percent;
+                percentButtons.forEach((btn) => btn.classList.remove('active'));
+                const activeButton = Array.from(percentButtons).find(
+                    (btn) => parseFloat(btn.dataset.percent) === percent
+                );
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+                updateStakeDisplay(percent);
+            };
+
+            setActivePercentage(parseFloat(percentageInput.value || '1'));
+
+            percentButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const percent = parseFloat(btn.dataset.percent || '1');
+                    setActivePercentage(percent);
+                });
+            });
+
+            if (stakeInput) {
+                stakeInput.addEventListener('input', () => {
+                    const rawStake = parseFloat(stakeInput.value || '0');
+
+                    if (buyBalance <= 0) {
+                        stakeAmountText.textContent = `${formatAmount(rawStake)} USDT`;
+                        selectedPercentText.textContent = 'N/A';
+                        percentageInput.value = 0;
+                        percentButtons.forEach((btn) => btn.classList.remove('active'));
+                        return;
+                    }
+
+                    let percent = (rawStake / buyBalance) * 100;
+                    percent = clamp(percent, 0, 100);
+
+                    percentageInput.value = percent.toFixed(2);
+                    selectedPercentText.textContent = `${percent.toFixed(2)}%`;
+                    stakeAmountText.textContent = `${formatAmount(rawStake)} USDT`;
+
+                    let matched = false;
+                    percentButtons.forEach((btn) => {
+                        const btnPercent = parseFloat(btn.dataset.percent || '0');
+                        if (Math.abs(btnPercent - percent) < 0.01) {
+                            btn.classList.add('active');
+                            matched = true;
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+
+                    if (!matched) {
+                        percentButtons.forEach((btn) => btn.classList.remove('active'));
+                    }
+                });
+            }
+
+            buyForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const payload = {
+                    direction: buyForm.dataset.direction,
+                    crypto_symbol: buyForm.dataset.crypto,
+                    signal_id: buyForm.querySelector('select[name="signal_id"]').value || null,
+                    percentage: percentageInput.value,
+                };
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                };
+
+                if (csrfInput) {
+                    headers['X-CSRF-TOKEN'] = csrfInput.value;
+                }
+
+                try {
+                    const response = await fetch(tradeRoute, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(payload),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Trade execution failed.');
+                    }
+
+                    alert('Trade executed! New balance: ' + data.new_balance + ' USDT');
+
+                    if (typeof data.new_balance !== 'undefined') {
+                        buyBalance = parseFloat(data.new_balance) || 0;
+                        if (availableText) {
+                            availableText.textContent = `${formatAmount(buyBalance)} USDT`;
+                        }
+                        setActivePercentage(parseFloat(percentageInput.value || '1'));
+                    }
+                } catch (error) {
+                    alert('Trade failed: ' + error.message);
+                }
             });
         });
     </script>

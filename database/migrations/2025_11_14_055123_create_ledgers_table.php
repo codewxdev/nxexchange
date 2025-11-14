@@ -14,10 +14,10 @@ return new class extends Migration
         Schema::create('ledgers', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
-$table->string('type');
-$table->decimal('amount', 20, 8);
-$table->decimal('balance_after', 20, 8);
-$table->text('notes')->nullable();
+            $table->string('type');
+            $table->decimal('amount', 20, 8);
+            $table->decimal('balance_after', 20, 8);
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Signal;
+use App\Models\Trade;
 use App\Services\TradeService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,14 +15,11 @@ class SettleTradesForSignal implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $signalId;
-
     /**
-     * Create a new job instance.
+     * The signal to settle.
      */
-    public function __construct(int $signalId)
+    public function __construct(private readonly int $signalId)
     {
-        $this->signalId = $signalId;
     }
 
     /**
@@ -31,25 +29,20 @@ class SettleTradesForSignal implements ShouldQueue
     {
         $signal = Signal::find($this->signalId);
 
-        if (! $signal) {
+        if (!$signal) {
             return;
         }
 
-        // Get all pending trades for this signal
-        $trades = \App\Models\Trade::where('signal_id', $this->signalId)
+        $tradeIds = Trade::where('signal_id', $this->signalId)
             ->where('result', 'pending')
             ->pluck('id')
             ->toArray();
 
-        if (empty($trades)) {
+        if (empty($tradeIds)) {
             return;
         }
 
-        // The winning direction is the signal's direction
-        // If signal is Call, Call wins; if signal is Put, Put wins
-        $winningDirection = $signal->direction;
-
-        // Settle all trades for this signal
-        $tradeService->settleTrades($trades, $winningDirection);
+        $tradeService->settleTrades($tradeIds, $signal->direction);
     }
 }
+
