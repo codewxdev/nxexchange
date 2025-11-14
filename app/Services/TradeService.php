@@ -36,18 +36,24 @@ class TradeService
             }
 
             // 1% of exchange balance
-            $stake = bcmul($wallet->exchange_account_balance, '0.01', 2);
+            $stake = bcmul($wallet->exchange_account_balance, '0.01', 8);
 
-            if (bccomp($stake, '0', 2) <= 0) {
+            if (bccomp($stake, '0', 8) <= 0) {
                 throw new RuntimeException('Unable to calculate stake from zero balance.');
             }
 
-            if (bccomp($wallet->exchange_account_balance, $stake, 2) < 0) {
+            // Minimum trade amount is 0.01 USDT
+            $minimumStake = '0.01';
+            if (bccomp($stake, $minimumStake, 2) < 0) {
+                throw new RuntimeException('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance is less than 0.01 USDT.');
+            }
+
+            if (bccomp($wallet->exchange_account_balance, $stake, 8) < 0) {
                 throw new RuntimeException('Insufficient funds to place trade.');
             }
 
             // Deduct stake
-            $wallet->exchange_account_balance = bcsub($wallet->exchange_account_balance, $stake, 2);
+            $wallet->exchange_account_balance = bcsub($wallet->exchange_account_balance, $stake, 8);
             $wallet->save();
 
             // Record ledger entry

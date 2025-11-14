@@ -189,35 +189,48 @@
                         <!-- ===== SELL SECTION ===== -->
                         <div class="col-md-6 sell-card">
                             <h4 class="title">Sell BTC</h4>
-                            <div class="signals mb-3">
+                            <form id="sell-trade-form" data-direction="Put" data-crypto="BTC"
+                                data-balance="{{ $wallet->exchange_account_balance ?? 0 }}">
+                                @csrf
 
-                                <select class="form-select">
-                                    <option value="">No Signal (Self)</option>
-                                    @foreach ($signalSells as $signal)
-                                        <option value="{{ $signal->id }}" class="text-dark">
-                                            {{ $signal->crypto_symbol }} → {{ $signal->direction }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                <div class="signals mb-3">
+                                    <select class="form-select" name="signal_id">
+                                        <option value="">No Signal (Self)</option>
+                                        @foreach ($signalSells as $signal)
+                                            <option value="{{ $signal->id }}" class="text-dark">
+                                                {{ $signal->crypto_symbol }} → {{ $signal->direction }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
 
-                            <div class="input-group mb-3">
-                                <input type="number" class="form-control" placeholder="Enter amount to sell">
-                            </div>
+                                <input type="hidden" name="percentage" id="sell-percentage-input" value="1">
 
-                            <div class="percentages d-flex justify-content-between mb-3">
-                                <button type="button">1%</button>
-                                <button type="button">3%</button>
-                                <button type="button">7%</button>
-                                <button type="button">25%</button>
-                            </div>
+                                <div class="input-group mb-3">
+                                    <input type="number" step="0.00000001" class="form-control" id="sell-stake-input"
+                                        placeholder="Enter amount (or use percentage buttons)">
+                                </div>
 
-                            <div class="mini-info d-flex justify-content-between">
-                                <span>Minimum: <b>0.00</b></span>
-                                <span>Available: <b>0.00 BTC</b></span>
-                            </div>
+                                <div class="percentages d-flex justify-content-between mb-3">
+                                    <button type="button" class="percent-btn" data-percent="1">1%</button>
+                                    <button type="button" class="percent-btn" data-percent="3">3%</button>
+                                    <button type="button" class="percent-btn" data-percent="7">7%</button>
+                                    <button type="button" class="percent-btn" data-percent="25">25%</button>
+                                </div>
 
-                            <button class="action-btn sell">Sell Now</button>
+                                <div class="mini-info d-flex justify-content-between mb-3">
+                                    <span>Minimum: <b id="sell-minimum">0.00000001 USDT</b></span>
+                                    <span>Available: <b id="sell-available">
+                                            {{ number_format($wallet->exchange_account_balance ?? 0, 8) }} USDT
+                                        </b></span>
+                                </div>
+                                <div class="mini-info d-flex justify-content-between mb-3">
+                                    <span>Selected Stake: <b id="sell-stake-amount">--</b></span>
+                                    <span>Selected %: <b id="sell-selected-percent">1%</b></span>
+                                </div>
+
+                                <button type="submit" class="action-btn sell" id="sell-btn">Sell Now</button>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -497,6 +510,16 @@
             buyForm.addEventListener('submit', async (event) => {
                 event.preventDefault();
 
+                // Calculate 1% of balance (as per requirement)
+                const calculatedStake = buyBalance * 0.01;
+                const minimumStake = 0.01;
+
+                // Frontend validation: Minimum trade is 0.01 USDT
+                if (calculatedStake < minimumStake) {
+                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
+                    return;
+                }
+
                 const payload = {
                     direction: buyForm.dataset.direction,
                     crypto_symbol: buyForm.dataset.crypto,
@@ -532,6 +555,156 @@
                         buyBalance = parseFloat(data.new_balance) || 0;
                         if (availableText) {
                             availableText.textContent = `${formatAmount(buyBalance)} USDT`;
+                        }
+                        setActivePercentage(parseFloat(percentageInput.value || '1'));
+                    }
+                } catch (error) {
+                    alert('Trade failed: ' + error.message);
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tradeRoute = @json(route('trade.execute'));
+            const sellForm = document.getElementById('sell-trade-form');
+
+            if (!sellForm) {
+                return;
+            }
+
+            const percentageInput = document.getElementById('sell-percentage-input');
+            const stakeInput = document.getElementById('sell-stake-input');
+            const stakeAmountText = document.getElementById('sell-stake-amount');
+            const selectedPercentText = document.getElementById('sell-selected-percent');
+            const availableText = document.getElementById('sell-available');
+            const percentButtons = sellForm.querySelectorAll('.percent-btn');
+            const csrfInput = sellForm.querySelector('input[name="_token"]');
+
+            let sellBalance = parseFloat(sellForm.dataset.balance || '0');
+
+            const clamp = (value, min, max) => Math.min(Math.max(value, min), max);
+
+            const formatAmount = (value) => Number(value || 0).toFixed(8);
+
+            const updateStakeDisplay = (percent) => {
+                const stake = sellBalance * (percent / 100);
+                if (stakeAmountText) {
+                    stakeAmountText.textContent = `${formatAmount(stake)} USDT`;
+                }
+                if (selectedPercentText) {
+                    selectedPercentText.textContent = `${percent}%`;
+                }
+                if (stakeInput) {
+                    stakeInput.value = formatAmount(stake);
+                }
+            };
+
+            const setActivePercentage = (percent) => {
+                percentageInput.value = percent;
+                percentButtons.forEach((btn) => btn.classList.remove('active'));
+                const activeButton = Array.from(percentButtons).find(
+                    (btn) => parseFloat(btn.dataset.percent) === percent
+                );
+                if (activeButton) {
+                    activeButton.classList.add('active');
+                }
+                updateStakeDisplay(percent);
+            };
+
+            setActivePercentage(parseFloat(percentageInput.value || '1'));
+
+            percentButtons.forEach((btn) => {
+                btn.addEventListener('click', () => {
+                    const percent = parseFloat(btn.dataset.percent || '1');
+                    setActivePercentage(percent);
+                });
+            });
+
+            if (stakeInput) {
+                stakeInput.addEventListener('input', () => {
+                    const rawStake = parseFloat(stakeInput.value || '0');
+
+                    if (sellBalance <= 0) {
+                        stakeAmountText.textContent = `${formatAmount(rawStake)} USDT`;
+                        selectedPercentText.textContent = 'N/A';
+                        percentageInput.value = 0;
+                        percentButtons.forEach((btn) => btn.classList.remove('active'));
+                        return;
+                    }
+
+                    let percent = (rawStake / sellBalance) * 100;
+                    percent = clamp(percent, 0, 100);
+
+                    percentageInput.value = percent.toFixed(2);
+                    selectedPercentText.textContent = `${percent.toFixed(2)}%`;
+                    stakeAmountText.textContent = `${formatAmount(rawStake)} USDT`;
+
+                    let matched = false;
+                    percentButtons.forEach((btn) => {
+                        const btnPercent = parseFloat(btn.dataset.percent || '0');
+                        if (Math.abs(btnPercent - percent) < 0.01) {
+                            btn.classList.add('active');
+                            matched = true;
+                        } else {
+                            btn.classList.remove('active');
+                        }
+                    });
+
+                    if (!matched) {
+                        percentButtons.forEach((btn) => btn.classList.remove('active'));
+                    }
+                });
+            }
+
+            sellForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                // Calculate 1% of balance (as per requirement)
+                const calculatedStake = sellBalance * 0.01;
+                const minimumStake = 0.01;
+
+                // Frontend validation: Minimum trade is 0.01 USDT
+                if (calculatedStake < minimumStake) {
+                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
+                    return;
+                }
+
+                const payload = {
+                    direction: sellForm.dataset.direction,
+                    crypto_symbol: sellForm.dataset.crypto,
+                    signal_id: sellForm.querySelector('select[name="signal_id"]').value || null,
+                    percentage: percentageInput.value,
+                };
+
+                const headers = {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                };
+
+                if (csrfInput) {
+                    headers['X-CSRF-TOKEN'] = csrfInput.value;
+                }
+
+                try {
+                    const response = await fetch(tradeRoute, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(payload),
+                    });
+
+                    const data = await response.json();
+
+                    if (!response.ok) {
+                        throw new Error(data.error || 'Trade execution failed.');
+                    }
+
+                    alert('Trade executed! New balance: ' + data.new_balance + ' USDT');
+
+                    if (typeof data.new_balance !== 'undefined') {
+                        sellBalance = parseFloat(data.new_balance) || 0;
+                        if (availableText) {
+                            availableText.textContent = `${formatAmount(sellBalance)} USDT`;
                         }
                         setActivePercentage(parseFloat(percentageInput.value || '1'));
                     }
