@@ -1,0 +1,222 @@
+@extends('Layouts.FrontLayout')
+
+@section('content')
+    <div class="asset-container py-5 px-3">
+        <div class="row g-4 justify-content-center">
+
+            <!-- ===== Total Asset Overview ===== -->
+            <div class="col-12 glass-card text-center py-4">
+                <h2 class="fw-bold text-white mb-1">Total Account Assets</h2>
+                <p class="text-muted mb-2">All balances converted to USD</p>
+                <h1 class="main-balance mb-0">$00.00</h1>
+                <span class="text-secondary">≈ 0.00 USD</span>
+            </div>
+
+            <!-- ===== Quick Actions ===== -->
+            <div class="col-12 col-md-10">
+                <div class="row g-3 text-center justify-content-center">
+                    <div class="col-6 col-md-3 action-box">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Deposit</span>
+                    </div>
+                    <div class="col-6 col-md-3 action-box">
+                        <i class="fa-solid fa-upload"></i>
+                        <span>Withdraw</span>
+                    </div>
+                    <div class="col-6 col-md-3 action-box">
+                        <i class="fa-solid fa-right-left"></i>
+                        <span>Transfer</span>
+                    </div>
+                    <div class="col-6 col-md-3 action-box">
+                        <i class="fa-solid fa-link"></i>
+                        <span>Address</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== Account Breakdown ===== -->
+            <div class="col-12 col-md-10 glass-card mt-4 p-4">
+                <h3 class="section-title mb-3 text-white">My Accounts</h3>
+                <div class="row g-3">
+                    <div class="col-12 col-md-6 col-lg-3 account-box">
+                        <i class="fa-solid fa-wallet"></i>
+                        <div class="content">
+                            <h5>Total Account Asset</h5>
+                            <span>USDT</span>
+                        </div>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3 account-box">
+                        <i class="fa-solid fa-coins"></i>
+                        <div class="content">
+                            <h5>Spot Account</h5>
+                            <span>USDT</span>
+                        </div>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3 account-box">
+                        <i class="fa-solid fa-file-contract"></i>
+                        <div class="content">
+                            <h5>Contract Account</h5>
+                            <span>USDT</span>
+                        </div>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-md-6 col-lg-3 account-box">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <div class="content">
+                            <h5>Investment Account</h5>
+                            <span>USDT</span>
+                        </div>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+
+
+@push('style')
+    <style>
+        /* ===== ASSET PAGE DESIGN ===== */
+        .asset-container {
+            background: radial-gradient(circle at top left, #0b0b0b, #0f1115);
+            min-height: 100vh;
+            color: #fff;
+        }
+
+        /* Glass Card Background */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(15px);
+            box-shadow: 0 0 30px rgba(244, 101, 35, 0.1);
+        }
+
+        /* Main Balance */
+        .main-balance {
+            font-size: 3rem;
+            font-weight: 700;
+            color: #F46523;
+            text-shadow: 0 0 15px rgba(244, 101, 35, 0.3);
+        }
+
+        /* Action Buttons */
+        .action-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 15px;
+            padding: 25px 8px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+
+        .action-box:hover {
+            background: rgba(244, 101, 35, 0.15);
+            transform: translateY(-5px);
+        }
+
+        .action-box i {
+            font-size: 1.5rem;
+            color: #F46523;
+            margin-bottom: 10px;
+        }
+
+        .action-box span {
+            display: block;
+            color: #fff;
+            font-size: 0.95rem;
+        }
+
+        /* Account Boxes */
+        .account-box {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: 0.3s;
+            margin-right: 10px;
+        }
+
+        .account-box:hover {
+            background: rgba(244, 101, 35, 0.12);
+            transform: translateY(-4px);
+        }
+
+        .account-box i {
+            font-size: 1.8rem;
+            color: #F46523;
+            margin-right: 10px;
+        }
+
+        .account-box .content h5 {
+            font-size: 1rem;
+            margin-bottom: 4px;
+            color: #fff;
+        }
+
+        .account-box .content span {
+            color: #bbb;
+            font-size: 0.9rem;
+        }
+
+        .account-box .usd {
+            text-align: right;
+        }
+
+        .account-box .usd h4 {
+            margin: 0;
+            color: #fff;
+            font-size: 1.3rem;
+        }
+
+        .account-box .usd small {
+            color: #999;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.4rem;
+            border-left: 4px solid #F46523;
+            padding-left: 10px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            .main-balance {
+                font-size: 2rem;
+            }
+
+            .account-box {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .account-box i {
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+@endpush
+
+
+ 

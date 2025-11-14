@@ -37,7 +37,7 @@
             transform: translateY(0);
         }
 
- 
+
         .dropdown-item:hover {
             background-color: #f8f9fa;
         }
@@ -49,7 +49,8 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#"><img src="{{ asset('assets/images/logo2.png') }}" alt="" width="80px"></a>
+            <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('assets/images/logo2.png') }}"
+                    alt="" width="80px"></a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -64,62 +65,67 @@
                         <a class="nav-link active" aria-current="page" href="{{ route('trade.index') }}">Trade</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Assets</a>
+                        <a class="nav-link active" aria-current="page" href="{{ route('asset.index') }}">Assets</a>
                     </li>
-
                 </ul>
                 @if (auth()->user())
-                <ul class="navbar-nav  mb-2 mb-lg-0">
+                    <ul class="navbar-nav  mb-2 mb-lg-0">
 
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Transaction</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Share</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Help</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Set</a>
-                    </li>
-                    <li class="nav-item dropdown user-dropdown d-flex">
-                        <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
-                        <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
-                            {{ auth()->user()->email }}
-                        </a>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Transaction</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Share</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Help</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="#">Set</a>
+                        </li>
+                        <li class="nav-item dropdown user-dropdown d-flex">
+                            <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
+                            <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
+                                {{ auth()->user()->email }}
+                            </a>
 
-                        <div class="dropdown-menu dropdown-menu-end animate-dropdown" aria-labelledby="userDropdown">
-                            <div class="px-3 py-2">
-                                <p><strong>ID:</strong> {{ auth()->user()->id }}</p>
-                                <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
-                                <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
-                                <!-- Add more info as needed -->
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    Logout
-                                </a>
-                                <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
-                                    @csrf
-                                </form>
+                            <div class="dropdown-menu dropdown-menu-end animate-dropdown"
+                                aria-labelledby="userDropdown">
+                                <div class="px-3 py-2">
+                                    <p><strong>ID:</strong> {{ auth()->user()->id }}</p>
+                                    <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
+                                    <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
+                                    <!-- Add more info as needed -->
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Logout
+                                    </a>
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                        class="d-none">
+                                        @csrf
+                                    </form>
+                                    @if (auth()->user()->role == 'admin')
+                                        <a href="{{ route('admin.dashboard') }}">Admin Panel</a>
+                                    @endif
+
+                                </div>
                             </div>
-                        </div>
-                    </li>
+                        </li>
 
-                </ul>
+                    </ul>
                 @else
-                <div class="btns">
-                    <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
-                    <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
-                            now</button></a>
-                </div>
-                <select name="" id="language">
-                    <option value="en">English</option>
-                    <option value="fr">French</option>
-                    <option value="de">Duch</option>
-                    <option value="de">Duch</option>
-                </select>
+                    <div class="btns">
+                        <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign In</button></a>
+                        <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
+                                now</button></a>
+                    </div>
+                    <select name="" id="language">
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                        <option value="de">Duch</option>
+                        <option value="de">Duch</option>
+                    </select>
                 @endif
 
             </div>
@@ -192,22 +198,22 @@
     </footer>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        const dropdownToggle = document.getElementById('userDropdown');
-        const dropdownMenu = dropdownToggle.nextElementSibling;
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggle = document.getElementById('userDropdown');
+            const dropdownMenu = dropdownToggle.nextElementSibling;
 
-        dropdownToggle.addEventListener('click', function (e) {
-            e.preventDefault();
-            dropdownToggle.parentElement.classList.toggle('show');
-        });
+            dropdownToggle.addEventListener('click', function(e) {
+                e.preventDefault();
+                dropdownToggle.parentElement.classList.toggle('show');
+            });
 
-        // Click outside to close
-        document.addEventListener('click', function(e) {
-            if (!dropdownToggle.parentElement.contains(e.target)) {
-                dropdownToggle.parentElement.classList.remove('show');
-            }
+            // Click outside to close
+            document.addEventListener('click', function(e) {
+                if (!dropdownToggle.parentElement.contains(e.target)) {
+                    dropdownToggle.parentElement.classList.remove('show');
+                }
+            });
         });
-    });
     </script>
 
     <script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.8.5/dist/dotlottie-wc.js" type="module"></script>
