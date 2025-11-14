@@ -16,39 +16,38 @@ class TradeService
     /**
      * Place a trade by staking 1% of the user's exchange balance.
      *
-     * @param  int         $userId
-     * @param  string      $direction    Call/Put (case insensitive)
-     * @param  int|null    $signalId     Optional signal reference
-     * @param  string      $symbol       Crypto symbol (defaults to BTC)
+     * @param  string  $direction  Call/Put (case insensitive)
+     * @param  int|null  $signalId  Optional signal reference
+     * @param  string  $symbol  Crypto symbol (defaults to BTC)
      */
     public function placeTrade(int $userId, string $direction, ?int $signalId, string $symbol = 'BTC'): Trade
     {
         $normalizedDirection = ucfirst(strtolower($direction));
 
-        if (!in_array($normalizedDirection, ['Call', 'Put'], true)) {
+        if (! in_array($normalizedDirection, ['Call', 'Put'], true)) {
             throw new InvalidArgumentException('Direction must be Call or Put.');
         }
 
         return DB::transaction(function () use ($userId, $normalizedDirection, $signalId, $symbol) {
             $wallet = Wallet::where('user_id', $userId)->lockForUpdate()->first();
 
-            if (!$wallet) {
+            if (! $wallet) {
                 throw new ModelNotFoundException('Wallet not found for the authenticated user.');
             }
 
             // 1% of exchange balance
-            $stake = bcmul($wallet->exchange_account_balance, '0.01', 8);
+            $stake = bcmul($wallet->exchange_account_balance, '0.01', 2);
 
-            if (bccomp($stake, '0', 8) <= 0) {
+            if (bccomp($stake, '0', 2) <= 0) {
                 throw new RuntimeException('Unable to calculate stake from zero balance.');
             }
 
-            if (bccomp($wallet->exchange_account_balance, $stake, 8) < 0) {
+            if (bccomp($wallet->exchange_account_balance, $stake, 2) < 0) {
                 throw new RuntimeException('Insufficient funds to place trade.');
             }
 
             // Deduct stake
-            $wallet->exchange_account_balance = bcsub($wallet->exchange_account_balance, $stake, 8);
+            $wallet->exchange_account_balance = bcsub($wallet->exchange_account_balance, $stake, 2);
             $wallet->save();
 
             // Record ledger entry
@@ -97,7 +96,7 @@ class TradeService
 
                 $wallet = Wallet::where('user_id', $trade->user_id)->lockForUpdate()->first();
 
-                if (!$wallet) {
+                if (! $wallet) {
                     continue;
                 }
 
@@ -164,4 +163,3 @@ class TradeService
         }, 3);
     }
 }
-
