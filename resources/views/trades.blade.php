@@ -143,10 +143,12 @@
                         <div class="col-md-6 buy-card">
                             <h4 class="title">Buy BTC</h4>
                             <div class="signals mb-3">
-                                <select class="form-select">
-                                    <option>Signal One</option>
-                                    <option>Signal Two</option>
-                                    <option>Signal Three</option>
+                                <select class="form-select ">
+                                    @foreach ($signalBuys as $signal)
+                                        <option value="{{ $signal->id }}" class="text-dark">
+                                            {{ $signal->crypto_symbol }} → {{ $signal->direction }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
@@ -173,10 +175,13 @@
                         <div class="col-md-6 sell-card">
                             <h4 class="title">Sell BTC</h4>
                             <div class="signals mb-3">
+
                                 <select class="form-select">
-                                    <option>Signal One</option>
-                                    <option>Signal Two</option>
-                                    <option>Signal Three</option>
+                                    @foreach ($signalSells as $signal)
+                                        <option value="{{ $signal->id }}" class="text-dark">
+                                            {{ $signal->crypto_symbol }} → {{ $signal->direction }}
+                                        </option>
+                                    @endforeach
                                 </select>
                             </div>
 
