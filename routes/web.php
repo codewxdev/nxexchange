@@ -6,6 +6,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\CryptoController;
 use App\Http\Controllers\DepositController;
+use App\Http\Controllers\MarketController;
 use App\Http\Controllers\SignalController;
 use App\Http\Controllers\TradeController;
 use App\Http\Controllers\TransferController;
@@ -21,6 +22,8 @@ Route::get('/', function () {
 
 Route::get('/trade', [TradeController::class, 'index'])->name('trade.index');
 Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
+Route::get('/market', [MarketController::class, 'index'])->name('market.index');
+
 
 Route::get('/register', [RegisterController::class, 'ShowRegister'])->name('register.index');
 Route::post('/register-store', [RegisterController::class, 'storeRegisterForm'])->name('register.store');
@@ -38,22 +41,25 @@ Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // dashboard route start here
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-})->name('admin.dashboard');
-Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
-Route::prefix('admin')->group(function () {
-    Route::resource('signals', SignalController::class)->names('admin.signals');
+Route::middleware('isAdmin')->group(function () {
+    Route::get('/admin/dashboard', function () {
+        return view('admin.dashboard');
+    })->name('admin.dashboard');
+    Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
+    Route::prefix('admin')->group(function () {
+        Route::resource('signals', SignalController::class)->names('admin.signals');
+    });
+
+    Route::get('deposit', [DepositController::class, 'index'])->name('deposits.index');
+    // Route::post('/deposits/store', [DepositController::class, 'store'])->name('deposits.store');
+    Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraws.index');
+    // Route::post('/withdrawals/store', [WithdrawController::class, 'store'])->name('withdrawals.store');
+    Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
+    // Route::post('/transfers/store', [TransferController::class, 'store'])->name('transfers.store');
+    Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
+    Route::post('/withdraws/{withdraw}/update-status', [WithdrawController::class, 'updateStatus'])->name('withdraws.updateStatus');
 });
 
-Route::get('deposit', [DepositController::class, 'index'])->name('deposits.index');
-// Route::post('/deposits/store', [DepositController::class, 'store'])->name('deposits.store');
-Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraws.index');
-// Route::post('/withdrawals/store', [WithdrawController::class, 'store'])->name('withdrawals.store');
-Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
-// Route::post('/transfers/store', [TransferController::class, 'store'])->name('transfers.store');
-Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
-Route::post('/withdraws/{withdraw}/update-status', [WithdrawController::class, 'updateStatus'])->name('withdraws.updateStatus');
 
 Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('trade.execute');
 

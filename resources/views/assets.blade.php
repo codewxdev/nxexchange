@@ -37,12 +37,14 @@
             <!-- ===== Account Breakdown ===== -->
             <div class="col-12 col-md-10 glass-card mt-4 p-4">
                 <h3 class="section-title mb-3 text-white">My Accounts</h3>
-                <div class="row g-3">
-                    <div class="col-12 col-md-6 col-lg-3 account-box">
-                        <i class="fa-solid fa-wallet"></i>
-                        <div class="content">
-                            <h5>Total Account Asset</h5>
-                            <span>USDT</span>
+                <div class="row g-4 m-0">
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-wallet"></i>
+                            <div class="heading">
+                                <h5>Total Account Asset</h5>
+                                <span>USDT</span>
+                            </div>
                         </div>
                         <div class="usd">
                             <h4>0</h4>
@@ -50,11 +52,13 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3 account-box">
-                        <i class="fa-solid fa-coins"></i>
-                        <div class="content">
-                            <h5>Spot Account</h5>
-                            <span>USDT</span>
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-coins"></i>
+                            <div class="heading">
+                                <h5>Spot Account</h5>
+                                <span>USDT</span>
+                            </div>
                         </div>
                         <div class="usd">
                             <h4>0</h4>
@@ -62,11 +66,13 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3 account-box">
-                        <i class="fa-solid fa-file-contract"></i>
-                        <div class="content">
-                            <h5>Contract Account</h5>
-                            <span>USDT</span>
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <div class="heading">
+                                <h5>Contract Account</h5>
+                                <span>USDT</span>
+                            </div>
                         </div>
                         <div class="usd">
                             <h4>0</h4>
@@ -74,18 +80,23 @@
                         </div>
                     </div>
 
-                    <div class="col-12 col-md-6 col-lg-3 account-box">
-                        <i class="fa-solid fa-chart-line"></i>
-                        <div class="content">
-                            <h5>Investment Account</h5>
-                            <span>USDT</span>
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <div class="heading">
+                                <h5>Investment Account</h5>
+                                <span>USDT</span>
+                            </div>
                         </div>
                         <div class="usd">
                             <h4>0</h4>
                             <small>≈ USD</small>
                         </div>
                     </div>
+
                 </div>
+                
+
             </div>
         </div>
     </div>
@@ -154,7 +165,9 @@
             align-items: center;
             justify-content: space-between;
             transition: 0.3s;
-            margin-right: 10px;
+            width: 100% !important
+            /* margin-right: 5px; */
+            
         }
 
         .account-box:hover {
@@ -217,6 +230,3 @@
         }
     </style>
 @endpush
-
-
- 

@@ -1,0 +1,90 @@
+ 
+        /* ====== ERROR PAGE GLOBAL STYLES ====== */
+        
+
+        .error-container{
+            margin: 0;
+            padding: 0;
+            background: #0b0b0b;
+            font-family: 'Poppins', sans-serif;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 80vh;
+        }
+
+        .error-wrapper {
+            text-align: center;
+            padding: 40px;
+            width: 90%;
+            max-width: 550px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .error-code {
+            font-size: 110px;
+            font-weight: 800;
+            color: #F46523;
+            margin-bottom: -10px;
+            animation: float 3s infinite ease-in-out;
+        }
+
+        .error-title {
+            font-size: 32px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .error-msg {
+            font-size: 16px;
+            opacity: 0.8;
+            margin-bottom: 25px;
+        }
+
+        .error-btn {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #F46523;
+            border-radius: 50px;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .error-btn:hover {
+            background: #da541d;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+ 
