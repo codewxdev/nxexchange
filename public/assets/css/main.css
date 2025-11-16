@@ -125,7 +125,7 @@
             padding: 40px 89px;
         }
 
-        .main .content a {
+        .main .content .small-head{
             background-color: #f465235c;
             padding: 7px 14px;
             border-radius: 15px;
@@ -137,7 +137,6 @@
 
         .main .content h1 {
             font-size: 65px;
-
         }
 
         .hero-btns .btn1 {
@@ -716,4 +715,8 @@
             background-color: #F46523;
             border-radius: 50%;
             padding: 8px 14px;
+        }
+
+        html{
+            scroll-behavior: smooth;
         }

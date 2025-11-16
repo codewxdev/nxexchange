@@ -15,7 +15,7 @@
             <!-- ===== Quick Actions ===== -->
             <div class="col-12 col-md-10">
                 <div class="row g-3 text-center justify-content-center">
-                    <div class="col-6 col-md-3 action-box">
+                    <div class="col-6 col-md-3 action-box" data-bs-toggle="modal" data-bs-target="#depositModal">
                         <i class="fa-solid fa-download"></i>
                         <span>Deposit</span>
                     </div>
@@ -27,10 +27,11 @@
                         <i class="fa-solid fa-right-left"></i>
                         <span>Transfer</span>
                     </div>
-                    <div class="col-6 col-md-3 action-box">
+                    <div class="col-6 col-md-3 action-box" data-bs-toggle="modal" data-bs-target="#addressModal">
                         <i class="fa-solid fa-link"></i>
                         <span>Address</span>
                     </div>
+
                 </div>
             </div>
 
@@ -93,9 +94,63 @@
                             <small>≈ USD</small>
                         </div>
                     </div>
-
                 </div>
-                
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== Wallet Address Modal ===== -->
+    <div class="modal fade" id="addressModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card p-3">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">Add Wallet Address</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ route('wallet.address.store') }}" method="POST">
+                        @csrf
+
+                        <label class="text-white mb-1">Wallet Address</label>
+                        <input type="text" name="address" class="form-control mb-3" placeholder="Enter wallet address"
+                            required>
+
+                        <button type="submit" class="address-btn w-100">Save Address</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== Deposit Modal ===== -->
+    <div class="modal fade" id="depositModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card p-3">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">Make a Deposit</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form action="{{ route('deposits.store') }}" method="POST">
+                        @csrf
+
+                        <label class="text-white mb-1">Amount (USD)</label>
+                        <input type="number" name="amount" class="form-control mb-3" placeholder="Enter amount" required>
+
+                        <label class="text-white mb-1">Currency</label>
+                        <select name="currency" class="form-control mb-3" disabled>
+                            <option value="USDT">USDT</option>
+                        </select>
+
+                        <button type="submit" class="address-btn w-100">Proceed</button>
+                    </form>
+                </div>
 
             </div>
         </div>
@@ -166,8 +221,8 @@
             justify-content: space-between;
             transition: 0.3s;
             width: 100% !important
-            /* margin-right: 5px; */
-            
+                /* margin-right: 5px; */
+
         }
 
         .account-box:hover {
@@ -211,6 +266,19 @@
             font-size: 1.4rem;
             border-left: 4px solid #F46523;
             padding-left: 10px;
+        }
+
+        .address-btn {
+            background-color: #F46523;
+            border: none;
+            font-weight: 500;
+            color: #ffffff;
+            transition: all 0.3s ease;
+            font-weight: 400;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 16px;
+            padding: 10px 62px;
         }
 
         /* Responsive Adjustments */

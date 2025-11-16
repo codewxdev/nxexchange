@@ -1,4 +1,4 @@
-   <div class="last-section">
+   <div class="last-section" id="learn">
         <div class="container">
             <!-- First Row -->
             <div class="intro d-flex flex-wrap align-items-center justify-content-between">

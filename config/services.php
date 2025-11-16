@@ -13,7 +13,11 @@ return [
     | a conventional file to locate the various service credentials.
     |
     */
-
+    'nowpayments' => [
+        'api_key' => env('NOWPAYMENTS_API_KEY'),
+        'endpoint' => env('NOWPAYMENTS_ENDPOINT', 'https://api.nowpayments.io/v1'),
+    ],
+    
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],

@@ -21,6 +21,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'id_card_number',
+        'kyc_front_image',
+        'kyc_back_image',
+        'kyc_status',
+        'country'
     ];
 
     /**
@@ -32,10 +37,10 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-protected $casts = [
-    'registered_at' => 'datetime',
-    'last_login_at' => 'datetime',
-];
+    protected $casts = [
+        'registered_at' => 'datetime',
+        'last_login_at' => 'datetime',
+    ];
 
     /**
      * Get the attributes that should be cast.
@@ -48,5 +53,15 @@ protected $casts = [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function deposits()
+    {
+        return $this->hasMany(Deposit::class);
+    }
+
+    public function notifications()
+    {
+        return $this->hasMany(UserNotification::class);
     }
 }
