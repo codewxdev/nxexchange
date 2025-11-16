@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\AssetController;
-use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Auth\ForgetPasswordContoller;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
@@ -20,6 +19,15 @@ use App\Http\Controllers\TradeController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\KycController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\CryptoController;
+use App\Http\Controllers\DepositController;
+use App\Http\Controllers\MarketController;
+use App\Http\Controllers\SignalController;
+use App\Http\Controllers\TradeController;
+use App\Http\Controllers\TransferController;
+use App\Http\Controllers\UserController;
+use App\Http\Controllers\WithdrawController;
+use Illuminate\Support\Facades\Route;
 
 // use function Pest\Laravel\get;
 
@@ -42,7 +50,6 @@ Route::get('/help/financial', [HelpController::class, 'financial'])->name('help.
 Route::get('/register', [RegisterController::class, 'ShowRegister'])->name('register.index');
 Route::post('/register-store', [RegisterController::class, 'storeRegisterForm'])->name('register.store');
 Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.code');
-
 
 Route::post('/login-store', [LoginController::class, 'StoreLoginForm'])->name('login.store');
 Route::get('/login', [LoginController::class, 'ShowLogin'])->name('login.index');
@@ -75,6 +82,7 @@ Route::middleware('isAdmin')->group(function () {
 });
 
 
+Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('trade.execute');
 
 Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
 Route::get('/crypto-data', [CryptoController::class, 'fetchData'])->name('crypto.data');

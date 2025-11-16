@@ -2,16 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Jobs\SettleTradesForSignal;
 use App\Models\Signal;
 use App\Models\Wallet;
 use App\Services\TradeService;
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
+use RuntimeException;
 
 class TradeController extends Controller
 {
+    public function __construct(private readonly TradeService $tradeService)
+    {
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -33,100 +43,62 @@ class TradeController extends Controller
         return view('trades', compact('currencies', 'signalBuys', 'wallet', 'signalSells'));
     }
 
-    public function __construct(TradeService $service)
+    public function executeTrade(Request $request)
     {
-        $this->service = $service;
-    }
-
-    public function place(Request $req)
-    {
-        $req->validate([
-            'direction' => 'required|in:call,put',
+        $request->validate([
+            'direction' => 'required|in:Call,Put,call,put',
+            'crypto_symbol' => 'required|string|max:10',
             'signal_id' => 'nullable|exists:signals,id',
-            'symbol' => 'nullable|string',
         ]);
 
         $user = Auth::user();
-        $direction = $req->input('direction');
-        $signalId = $req->input('signal_id');
-        $symbol = $req->input('symbol', 'BTC');
 
-        $trade = $this->service->placeTrade($user->id, $direction, $signalId, $symbol);
-
-        // if signal-based, dispatch job at signal end_time
-        if ($signalId) {
-            $signal = Signal::find($signalId);
-            if ($signal && $signal->end_time) {
-                $endTime = \Carbon\Carbon::parse($signal->end_time);
-                $now = \Carbon\Carbon::now();
-                
-                if ($endTime->isPast()) {
-                    // Signal already ended, settle immediately
-                    \App\Jobs\SettleTradesForSignal::dispatch($signalId);
-                } else {
-                    // Dispatch job to settle this signal at end_time
-                    // Note: Job is idempotent - multiple dispatches are safe
-                    $delay = $endTime->diffInSeconds($now);
-                    \App\Jobs\SettleTradesForSignal::dispatch($signalId)->delay($delay);
-                }
-            } elseif ($signal && !$signal->end_time) {
-                // Signal has no end_time, settle immediately (admin can manually trigger)
-                \App\Jobs\SettleTradesForSignal::dispatch($signalId);
-            }
-        } else {
-            // For self trades, trigger matching immediately
-            // This handles both single-user and multi-user scenarios
-            $this->service->handleSelfTradesMatching();
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return response()->json(['success' => true, 'trade' => $trade]);
-    }
+        try {
+            $trade = $this->tradeService->placeTrade(
+                $user->id,
+                $request->input('direction'),
+                $request->input('signal_id'),
+                $request->input('crypto_symbol', 'BTC')
+            );
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+            if ($trade->signal_id) {
+                $signal = Signal::find($trade->signal_id);
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+                if ($signal && $signal->end_time) {
+                    $endTime = Carbon::parse($signal->end_time);
+                    $now = Carbon::now();
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
-    }
+                    if ($endTime->isPast()) {
+                        SettleTradesForSignal::dispatch($signal->id);
+                    } else {
+                        SettleTradesForSignal::dispatch($signal->id)->delay($endTime->diffInSeconds($now));
+                    }
+                } elseif ($signal) {
+                    SettleTradesForSignal::dispatch($signal->id);
+                }
+            } else {
+                $this->tradeService->handleSelfTradesMatching();
+            }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
+            $wallet = Wallet::where('user_id', $user->id)->first();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
+            return response()->json([
+                'message' => 'Trade placed successfully.',
+                'trade' => $trade,
+                'new_balance' => $wallet?->exchange_account_balance,
+            ], 201);
+        } catch (ModelNotFoundException|InvalidArgumentException|RuntimeException $e) {
+            Log::warning('Trade execution validation failed: '.$e->getMessage());
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+            return response()->json(['error' => $e->getMessage()], 422);
+        } catch (\Throwable $e) {
+            Log::error('Trade execution failed: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
+
+            return response()->json(['error' => 'Trade execution failed. Please try again.'], 500);
+        }
     }
 }

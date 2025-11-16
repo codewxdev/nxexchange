@@ -6,63 +6,94 @@ use App\Models\Ledger;
 use App\Models\Trade;
 use App\Models\Wallet;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
+use InvalidArgumentException;
+use RuntimeException;
 
 class TradeService
 {
+    /**
+     * Place a trade by staking 1% of the user's exchange balance.
+     *
+     * @param  string  $direction  Call/Put (case insensitive)
+     * @param  int|null  $signalId  Optional signal reference
+     * @param  string  $symbol  Crypto symbol (defaults to BTC)
+     */
     public function placeTrade(int $userId, string $direction, ?int $signalId, string $symbol = 'BTC'): Trade
     {
-        return DB::transaction(function () use ($userId, $direction, $signalId, $symbol) {
-            // Get user wallet with lock to prevent concurrent modifications
+        $normalizedDirection = ucfirst(strtolower($direction));
+
+        if (! in_array($normalizedDirection, ['Call', 'Put'], true)) {
+            throw new InvalidArgumentException('Direction must be Call or Put.');
+        }
+
+        return DB::transaction(function () use ($userId, $normalizedDirection, $signalId, $symbol) {
             $wallet = Wallet::where('user_id', $userId)->lockForUpdate()->first();
 
             if (! $wallet) {
-                throw new \Exception('Wallet not found for user');
+                throw new ModelNotFoundException('Wallet not found for the authenticated user.');
             }
 
-            // Calculate 1% of account balance
-            $balance = (float) $wallet->exchange_account_balance;
-            $stake = bcmul((string) $balance, '0.01', 8); // 1% of balance
+            // 1% of exchange balance
+            $stake = bcmul($wallet->exchange_account_balance, '0.01', 8);
 
-            // Check if user has sufficient balance
-            if (bccomp($stake, '0', 8) <= 0 || bccomp($wallet->exchange_account_balance, $stake, 8) < 0) {
-                throw new \Exception('Insufficient balance to place trade');
+            if (bccomp($stake, '0', 8) <= 0) {
+                throw new RuntimeException('Unable to calculate stake from zero balance.');
             }
 
-            // Deduct stake from wallet
+            // Minimum trade amount is 0.01 USDT (strict check)
+            $minimumStake = '0.01';
+            // Compare with 2 decimal precision to ensure minimum of 0.01 USDT
+            if (bccomp($stake, $minimumStake, 2) < 0) {
+                throw new RuntimeException('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance ('.number_format((float)$stake, 8).' USDT) is less than 0.01 USDT.');
+            }
+
+            if (bccomp($wallet->exchange_account_balance, $stake, 8) < 0) {
+                throw new RuntimeException('Insufficient funds to place trade.');
+            }
+
+            // Deduct stake
             $wallet->exchange_account_balance = bcsub($wallet->exchange_account_balance, $stake, 8);
             $wallet->save();
 
-            // ledger debit
+            // Record ledger entry
             Ledger::create([
                 'user_id' => $userId,
                 'type' => 'trade_stake',
                 'amount' => -1 * (float) $stake,
                 'balance_after' => $wallet->exchange_account_balance,
-                'notes' => 'Stake for '.ucfirst($direction).' '.$symbol,
+                'notes' => 'Stake for '.$normalizedDirection.' '.$symbol.' trade',
             ]);
 
-            // store exact profit rate used for this trade (randomized between 0.70 and 0.73)
-            $profitRate = number_format((rand(7000, 7300) / 10000), 4);
+            // Random profit rate between 70% and 73%
+            $profitRate = bcdiv((string) random_int(7000, 7300), '10000', 4);
 
-            $trade = Trade::create([
+            return Trade::create([
                 'user_id' => $userId,
-                'direction' => ucfirst($direction),
+                'direction' => $normalizedDirection,
                 'trade_type' => $signalId ? 'signal' : 'self',
                 'signal_id' => $signalId,
-                'crypto_symbol' => $symbol,
+                'crypto_symbol' => strtoupper($symbol),
                 'stake_amount' => $stake,
                 'profit_rate' => $profitRate,
                 'start_time' => Carbon::now(),
             ]);
-
-            return $trade;
         }, 3);
     }
 
-    public function settleTrades(array $tradeIds, string $winningDirection)
+    /**
+     * Settle a collection of trade IDs and credit winnings.
+     */
+    public function settleTrades(array $tradeIds, string $winningDirection): void
     {
-        DB::transaction(function () use ($tradeIds, $winningDirection) {
+        if (empty($tradeIds)) {
+            return;
+        }
+
+        $normalizedDirection = ucfirst(strtolower($winningDirection));
+
+        DB::transaction(function () use ($tradeIds, $normalizedDirection) {
             $trades = Trade::whereIn('id', $tradeIds)->lockForUpdate()->get();
 
             foreach ($trades as $trade) {
@@ -70,12 +101,16 @@ class TradeService
                     continue;
                 }
 
-                if (strtolower($trade->direction) === strtolower($winningDirection)) {
-                    // winner: credit stake + profit
-                    $profit = bcmul((string) $trade->stake_amount, (string) $trade->profit_rate, 8);
-                    $credit = bcadd((string) $trade->stake_amount, (string) $profit, 8);
+                $wallet = Wallet::where('user_id', $trade->user_id)->lockForUpdate()->first();
 
-                    $wallet = Wallet::where('user_id', $trade->user_id)->lockForUpdate()->first();
+                if (! $wallet) {
+                    continue;
+                }
+
+                if ($trade->direction === $normalizedDirection) {
+                    $profit = bcmul($trade->stake_amount, $trade->profit_rate, 8);
+                    $credit = bcadd($trade->stake_amount, $profit, 8);
+
                     $wallet->exchange_account_balance = bcadd($wallet->exchange_account_balance, $credit, 8);
                     $wallet->save();
 
@@ -90,7 +125,6 @@ class TradeService
                     $trade->profit_amount = $profit;
                     $trade->result = 'win';
                 } else {
-                    // lost -> stake already deducted
                     $trade->profit_amount = 0;
                     $trade->result = 'lose';
                 }
@@ -101,11 +135,17 @@ class TradeService
         }, 3);
     }
 
-    public function handleSelfTradesMatching()
+    /**
+     * Handle self-trade resolution, ensuring majority side loses and single trades auto-lose.
+     */
+    public function handleSelfTradesMatching(): void
     {
-        // select pending self trades within a short window (example: all pending self trades)
         DB::transaction(function () {
-            $pending = Trade::where('trade_type', 'self')->where('result', 'pending')->lockForUpdate()->get();
+            $pending = Trade::where('trade_type', 'self')
+                ->where('result', 'pending')
+                ->lockForUpdate()
+                ->get();
+
             if ($pending->isEmpty()) {
                 return;
             }
@@ -113,24 +153,17 @@ class TradeService
             $callTrades = $pending->where('direction', 'Call');
             $putTrades = $pending->where('direction', 'Put');
 
-            $callCount = $callTrades->count();
-            $putCount = $putTrades->count();
             $callSum = $callTrades->sum('stake_amount');
             $putSum = $putTrades->sum('stake_amount');
 
-            // If only one user places a trade (Call or Put), the opposite side wins and that trade loses
-            if ($callCount > 0 && $putCount == 0) {
-                // Only Call trades exist - Put wins (opposite side), Call loses
+            if ($callTrades->isNotEmpty() && $putTrades->isEmpty()) {
                 $winning = 'Put';
-            } elseif ($putCount > 0 && $callCount == 0) {
-                // Only Put trades exist - Call wins (opposite side), Put loses
+            } elseif ($putTrades->isNotEmpty() && $callTrades->isEmpty()) {
                 $winning = 'Call';
-            } elseif ($callSum == $putSum) {
-                // tie: choose random winner to break tie
-                $winning = (rand(0, 1) === 0) ? 'Call' : 'Put';
+            } elseif (bccomp((string) $callSum, (string) $putSum, 8) === 0) {
+                $winning = random_int(0, 1) === 0 ? 'Call' : 'Put';
             } else {
-                // side with higher total loses
-                $winning = ($callSum > $putSum) ? 'Put' : 'Call';
+                $winning = $callSum > $putSum ? 'Put' : 'Call';
             }
 
             $this->settleTrades($pending->pluck('id')->toArray(), $winning);
