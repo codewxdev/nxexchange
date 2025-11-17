@@ -251,7 +251,8 @@
                 @if (auth()->user())
                     <ul class="navbar-nav  mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('transaction.index') }}">Transaction Records</a>
+                            <a class="nav-link active" aria-current="page"
+                                href="{{ route('transaction.index') }}">Transaction Records</a>
                         </li>
                         <li class="nav-item position-relative">
                             <a class="nav-link active messages-btn" aria-current="page" href="javascript:void(0)">
@@ -262,9 +263,9 @@
                             @endphp
                             <!-- Notification badge -->
                             @if (!empty($unread))
-                                  <span class="notif-badge">{{ $unread }}</span>
+                                <span class="notif-badge">{{ $unread }}</span>
                             @endif
-                           
+
                         </li>
 
                         <!-- Notification Panel Wrapper -->
@@ -286,7 +287,7 @@
                                     <i class="fa-regular fa-bell-slash fs-1"></i>
                                     <p>No notifications</p>
                                 </div>
-                            @endforelse 
+                            @endforelse
                         </div>
 
                         {{-- <div id="notificationList">
@@ -311,12 +312,12 @@
 
 
                         <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="#">Share</a>
+                            <a class="nav-link active" aria-current="page" href="{{ route('share.index') }}">Share</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link active" aria-current="page" href="{{ route('help.index') }}">Help</a>
                         </li>
-                       
+
                         <li class="nav-item dropdown user-dropdown d-flex">
                             <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
                             <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
@@ -378,11 +379,7 @@
             </div>
         </div>
     </nav>
-
-
-
-
-
+ 
     @yield('content')
 
     <footer class="brand-footer">
@@ -509,51 +506,50 @@
             panel.classList.remove('show');
         });
 
-     $(document).on('click', '.delete-note', function() {
+        $(document).on('click', '.delete-note', function() {
 
-    let id = $(this).data('id');
-    let noteBox = $(this).closest('.notif-item');  // FIXED
+            let id = $(this).data('id');
+            let noteBox = $(this).closest('.notif-item'); // FIXED
 
-    $.ajax({
-        url: "/notification/" + id,
-        type: "DELETE",
-        data: {
-            _token: "{{ csrf_token() }}"
-        },
+            $.ajax({
+                url: "/notification/" + id,
+                type: "DELETE",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
 
-        success: function(res) {
-            if (res.success) {
+                success: function(res) {
+                    if (res.success) {
 
-                noteBox.fadeOut(300, function() {
-                    $(this).remove();
+                        noteBox.fadeOut(300, function() {
+                            $(this).remove();
 
-                    // -------- UPDATE BADGE COUNT -------- //
-                    let badge = $('.notif-badge');
-                    if (badge.length) {
-                        let count = parseInt(badge.text()) - 1;
+                            // -------- UPDATE BADGE COUNT -------- //
+                            let badge = $('.notif-badge');
+                            if (badge.length) {
+                                let count = parseInt(badge.text()) - 1;
 
-                        if (count > 0) {
-                            badge.text(count);
-                        } else {
-                            badge.remove();   // hide badge completely
-                        }
-                    }
+                                if (count > 0) {
+                                    badge.text(count);
+                                } else {
+                                    badge.remove(); // hide badge completely
+                                }
+                            }
 
-                    // -------- SHOW EMPTY MESSAGE -------- //
-                    if ($('#notificationPanel .notif-item').length === 0) {
-                        $('#notificationPanel').append(`
+                            // -------- SHOW EMPTY MESSAGE -------- //
+                            if ($('#notificationPanel .notif-item').length === 0) {
+                                $('#notificationPanel').append(`
                             <div id="emptyNoti" class="text-center py-4 text-muted">
                                 <i class="fa-regular fa-bell-slash fs-1"></i>
                                 <p>No notifications</p>
                             </div>
                         `);
+                            }
+                        });
                     }
-                });
-            }
-        }
-    });
-});
-
+                }
+            });
+        });
     </script>
 
     @stack('scripts')

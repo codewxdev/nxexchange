@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Helpers\Referal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -25,7 +27,10 @@ class User extends Authenticatable
         'kyc_front_image',
         'kyc_back_image',
         'kyc_status',
-        'country'
+        'country',
+        'referral_code',
+        'referred_by',
+        'referrals_count'
     ];
 
     /**
@@ -63,5 +68,16 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(UserNotification::class);
+    }
+
+
+    public static function boot()
+    {
+        parent::boot();
+        static::creating(function ($user) {
+            if (empty($user->referral_code)) {
+                $user->referral_code = Referal::generateReferralCode(8);
+            }
+        });
     }
 }
