@@ -19,7 +19,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\NotificationController;
+
 // use App\Http\Controllers\CryptoController;
 // use App\Http\Controllers\DepositController;
 // use App\Http\Controllers\MarketController;
@@ -101,5 +101,4 @@ Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
 Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])
     ->name('notification.delete');
 
-
-    // Route::get('/invite', [UserController::class, 'index'])->middleware('auth');
+// Route::get('/invite', [UserController::class, 'index'])->middleware('auth');
