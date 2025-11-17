@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\Referal;
 use App\Http\Controllers\Controller;
+use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -24,10 +26,11 @@ class RegisterController extends Controller
     function storeRegisterForm(Request $request)
     {
 
-       
-        $request->validate([ 
+
+        $request->validate([
             'email' => 'required|email|unique:users,email',
             'code' => 'required|numeric',
+            'invitation_code' => 'required|string',
             'password' => [
                 'required',
                 'confirmed',
@@ -39,6 +42,7 @@ class RegisterController extends Controller
             ],
         ]);
 
+
         // Match code with session
         if (
             $request->code != Session::get('verification_code') ||
@@ -47,12 +51,38 @@ class RegisterController extends Controller
             return back()->withErrors(['code' => 'Invalid verification code.']);
         }
 
+        //referal algorithms 
+        $invite = Invitation::where('code', $request->invitation_code)->first();
+        if (!$invite) return back()->withErrors(['invitation_code' => 'Invalid invitation code']);
 
+        if ($invite->single_use && $invite->uses >= 1) {
+            return back()->withErrors(['invitation_code' => 'This invitation is already used']);
+        }
+        if ($invite->max_uses && $invite->uses >= $invite->max_uses) {
+            return back()->withErrors(['invitation_code' => 'Invitation usage limit reached']);
+        }
+
+        $code = Referal::generateReferralCode(8);
         // Create new user
         $user = User::create([
-            'name' => 'javed',
+            'name' => 'asim bahi',
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'referral_code'=> $code,
+            'referred_by'=>$invite->created_by // may be null if admin-generated
+        ]);
+
+         // mark invite used
+        $invite->increment('uses');
+
+        // increment referrer count
+        if ($invite->created_by) {
+            User::where('id', $invite->created_by)->increment('referrals_count');
+        }
+
+        Invitation::create([
+            'code'=> $code,
+            'created_by'=>$user->id,
         ]);
 
         // Auto-login and remember if requested

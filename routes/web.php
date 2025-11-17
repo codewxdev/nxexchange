@@ -19,6 +19,16 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotificationController;
+// use App\Http\Controllers\CryptoController;
+// use App\Http\Controllers\DepositController;
+// use App\Http\Controllers\MarketController;
+// use App\Http\Controllers\SignalController;
+// use App\Http\Controllers\TradeController;
+// use App\Http\Controllers\TransferController;
+// use App\Http\Controllers\UserController;
+// use App\Http\Controllers\WithdrawController;
+// use Illuminate\Support\Facades\Route;
 
 // use function Pest\Laravel\get;
 
@@ -35,6 +45,7 @@ Route::get('/help', [HelpController::class, 'index'])->name('help.index');
 Route::get('/transactions', [WalletController::class, 'transaction'])->name('transaction.index');
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
 Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
 
 Route::get('/help/terms', [HelpController::class, 'terms'])->name('help.terms');
 Route::get('/help/privacy', [HelpController::class, 'privacy'])->name('help.privacy');
@@ -89,3 +100,6 @@ Route::get('/identity-verification', [KycController::class, 'index'])->name('kyc
 Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
 Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])
     ->name('notification.delete');
+
+
+    // Route::get('/invite', [UserController::class, 'index'])->middleware('auth');
