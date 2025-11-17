@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'Admin Dashboard')</title>
 
-    <link rel="shortcut icon" href="{{ asset('assets/images/logo3.png')}}" type="image/x-icon">
+    <link rel="shortcut icon" href="{{ asset('assets/images/logo3.png') }}" type="image/x-icon">
     {{-- Tailwind or Bootstrap --}}
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
@@ -52,17 +52,45 @@
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="bi bi-lightning"></i> Transaction
                     </a>
-                    <ul class="dropdown-menu" aria-labelledby="transactionDropdown">
-                        <li><a class="dropdown-item" href="{{ route('deposits.index') }}">Deposit</a></li>
-                        <li><a class="dropdown-item" href="{{ url('withdraw') }}">Withdraw</a></li>
-                        <li><a class="dropdown-item" href="{{ url('transfer') }}">Transfer</a></li>
+                    <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="transactionDropdown">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('deposits.index') }}">
+                                <i class="bi bi-arrow-down-circle me-2"></i> Deposit
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url('withdraw') }}">
+                                <i class="bi bi-arrow-up-circle me-2"></i> Withdraw
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ url('transfer') }}">
+                                <i class="bi bi-arrow-left-right me-2"></i> Transfer
+                            </a>
+                        </li>
                     </ul>
                 </li>
 
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i
+                <li class="nav-item"><a href="{{ route('trade.dashboard') }}" class="nav-link text-white"><i
                             class="bi bi-currency-bitcoin"></i> Trades</a></li>
-                <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-wallet2"></i>
-                        Wallets</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-wallet2"></i> Wallets
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('wallet.dashboard') }}">
+                                <i class="bi bi-wallet me-2"></i>Management
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('wallet.transaction.index') }}">
+                                <i class="bi bi-clock-history me-2"></i> Wallet History
+                            </a>
+                        </li>
+                    </ul>
+                </li>
                 {{-- <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-graph-up"></i>
                         Reports</a></li> --}}
             </ul>

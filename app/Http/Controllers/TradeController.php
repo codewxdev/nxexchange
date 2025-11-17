@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Jobs\SettleTradesForSignal;
 use App\Models\Signal;
+use App\Models\Trade;
 use App\Models\Wallet;
 use App\Services\TradeService;
 use Carbon\Carbon;
@@ -18,9 +19,7 @@ use RuntimeException;
 
 class TradeController extends Controller
 {
-    public function __construct(private readonly TradeService $tradeService)
-    {
-    }
+    public function __construct(private readonly TradeService $tradeService) {}
 
     /**
      * Display a listing of the resource.
@@ -53,7 +52,7 @@ class TradeController extends Controller
 
         $user = Auth::user();
 
-        if (!$user) {
+        if (! $user) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
@@ -99,6 +98,20 @@ class TradeController extends Controller
             Log::error('Trade execution failed: '.$e->getMessage(), ['trace' => $e->getTraceAsString()]);
 
             return response()->json(['error' => 'Trade execution failed. Please try again.'], 500);
+        }
+    }
+
+    public function history()
+    {
+        try {
+            $trades = Trade::with(['user', 'signal'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return view('admin.trade', compact('trades'));
+
+        } catch (\Exception $e) {
+            return back()->with('error', 'Error loading trades: '.$e->getMessage());
         }
     }
 }

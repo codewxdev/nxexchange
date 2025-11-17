@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('trades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+
             // Call or Put trade
             $table->enum('direction', ['Call', 'Put']);
             // Signal-based or self-trade

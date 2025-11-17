@@ -8,12 +8,13 @@ class Wallet extends Model
 {
     protected $fillable = [
         'user_id',
-        'exchange_account_balance',
-        'trade_account_balance',
-        'trading_volume_target',
-        'trading_volume_completed',
-        'withdrawal_address',
-        'withdrawal_password',
-        'withdrawal_network',
+        'exchange_balance',
+        'trade_balance',
+
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

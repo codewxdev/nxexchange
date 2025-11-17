@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Signal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,9 +13,9 @@ class SignalController extends Controller
     {
         // Display list of all signals, ordered by creation date
         $signals = Signal::with('admin')->latest()->get();
+
         return view('admin.signals.index', compact('signals'));
     }
-
 
     public function create()
     {
@@ -30,7 +29,7 @@ class SignalController extends Controller
             'crypto_symbol' => 'required|string|max:10',
             'direction' => 'required|in:Call,Put',
             'start_time' => 'nullable|date',
-            'end_time' => 'nullable|date|after:start_time',
+            'end_time' => 'nullable|date',
             'is_active' => 'boolean',
         ]);
 
@@ -79,6 +78,7 @@ class SignalController extends Controller
     public function destroy(Signal $signal)
     {
         $signal->delete();
+
         return redirect()->route('admin.signals.index')->with('success', 'Signal deleted successfully.');
     }
 }

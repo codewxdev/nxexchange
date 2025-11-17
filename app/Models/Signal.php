@@ -3,9 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Signal extends Model
 {
+    use SoftDeletes;
+
+    protected $dates = ['end_time', 'deleted_at'];
+
     protected $fillable = [
         'crypto_symbol',
         'direction',

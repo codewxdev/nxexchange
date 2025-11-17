@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.Layouts.admin')
 
 @section('title', isset($signal) ? 'Edit Signal' : 'Create New Signal')
 

@@ -11,364 +11,20 @@
 
             <div class="market-table-wrapper">
                 <div class="table-responsive">
-                    <table class="table crypto-table mb-0">
+                    {{-- <input type="text" id="searchCrypto" placeholder="Search Token..."
+                        style="margin-bottom:10px; padding:5px;"> --}}
+                    <table class="table text-white" id="cryptoTable">
                         <thead>
                             <tr>
-                                <th>Token</th>
-                                <th>Last Price</th>
-                                <th>24h Change</th>
+                                <th onclick="sortTable(0)">Token</th>
+                                <th onclick="sortTable(1)">Last Price</th>
+                                <th onclick="sortTable(2)">24h Change</th>
                                 <th>24h High</th>
                                 <th>24h Low</th>
-                                <th>24h Volume</th>
+                                <th onclick="sortTable(5)">24h Volume</th>
                             </tr>
                         </thead>
-                        <tbody>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr>
- <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr> <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/bitcoin.png') }}" alt=""> BTC
-                                </td>
-                                <td data-label="Last Price">$103,423.88</td>
-                                <td data-label="Change" class="text-danger">-0.04%</td>
-                                <td data-label="High">$103,741.96</td>
-                                <td data-label="Low">$102,488.34</td>
-                                <td data-label="Volume">87.66M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="{{ asset('assets/images/authen.png') }}" alt=""> ETH
-                                </td>
-                                <td data-label="Last Price">$3,240.50</td>
-                                <td data-label="Change" class="text-success">+1.26%</td>
-                                <td data-label="High">$3,310.00</td>
-                                <td data-label="Low">$3,180.24</td>
-                                <td data-label="Volume">43.21M</td>
-                            </tr>
-
-                            <tr>
-                                <td class="token-cell" data-label="Token">
-                                    <img src="https://cryptologos.cc/logos/tether-usdt-logo.png" alt=""> USDT
-                                </td>
-                                <td data-label="Last Price">$1.00</td>
-                                <td data-label="Change" class="text-muted">0.00%</td>
-                                <td data-label="High">$1.01</td>
-                                <td data-label="Low">$0.99</td>
-                                <td data-label="Volume">102.12M</td>
-                            </tr>
-                            {{-- Add more tokens here --}}
-                        </tbody>
+                        <tbody id="cryptoBody"></tbody>
                     </table>
                 </div>
             </div>
@@ -474,4 +130,47 @@
             }
         }
     </style>
+@endpush
+
+@push('scripts')
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+        function fetchCryptoData() {
+            $.ajax({
+                url: "{{ route('crypto-market') }}",
+                method: 'GET',
+                success: function(data) {
+                    let tableBody = '';
+                    data.forEach(function(coin) {
+                        tableBody += `
+                    <tr>
+                        <td class="token-cell text-white" data-label="Token">
+                            <img src="${coin.image}" width="30" /> ${coin.symbol.toUpperCase()}
+                        </td>
+                        <td data-label="Last Price" class="text-white">$${coin.current_price.toLocaleString()}</td>
+                        <td data-label="Change" class="${coin.price_change_percentage_24h >= 0 ? 'text-success' : 'text-danger'}">
+                            ${coin.price_change_percentage_24h.toFixed(2)}%
+                        </td>
+                        <td data-label="High" class="text-white">$${coin.high_24h.toLocaleString()}</td>
+                        <td data-label="Low" class="text-white">$${coin.low_24h.toLocaleString()}</td>
+                        <td data-label="Volume" class="text-white">${coin.total_volume.toLocaleString()}</td>
+                    </tr>
+                `;
+                    });
+
+                    // FIXED: Update the correct tbody
+                    $('#cryptoBody').html(tableBody);
+                },
+                error: function() {
+                    console.error('Failed to fetch crypto data');
+                }
+            });
+        }
+
+        // Initial load
+        fetchCryptoData();
+
+        // Refresh every 10 seconds
+        setInterval(fetchCryptoData, 10000);
+    </script>
 @endpush

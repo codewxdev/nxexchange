@@ -1,4 +1,4 @@
-@extends('layouts.admin')
+@extends('admin.Layouts.admin')
 
 @section('title', 'Signal Management')
 
@@ -46,8 +46,8 @@
                                     </td>
                                     <td>
                                         <span
-                                            class="badge 
-                                            @if ($signal->direction == 'Call') bg-success 
+                                            class="badge
+                                            @if ($signal->direction == 'Call') bg-success
                                             @else bg-danger @endif">
                                             {{ $signal->direction }}
                                         </span>

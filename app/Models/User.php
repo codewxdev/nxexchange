@@ -25,7 +25,7 @@ class User extends Authenticatable
         'kyc_front_image',
         'kyc_back_image',
         'kyc_status',
-        'country'
+        'country',
     ];
 
     /**
@@ -37,6 +37,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
+
     protected $casts = [
         'registered_at' => 'datetime',
         'last_login_at' => 'datetime',
