@@ -38,6 +38,8 @@ class User extends Authenticatable
         'referred_by',
         'wallet_address',
         'country',
+        'referral_code',
+        'referred_by'
     ];
 
     /**
@@ -78,23 +80,13 @@ class User extends Authenticatable
         return $this->hasMany(UserNotification::class);
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function ($user) {
-            if (empty($user->referral_code)) {
-                $user->referral_code = Referal::generateReferralCode(8);
-            }
-        });
-    }
-
-    public function isActive()
-    {
-        return $this->account_status === 'active';
-    }
-
-    public function isDeactivated()
-    {
-        return $this->account_status === 'deactivated';
-    }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     static::creating(function ($user) {
+    //         if (empty($user->referral_code)) {
+    //             $user->referral_code = Referal::generateReferralCode(8);
+    //         }
+    //     });
+    // }
 }

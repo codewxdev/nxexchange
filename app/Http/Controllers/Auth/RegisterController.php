@@ -47,9 +47,8 @@ class RegisterController extends Controller
         }
 
         // referal algorithms
-        // $invite = Invitation::where('code', $request->invitation_code)->first();
+        $invite = Invitation::where('code', $request->invitation_code)->first();
 
-        // dd($invite);
         if (! $invite) {
 
             return back()->withErrors(['invitation_code' => 'Invalid invitation code'])->withInput();
@@ -62,13 +61,13 @@ class RegisterController extends Controller
             return back()->withErrors(['invitation_code' => 'Invitation usage limit reached'])->withInput();
         }
 
-        $code = Referal::generateReferralCode(8);
+        $newReferalCode = Referal::generateReferralCode(8);
         // Create new user
         $user = User::create([
             'name' => 'asim bahi',
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'referral_code' => $code,
+            'referral_code' => $newReferalCode,
             'referred_by' => $invite->created_by, // may be null if admin-generated
         ]);
 
@@ -81,8 +80,9 @@ class RegisterController extends Controller
         }
 
         Invitation::create([
-            'code' => $code,
+            'code' => $newReferalCode,
             'created_by' => $user->id,
+            'single_use' => true,
         ]);
 
         // Auto-login and remember if requested
