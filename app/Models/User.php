@@ -28,6 +28,8 @@ class User extends Authenticatable
         'kyc_back_image',
         'kyc_status',
         'country',
+        'referral_code',
+        'referred_by'
     ];
 
     /**
@@ -68,13 +70,13 @@ class User extends Authenticatable
         return $this->hasMany(UserNotification::class);
     }
 
-    public static function boot()
-    {
-        parent::boot();
-        static::creating(function ($user) {
-            if (empty($user->referral_code)) {
-                $user->referral_code = Referal::generateReferralCode(8);
-            }
-        });
-    }
+    // public static function boot()
+    // {
+    //     parent::boot();
+    //     static::creating(function ($user) {
+    //         if (empty($user->referral_code)) {
+    //             $user->referral_code = Referal::generateReferralCode(8);
+    //         }
+    //     });
+    // }
 }
