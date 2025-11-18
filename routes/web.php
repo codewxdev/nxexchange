@@ -36,16 +36,33 @@ Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
-Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
-Route::get('/market', [MarketController::class, 'index'])->name('market.index');
-Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');
+Route::middleware(['auth', 'checkUserStatus'])->group(function () {
+    Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
+    Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
+    Route::get('/market', [MarketController::class, 'index'])->name('market.index');
+    Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');
+    Route::get('/transactions', [WalletController::class, 'transaction'])->name('transaction.index');
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+    Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
+    Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');
+    Route::get('/deposit/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
+    Route::get('/identity-verification', [KycController::class, 'index'])->name('kyc.index');
+    Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
+    Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])
+        ->name('notification.delete');
+});
+
+
+
+
 
 Route::get('/help', [HelpController::class, 'index'])->name('help.index');
-Route::get('/transactions', [WalletController::class, 'transaction'])->name('transaction.index');
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
+
+
 
 Route::get('/help/terms', [HelpController::class, 'terms'])->name('help.terms');
 Route::get('/help/privacy', [HelpController::class, 'privacy'])->name('help.privacy');
@@ -63,7 +80,7 @@ Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEma
 Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
 
 // dashboard route start here
 Route::middleware('isAdmin')->middleware(['auth', 'checkUserStatus'])->group(function () {
@@ -98,12 +115,6 @@ Route::post('/trade/execute', [TradeController::class, 'executeTrade'])->name('t
 Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
 Route::get('/crypto-data', [CryptoController::class, 'fetchData'])->name('crypto.data');
 Route::post('/wallet/address/store', [WalletController::class, 'store'])->name('wallet.address.store');
-Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
-Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');
-Route::get('/deposit/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
-Route::get('/identity-verification', [KycController::class, 'index'])->name('kyc.index');
-Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
-Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])
-    ->name('notification.delete');
+ 
 
 // Route::get('/invite', [UserController::class, 'index'])->middleware('auth');
