@@ -6,9 +6,10 @@
          <div class="heading">
              <div class="link">
                  <a href="{{ url()->previous() }}"><i class="fa-solid fa-arrow-left-long"></i></a>
-                 <a href="#">Register</a>
+                 <a href="#">{{ t('Register') }}
+                 </a>
              </div>
-             <select id="dropdown">
+            <select id="dropdown">
                  <option value="">English</option>
                  <option value="">Urdu</option>
                  <option value="">bangali</option>
@@ -22,6 +23,16 @@
          <div class="form-container">
              <form action="{{ route('register.store') }}" method="POST">
                  @csrf
+                 {{-- Name --}}
+                 <div class="mb-3">
+                     <label class="form-label">Your Name</label>
+                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                         name="name" value="{{ old('name') }}" placeholder="Enter your full name">
+                     @error('name')
+                         <div class="invalid-feedback">{{ $message }}</div>
+                     @enderror
+                 </div>
+
                  {{-- Email --}}
                  <div class="mb-3">
                      <label class="form-label">Your Mailbox</label>

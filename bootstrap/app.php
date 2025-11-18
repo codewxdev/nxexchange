@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Signal;
+use App\Models\Trade;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +19,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\AuthMiddleware::class,
             'isAdmin' => \App\Http\Middleware\RoleCheck::class,
             'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
+            'SetLanguage'=> \App\Http\Middleware\SetLanguage::class
 
         ]);
 

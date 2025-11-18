@@ -18,6 +18,7 @@ use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 // use App\Http\Controllers\CryptoController;
@@ -122,5 +123,16 @@ Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
 Route::get('/crypto-data', [CryptoController::class, 'fetchData'])->name('crypto.data');
 Route::post('/wallet/address/store', [WalletController::class, 'store'])->name('wallet.address.store');
  
+
+
+Route::get('/lang/{lang}', function ($lang) {
+    session(['locale' => $lang]);
+    return back();
+})->name('change.lang');
+
+// Route::post('/set-language', function () {
+//     session(['app_locale' => request('lang')]);
+//     return response()->json(['success' => true]);
+// });
 
 // Route::get('/invite', [UserController::class, 'index'])->middleware('auth');

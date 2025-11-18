@@ -24,6 +24,7 @@ class RegisterController extends Controller
     {
 
         $errors = $request->validate([
+             'name'=>'required',
             'email' => 'required|email|unique:users,email',
             'code' => 'required|numeric',
             // 'invitation_code' => 'required|string',
@@ -64,7 +65,7 @@ class RegisterController extends Controller
         $newReferalCode = Referal::generateReferralCode(8);
         // Create new user
         $user = User::create([
-            'name' => 'asim bahi',
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'referral_code' => $newReferalCode,

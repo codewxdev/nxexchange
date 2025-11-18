@@ -8,10 +8,15 @@
 
             <div class="col-lg-3 col-md-4 market-sidebar">
                 <!-- Selected Coin -->
-                <div class="selected-coin d-flex align-items-center mb-3">
+                @if (!empty($currencies))
+                     <div class="selected-coin d-flex align-items-center mb-3">
                     <img id="selected-coin-img" src="{{ $currencies[0]['image'] }}" alt="" width="40" height="40">
                     <span id="selected-coin-name" class="ms-2 fw-bold">{{ strtoupper($currencies[0]['symbol']) }}</span>
                 </div>
+                @endif
+                
+
+
 
                 <h3 class="market-title">Markets</h3>
 
@@ -20,10 +25,8 @@
                         <div class="market-item {{ $index === 0 ? 'active' : '' }}" data-name="{{ ucfirst($coin['name']) }}"
                             data-symbol="{{ strtoupper($coin['symbol']) }}" data-image="{{ $coin['image'] }}"
                             data-price="{{ $coin['current_price'] }}"
-                            data-change="{{ $coin['price_change_percentage_24h'] }}"
-                            data-high="{{ $coin['high_24h'] }}"
-                            data-low="{{ $coin['low_24h'] }}"
-                            data-volume="{{ $coin['total_volume'] }}"
+                            data-change="{{ $coin['price_change_percentage_24h'] }}" data-high="{{ $coin['high_24h'] }}"
+                            data-low="{{ $coin['low_24h'] }}" data-volume="{{ $coin['total_volume'] }}"
                             data-marketcap="{{ $coin['market_cap'] }}">
                             <img src="{{ $coin['image'] }}" alt="{{ $coin['name'] }}" />
                             <div class="info">
@@ -517,7 +520,8 @@
                 // Frontend validation: Minimum trade is 0.01 USDT (strict check - round to 2 decimals)
                 const stakeRounded = Math.round(calculatedStake * 100) / 100;
                 if (stakeRounded < minimumStake) {
-                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
+                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' +
+                        formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
                     return;
                 }
 
@@ -668,7 +672,8 @@
                 // Frontend validation: Minimum trade is 0.01 USDT (strict check - round to 2 decimals)
                 const stakeRounded = Math.round(calculatedStake * 100) / 100;
                 if (stakeRounded < minimumStake) {
-                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' + formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
+                    alert('Insufficient amount. Minimum trade is 0.01 USDT. Your 1% balance (' +
+                        formatAmount(calculatedStake) + ' USDT) is less than 0.01 USDT.');
                     return;
                 }
 
