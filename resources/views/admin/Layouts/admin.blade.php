@@ -7,19 +7,16 @@
     <title>@yield('title', 'Admin Dashboard')</title>
 
     <link rel="shortcut icon" href="{{ asset('assets/images/logo3.png') }}" type="image/x-icon">
-    {{-- Tailwind or Bootstrap --}}
+
+    <!-- Single Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
-    <!-- In <head> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Before </body> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-
-    {{-- Icons --}}
+    <!-- Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/dashboard.css') }}">
+
     <style>
         .dropdown-menu {
             background-color: #212529;
@@ -91,8 +88,6 @@
                         </li>
                     </ul>
                 </li>
-                {{-- <li class="nav-item"><a href="#" class="nav-link text-white"><i class="bi bi-graph-up"></i>
-                        Reports</a></li> --}}
             </ul>
         </div>
 
@@ -113,7 +108,12 @@
         </div>
     </div>
 
+    <!-- jQuery for Bootstrap compatibility -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Single Bootstrap 5 JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    @yield('scripts')
 </body>
 
 </html>

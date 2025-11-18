@@ -8,31 +8,31 @@ use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    function ShowLogin(){
+    public function ShowLogin()
+    {
         return view('Auth/login');
     }
 
+    public function StoreLoginForm(Request $request)
+    {
 
-    function StoreLoginForm(Request $request){
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
 
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+        $credentials = $request->only('email', 'password');
+        $remember = $request->has('remember');
 
-    $credentials = $request->only('email','password');
-    $remember = $request->has('remember');
+        if (Auth::attempt($credentials, $remember)) {
+            $request->session()->regenerate();
 
-    if (Auth::attempt($credentials, $remember)) {
-        $request->session()->regenerate();
-        return redirect()->intended('/');
+            return redirect()->intended('/');
+        }
+
+        return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->onlyInput('email');
+
     }
-
-    return back()->withErrors(['email' => 'The provided credentials do not match our records.'])->onlyInput('email');
-
-
-    }
-
 
     public function logout(Request $request)
     {
@@ -47,6 +47,3 @@ class LoginController extends Controller
         return redirect()->route('login.index')->with('status', 'You have been logged out successfully.');
     }
 }
-
-
- 

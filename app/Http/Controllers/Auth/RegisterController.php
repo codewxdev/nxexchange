@@ -7,30 +7,26 @@ use App\Http\Controllers\Controller;
 use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rules\Password as RulesPassword;
 
 class RegisterController extends Controller
 {
-    // 
-    function ShowRegister()
+    //
+    public function ShowRegister()
     {
         return view('Auth.register');
     }
 
-    function storeRegisterForm(Request $request)
+    public function storeRegisterForm(Request $request)
     {
-
 
         $errors = $request->validate([
             'email' => 'required|email|unique:users,email',
             'code' => 'required|numeric',
-            'invitation_code' => 'required|string',
+            // 'invitation_code' => 'required|string',
             'password' => [
                 'required',
                 'confirmed',
@@ -38,10 +34,9 @@ class RegisterController extends Controller
                     ->mixedCase()          // At least one uppercase & one lowercase
                     ->letters()            // At least one letter
                     ->numbers()            // At least one number
-                    ->symbols()            // At least one special character
+                    ->symbols(),            // At least one special character
             ],
         ]);
-
 
         // Match code with session
         if (
@@ -51,12 +46,12 @@ class RegisterController extends Controller
             return back()->withErrors(['code' => 'Invalid verification code.']);
         }
 
-        //referal algorithms 
-        $invite = Invitation::where('code', $request->invitation_code)->first();
-        
+        // referal algorithms
+        // $invite = Invitation::where('code', $request->invitation_code)->first();
+
         // dd($invite);
-        if (!$invite) {
-            
+        if (! $invite) {
+
             return back()->withErrors(['invitation_code' => 'Invalid invitation code'])->withInput();
         }
 
@@ -74,7 +69,7 @@ class RegisterController extends Controller
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'referral_code' => $code,
-            'referred_by' => $invite->created_by // may be null if admin-generated
+            'referred_by' => $invite->created_by, // may be null if admin-generated
         ]);
 
         // mark invite used
@@ -101,8 +96,6 @@ class RegisterController extends Controller
 
         return redirect(route('login.index'))->with('success', 'Registration successful!');
     }
-
-
 
     public function sendCode(Request $request)
     {

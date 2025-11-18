@@ -35,7 +35,6 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 })->name('home');
- 
 
 Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
 Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
@@ -67,7 +66,7 @@ Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
 // dashboard route start here
-Route::middleware('isAdmin')->group(function () {
+Route::middleware('isAdmin')->middleware(['auth', 'checkUserStatus'])->group(function () {
     Route::get('/admin/dashboard', function () {
         return view('admin.dashboard');
     })->name('admin.dashboard');
@@ -81,6 +80,11 @@ Route::middleware('isAdmin')->group(function () {
     Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
     Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
     Route::get('trade', [TradeController::class, 'history'])->name('trade.dashboard');
+    Route::put('/admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
+    // routes/web.php
+    // Route
+    // routes/web.php
+    Route::delete('/admin/users/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
     Route::get('wallet', [WalletController::class, 'history'])->name('wallet.dashboard');
     Route::prefix('wallet/transaction')->group(function () {
         Route::get('/', [WalletController::class, 'wallet_history'])->name('wallet.transaction.index');

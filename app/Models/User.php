@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Helpers\Referal;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -13,6 +14,10 @@ class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
+
+    use SoftDeletes;
+
+    protected $dates = ['deleted_at'];
 
     /**
      * The attributes that are mass assignable.
@@ -27,6 +32,11 @@ class User extends Authenticatable
         'kyc_front_image',
         'kyc_back_image',
         'kyc_status',
+        'level',
+        'account_status',
+        'referral_code',
+        'referred_by',
+        'wallet_address',
         'country',
     ];
 
@@ -76,5 +86,15 @@ class User extends Authenticatable
                 $user->referral_code = Referal::generateReferralCode(8);
             }
         });
+    }
+
+    public function isActive()
+    {
+        return $this->account_status === 'active';
+    }
+
+    public function isDeactivated()
+    {
+        return $this->account_status === 'deactivated';
     }
 }
