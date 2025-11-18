@@ -97,7 +97,9 @@
                 <div class="container-fluid">
                     <span class="navbar-brand">Admin Panel</span>
                     <div>
-                        <button class="btn btn-outline-secondary btn-sm">Logout</button>
+                        <a href="/logout" class="btn btn-outline-secondary btn-sm">
+                            Logout
+                        </a>
                     </div>
                 </div>
             </nav>

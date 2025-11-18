@@ -91,6 +91,12 @@ Route::middleware('isAdmin')->middleware(['auth', 'checkUserStatus'])->group(fun
         Route::put('/update/{id}', [WalletController::class, 'update'])->name('wallet.transaction.update');
         Route::get('/delete/{id}', [WalletController::class, 'destroy'])->name('wallet.transaction.delete');
     });
+    Route::get('/logout', function () {
+        Auth::logout();
+        session()->flush();
+
+        return redirect('/login');
+    });
     Route::post('/withdraws/{withdraw}/update-status', [WithdrawController::class, 'updateStatus'])->name('withdraws.updateStatus');
 });
 
