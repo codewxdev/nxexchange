@@ -64,10 +64,15 @@
                  {{-- Invitation code --}}
                  <div class="mb-3">
                      <label class="form-label">Enter Invitation Code</label>
-                     <input type="text" name="invitation_code" class="form-control" value="{{ request('ref') ?? old('invitation_code') }}"
-                         required>
+                     <input type="text" name="invitation_code"
+                         class="form-control @error('invitation_code') is-invalid @enderror"
+                         value="{{ request('ref') ?? old('invitation_code') }}" placeholder="Invitation code">
 
+                     @error('invitation_code')
+                         <div class="invalid-feedback">{{ $message }}</div>
+                     @enderror
                  </div>
+
                  {{-- Remember Me --}}
                  <div class="form-check mb-3">
                      <input type="checkbox" name="remember" class="form-check-input" id="remember"

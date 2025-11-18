@@ -35,8 +35,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('index');
 })->name('home');
+ 
 
-Route::get('/trade', [TradeController::class, 'index'])->name('trade.index');
+Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
 Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
 Route::get('/market', [MarketController::class, 'index'])->name('market.index');
 Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');

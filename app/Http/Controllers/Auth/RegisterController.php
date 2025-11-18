@@ -20,14 +20,14 @@ class RegisterController extends Controller
     // 
     function ShowRegister()
     {
-        return view('Auth/register');
+        return view('Auth.register');
     }
 
     function storeRegisterForm(Request $request)
     {
 
 
-        $request->validate([
+        $errors = $request->validate([
             'email' => 'required|email|unique:users,email',
             'code' => 'required|numeric',
             'invitation_code' => 'required|string',
@@ -53,13 +53,18 @@ class RegisterController extends Controller
 
         //referal algorithms 
         $invite = Invitation::where('code', $request->invitation_code)->first();
-        if (!$invite) return back()->withErrors(['invitation_code' => 'Invalid invitation code']);
+        
+        // dd($invite);
+        if (!$invite) {
+            
+            return back()->withErrors(['invitation_code' => 'Invalid invitation code'])->withInput();
+        }
 
         if ($invite->single_use && $invite->uses >= 1) {
-            return back()->withErrors(['invitation_code' => 'This invitation is already used']);
+            return back()->withErrors(['invitation_code' => 'This invitation is already used'])->withInput();
         }
         if ($invite->max_uses && $invite->uses >= $invite->max_uses) {
-            return back()->withErrors(['invitation_code' => 'Invitation usage limit reached']);
+            return back()->withErrors(['invitation_code' => 'Invitation usage limit reached'])->withInput();
         }
 
         $code = Referal::generateReferralCode(8);
@@ -68,11 +73,11 @@ class RegisterController extends Controller
             'name' => 'asim bahi',
             'email' => $request->email,
             'password' => Hash::make($request->password),
-            'referral_code'=> $code,
-            'referred_by'=>$invite->created_by // may be null if admin-generated
+            'referral_code' => $code,
+            'referred_by' => $invite->created_by // may be null if admin-generated
         ]);
 
-         // mark invite used
+        // mark invite used
         $invite->increment('uses');
 
         // increment referrer count
@@ -81,8 +86,8 @@ class RegisterController extends Controller
         }
 
         Invitation::create([
-            'code'=> $code,
-            'created_by'=>$user->id,
+            'code' => $code,
+            'created_by' => $user->id,
         ]);
 
         // Auto-login and remember if requested
