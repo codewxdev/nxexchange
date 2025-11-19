@@ -1,28 +1,25 @@
 <?php
 
-use Illuminate\Support\Facades\Http;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 
 if (!function_exists('t')) {
     function t($text)
     {
         $lang = session('locale', 'en');
 
+        // English? no need to translate
         if ($lang === 'en') {
-            return $text; // English ke liye translate na karo
+            return $text;
         }
 
-        // External API request
-        $response = Http::post('https://libretranslate.de/translate', [
-            'q' => $text,
-            'source' => 'en',
-            'target' => $lang,
-            'format' => 'text'
-        ]);
-
-        if ($response->successful()) {
-            return $response->json()['translatedText'];
+        try {
+            $tr = new GoogleTranslate();
+            $tr->setSource('en'); // Your default language
+            $tr->setTarget($lang);
+            return $tr->translate($text);
+        } catch (\Exception $e) {
+            logger("Translate error: " . $e->getMessage());
+            return $text; // fallback
         }
-
-        return $text; // fallback
     }
 }

@@ -15,9 +15,6 @@
                 </div>
                 @endif
                 
-
-
-
                 <h3 class="market-title">Markets</h3>
 
                 <div class="market-list">

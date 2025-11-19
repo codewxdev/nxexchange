@@ -125,10 +125,23 @@ Route::post('/wallet/address/store', [WalletController::class, 'store'])->name('
  
 
 
+// Route::get('/lang/{lang}', function ($lang) {
+//     session(['locale' => $lang]);
+//     return back();
+// })->name('change.lang');
+
 Route::get('/lang/{lang}', function ($lang) {
+    $allowed = ['en','ur','fr','es','ar'];
+
+    if (!in_array($lang, $allowed)) {
+        $lang = 'en';
+    }
+
     session(['locale' => $lang]);
+
     return back();
 })->name('change.lang');
+
 
 // Route::post('/set-language', function () {
 //     session(['app_locale' => request('lang')]);

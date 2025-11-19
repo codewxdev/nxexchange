@@ -9,9 +9,9 @@ use Illuminate\Foundation\Configuration\Middleware;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
-        web: __DIR__.'/../routes/web.php',
-        api: __DIR__.'/../routes/api.php',
-        commands: __DIR__.'/../routes/console.php',
+        web: __DIR__ . '/../routes/web.php',
+        api: __DIR__ . '/../routes/api.php',
+        commands: __DIR__ . '/../routes/console.php',
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -19,10 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\AuthMiddleware::class,
             'isAdmin' => \App\Http\Middleware\RoleCheck::class,
             'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
-            'SetLanguage'=> \App\Http\Middleware\SetLanguage::class
+            'SetLanguage' => \App\Http\Middleware\SetLanguage::class
 
         ]);
-
+        $middleware->appendToGroup('web', [
+            \App\Http\Middleware\SetLanguage::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
@@ -49,6 +51,5 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->where('created_at', '<', now()->subHours(2))
                 ->update(['status' => 'expired']);
         })->everyTenMinutes();
-
     })
     ->create();

@@ -4,15 +4,17 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Stichoza\GoogleTranslate\GoogleTranslate;
 use Illuminate\Support\Facades\App;
-use Symfony\Component\HttpFoundation\Response;
 
 class SetLanguage
 {
-     public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        // session me language hai?
-        $lang = session('locale', 'en'); // default en
+        // Default EN if no session
+        $lang = session('locale', 'en');
+
+        // Tell Laravel about current language
         App::setLocale($lang);
 
         return $next($request);

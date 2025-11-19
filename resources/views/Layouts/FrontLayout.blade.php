@@ -368,18 +368,32 @@
                         <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
                                 now</button></a>
                     </div>
-                    <select name="" id="language">
+                    {{-- <select name="" id="language">
                         <option value="en">English</option>
                         <option value="fr">French</option>
                         <option value="de">Duch</option>
                         <option value="de">Duch</option>
+                    </select> --}}
+                    <select onchange="window.location.href=this.value" id="language">
+                        <option value="{{ route('change.lang', 'en') }}"
+                            {{ session('locale') == 'en' ? 'selected' : '' }}>English
+                        </option>
+                        <option value="{{ route('change.lang', 'ur') }}"
+                            {{ session('locale') == 'ur' ? 'selected' : '' }}>Urdu
+                        </option>
+                        <option value="{{ route('change.lang', 'fr') }}"
+                            {{ session('locale') == 'fr' ? 'selected' : '' }}>French
+                        </option>
+                        <option value="{{ route('change.lang', 'es') }}"
+                            {{ session('locale') == 'es' ? 'selected' : '' }}>Spanish
+                        </option>
                     </select>
                 @endif
 
             </div>
         </div>
     </nav>
- 
+
     @yield('content')
 
     <footer class="brand-footer">
