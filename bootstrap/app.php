@@ -19,12 +19,12 @@ return Application::configure(basePath: dirname(__DIR__))
             'auth' => \App\Http\Middleware\AuthMiddleware::class,
             'isAdmin' => \App\Http\Middleware\RoleCheck::class,
             'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
-            'SetLanguage' => \App\Http\Middleware\SetLanguage::class
+            
 
         ]);
-        $middleware->appendToGroup('web', [
-            \App\Http\Middleware\SetLanguage::class,
-        ]);
+        // $middleware->appendToGroup('web', [
+        //     \App\Http\Middleware\SetLanguage::class,
+        // ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

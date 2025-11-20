@@ -1,12 +1,13 @@
 @media (max-width: 477px) {
 
-    *{
+    * {
         font-family: 'Poppins';
     }
 
-    button{
+    button {
         font-family: sans-serif;
     }
+
     /* ==== Home page ====  */
     .navbar {
         padding: 10px;
@@ -26,7 +27,7 @@
 
     .main .col-7 p {
         text-align: center;
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .main {
@@ -45,12 +46,12 @@
     .main .content .small-head {
         padding: 7px 11px;
         font-size: 11px;
-        font-family: 'sans-sarif';
+        font-family: 'sans-serif';
 
     }
 
     .main .content h1 {
-        font-size: 39px;
+        font-size: 30px;
         text-align: center;
     }
 
@@ -70,8 +71,21 @@
         width: 100%;
     }
 
+    .main .col-5 dotlottie-wc {
+        width: 300px !important;
+        height: 300px !important;
+    }
+
+    .about {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding-top: 0px;
+        padding-bottom: 20px;
+    }
+
     .crypto-title {
-        font-size: 2rem;
+        font-size: 25px;
         font-weight: 700;
         color: white;
     }
@@ -80,6 +94,10 @@
         padding: 40px 0;
     }
 
+    .scroll-card.large {
+        width: 295px;
+        height: 180px;
+    }
 
     .last-section .heading {
         font-size: 25px;
@@ -114,6 +132,16 @@
     }
 
     /* ==== Market page ====  */
+
+    .market-header h2 {
+        font-size: 25px;
+
+    }
+
+    .market-header p {
+
+        font-size: 14px;
+    }
 
     .table-responsive .table th {
         font-size: 14px;
@@ -160,8 +188,7 @@
 
     .order-history .tabs button {
         padding: 8px 0px !important;
-        font-size: 12px !important;
-
+        font-size: 10px !important;
     }
 
 

@@ -316,7 +316,6 @@
                     <i class="fa-solid fa-bell" style="font-size:17px"></i>
 
                 </a>
-
                 <a href="{{ route('share.index') }}" class="text-white text-center" style="font-size:14px">
                     <i class="fa-solid fa-share-nodes" style="font-size:17px"></i>
 
@@ -325,14 +324,11 @@
                     <i class="fa-regular fa-circle-question" style="font-size:17px"></i>
 
                 </a>
-
                 {{-- <a href="{{ route('help.index') }}" class="nav-item">
                     <i class="fa-regular fa-circle-question"></i>
                      
                 </a> --}}
-
             </div>
-
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -491,7 +487,7 @@
         <!-- Notification Panel Wrapper -->
         <div id="notificationPanel" class="notification-panel">
             <h5 class="title">Notifications</h5>
-            @if (!empty(auth()->user()->notifications()))
+            @if (auth()->user())
                 @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
                     <div class="notif-item">
                         <div class="notif-text">
@@ -603,13 +599,10 @@
             <span>Trade</span>
         </a>
 
-
-
-        <a href="{{ route('asset.index') }}" class="nav-item center-btn">
-           <svg height="22" fill="#ffffff" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_6871722"><g id="crypto_wallet"><path d="m18 20c0 .5517578-.4487305 1-1 1h-2v-2h2c.5512695 0 1 .4482422 1 1zm-1-5h-2v2h2c.5512695 0 1-.4482422 1-1s-.4487305-1-1-1zm14-5v16c0 1.6503906-1.3500977 3-3 3h-24c-1.6499023 0-3-1.3496094-3-3v-18c0-2.7597656 2.2402344-5 5-5h18c1.2998047 0 2.4101563.8398438 2.8198242 2h-20.8198242v2h22c1.6499023 0 3 1.3496094 3 3zm-11.7802734 8c.4794922-.5322266.7802734-1.2285156.7802734-2 0-1.6542969-1.3457031-3-3-3v-1h-2v1h-3v2h1v6h-1v2h3v1h2v-1c1.6542969 0 3-1.3457031 3-3 0-.7714844-.3007812-1.4677734-.7802734-2zm7.7802734 0c0-1.1035156-.8969727-2-2-2s-2 .8964844-2 2 .8969727 2 2 2 2-.8964844 2-2z"></path></g></svg>
+        <a href="{{ route('asset.index') }}" class="nav-item ">
+           <svg height="22" fill="#F46523" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_6871722"><g id="crypto_wallet"><path d="m18 20c0 .5517578-.4487305 1-1 1h-2v-2h2c.5512695 0 1 .4482422 1 1zm-1-5h-2v2h2c.5512695 0 1-.4482422 1-1s-.4487305-1-1-1zm14-5v16c0 1.6503906-1.3500977 3-3 3h-24c-1.6499023 0-3-1.3496094-3-3v-18c0-2.7597656 2.2402344-5 5-5h18c1.2998047 0 2.4101563.8398438 2.8198242 2h-20.8198242v2h22c1.6499023 0 3 1.3496094 3 3zm-11.7802734 8c.4794922-.5322266.7802734-1.2285156.7802734-2 0-1.6542969-1.3457031-3-3-3v-1h-2v1h-3v2h1v6h-1v2h3v1h2v-1c1.6542969 0 3-1.3457031 3-3 0-.7714844-.3007812-1.4677734-.7802734-2zm7.7802734 0c0-1.1035156-.8969727-2-2-2s-2 .8964844-2 2 .8969727 2 2 2 2-.8964844 2-2z"></path></g></svg>
             <span>Assets</span>
         </a>
- 
 
         <a href="{{ route('transaction.index') }}" class="nav-item" id="mobileProfile">
           <svg clip-rule="evenodd" fill-rule="evenodd" fill="#F46523" height="22" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_8377918"><g transform="translate(-148 -148)"><g id="solid"><path d="m166 150.003h-10c-1.657 0-3 1.343-3 3v20.341c0 1.154.662 2.206 1.703 2.705s2.275.357 3.175-.366l.496-.398c.366-.293.886-.293 1.252 0l2.498 2.006c1.096.88 2.655.881 3.753.003l2.5-2c.365-.292.883-.293 1.248-.001l.518.413c.901.719 2.134.858 3.173.358 1.038-.5 1.698-1.551 1.698-2.703v-14.361h-6.014c-.796 0-1.559-.316-2.121-.879-.563-.562-.879-1.325-.879-2.121zm.741 21.67 2.966-2.966c.286-.286.372-.716.217-1.09-.155-.373-.52-.617-.924-.617h-10c-.552 0-1 .448-1 1s.448 1 1 1h7.586s-1.259 1.259-1.259 1.259c-.391.39-.391 1.024 0 1.414.39.391 1.024.391 1.414 0zm-5.482-11.346-2.966 2.966c-.286.286-.372.716-.217 1.09.155.373.52.617.924.617h10c.552 0 1-.448 1-1s-.448-1-1-1h-7.586s1.259-1.259 1.259-1.259c.391-.39.391-1.024 0-1.414-.39-.391-1.024-.391-1.414 0zm6.741-10.204v5.877c0 .265.105.52.293.707.187.188.442.293.707.293h5.897c-.14-.486-.402-.933-.767-1.295l-4.854-4.829c-.359-.357-.799-.614-1.276-.753z"></path></g></g></svg>
