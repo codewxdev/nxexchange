@@ -3,9 +3,7 @@
 @section('content')
     <div class="main-container">
         <div class="row m-0">
-
             <!-- ===== Left Column: Market List ===== -->
-
             <div class="col-lg-3 col-md-4 market-sidebar">
                 <!-- Selected Coin -->
                 @if (!empty($currencies))
@@ -45,24 +43,6 @@
             <!-- ===== Right Column (Graph / Trading Area) ===== -->
             <div class="col-lg-9 col-md-8 trade-graph-area">
                 <!-- ===== Top Stats ===== -->
-                {{-- <div class="trade-stats d-flex flex-wrap justify-content-between align-items-center mb-3">
-                    <div class="stat-box">
-                        <span>Last Price</span>
-                        <h2>$103,093.78 <small class="text-success">+0.84%</small></h2>
-                    </div>
-                    <div class="stat-box">
-                        <span>24h High</span>
-                        <h2>$104,500.21</h2>
-                    </div>
-                    <div class="stat-box">
-                        <span>24h Low</span>
-                        <h2>$100,200.54</h2>
-                    </div>
-                    <div class="stat-box">
-                        <span>Volume (BTC)</span>
-                        <h2>15,239.21</h2>
-                    </div>
-                </div> --}}
                 <div class="trade-stats d-flex flex-wrap justify-content-between align-items-center mb-3">
                     <div class="stat-box">
                         <span>Last Price</span>
@@ -114,14 +94,6 @@
                 </div>
 
                 <!-- ===== Mini Stats Row ===== -->
-                {{-- <div class="mini-stats d-flex flex-wrap justify-content-between align-items-center mb-4">
-                    <div>Time: 2025-11-29 04:24</div>
-                    <div>Open: 103,463</div>
-                    <div>High: 104,335.00</div>
-                    <div>Low: 108,3838</div>
-                    <div>Close: 105,228</div>
-                    <div>Volume: 105,228</div>
-                </div> --}}
                 <div class="mini-stats d-flex flex-wrap justify-content-between align-items-center mb-4">
                     <div>Market Cap: <span id="marketcap">${{ number_format($currencies[0]['market_cap'], 2) }}</span>
                     </div>
@@ -135,7 +107,6 @@
                 <div class="chart-container p-3 rounded">
                     <div id="chart" style="height: 420px; width: 100%;"></div>
                 </div>
-
 
                 <!-- ===== Order List (Buy / Sell Panels) ===== -->
                 <div class="order-section mt-5">
@@ -226,7 +197,7 @@
                                     <button type="button" class="percent-btn" data-percent="100">100%</button>
                                 </div>
 
-                                <div class="trade-info mb-3 p-3  rounded">
+                                <div class="trade-info mb-3 p-3 rounded">
                                     <div class="d-flex justify-content-between mb-2">
                                         <span>Trade Balance:</span>
                                         <strong
@@ -256,27 +227,50 @@
                 </div>
 
                 <!-- ===== Order History Tabs ===== -->
-                <div class="order-history mt-5">
-                    <div class="tabs d-flex justify-content-around mb-3">
-                        <button class="tab active">Plan Order</button>
-                        <button class="tab">Delivery Order</button>
-                        <button class="tab">Historical Order</button>
-                        <button class="tab">Copy Trading</button>
-                    </div>
-                    <div class="no-more text-center py-4">
-                        <i class="fa-regular fa-box-open fa-2x mb-2 text-secondary"></i>
-                        <p>No More Data</p>
-                    </div>
-                </div>
+                @auth
 
+                    @if (auth()->user()->account_status == 'active')
+                        <div class="order-history mt-5">
+                            <div class="table-container" style="height: 300px; overflow-y: auto;">
+                                <table class="table table-hover mb-0 p-2">
+                                    <thead class="table-dark p-1" style="position: sticky; top: 0; z-index: 1;color:#e95a07;">
+                                        <tr>
+                                            <th> ID</th>
+                                            <th>Symbol</th>
+                                            <th>Type</th>
+                                            <th>Direction</th>
+                                            <th>Stake Price</th>
+                                            <th>Start Time</th>
+                                            <th>End Time</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="p-1">
+                                        @foreach ($trades as $trade)
+                                            <tr style="height: 48px;">
+                                                <td style="color: white;">#{{ $trade->id }}</td>
+                                                <td style="color: white;">{{ $trade->crypto_symbol }}</td>
+                                                <td style="color: white;">{{ $trade->trade_type }}</td>
+                                                <td style="color: white;">{{ $trade->direction }}</td>
+                                                <td style="color: white;">${{ $trade->stake_amount }}</td>
+                                                <td style="color: white;">{{ $trade->start_time }}</td>
+                                                <td style="color: white;">{{ $trade->end_time }}</td>
+                                                <td style="color: white;">{{ $trade->status }}</td>
+
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    @else
+                        <p>Your account is not active. Please contact support.</p>
+                    @endif
+                @endauth
             </div>
-
-
-
         </div>
     </div>
 @endsection
-
 
 @push('scripts')
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
@@ -317,7 +311,7 @@
                 },
                 series: [{
                     data: []
-                }], // empty initially
+                }],
                 xaxis: {
                     type: 'datetime',
                     labels: {
@@ -372,17 +366,17 @@
                 miniLow.textContent = `$${coinData.low_24h.toLocaleString()}`;
                 miniVolume.textContent = `$${coinData.total_volume.toLocaleString()}`;
 
-                // Generate chart data (for demo using random candles around current price)
+                // Generate chart data
                 const chartData = [];
                 let base = coinData.current_price;
-                for (let i = 0; i < 30; i++) { // last 30 periods
+                for (let i = 0; i < 30; i++) {
                     const openPrice = base + (Math.random() * 10 - 5);
                     const closePrice = openPrice + (Math.random() * 10 - 5);
                     const highPriceCandle = Math.max(openPrice, closePrice) + Math.random() * 5;
                     const lowPriceCandle = Math.min(openPrice, closePrice) - Math.random() * 5;
                     base = closePrice;
                     chartData.push({
-                        x: new Date(Date.now() - (29 - i) * 60 * 1000), // assuming 1-min intervals
+                        x: new Date(Date.now() - (29 - i) * 60 * 1000),
                         y: [openPrice.toFixed(2), highPriceCandle.toFixed(2), lowPriceCandle.toFixed(2),
                             closePrice.toFixed(2)
                         ]
@@ -436,81 +430,79 @@
             });
         });
     </script>
+
     <script>
         document.addEventListener("DOMContentLoaded", function() {
-        const intervalButtons = document.querySelectorAll('.interval-btn');
-        const outOrder = document.querySelector('.info-row div:nth-child(1) h6');
-        const countdown = document.querySelector('.info-row div:nth-child(2) h6');
-        const timePeriod = document.querySelector('.info-row div:nth-child(3) h6');
+            const intervalButtons = document.querySelectorAll('.interval-btn');
+            const outOrder = document.querySelector('.info-row div:nth-child(1) h6');
+            const countdown = document.querySelector('.info-row div:nth-child(2) h6');
+            const timePeriod = document.querySelector('.info-row div:nth-child(3) h6');
 
-        // Default interval: 60S
-        let selectedInterval = '60S';
-        let countdownValue = 5; // seconds
-        let countdownTimer;
+            let selectedInterval = '60S';
+            let countdownValue = 5;
+            let countdownTimer;
 
-        function updateInfoRow(interval) {
-            // Example logic for out order time
-            const now = new Date();
-            outOrder.textContent = now.toLocaleString();
+            function updateInfoRow(interval) {
+                const now = new Date();
+                outOrder.textContent = now.toLocaleString();
 
-            // Set countdown based on interval
-            switch (interval) {
-                case '60S':
-                    countdownValue = 60;
-                    break;
-                case '120S':
-                    countdownValue = 120;
-                    break;
-                case '5M':
-                    countdownValue = 300;
-                    break;
-                case '10M':
-                    countdownValue = 600;
-                    break;
-                case '1H':
-                    countdownValue = 3600;
-                    break;
-                case '24H':
-                    countdownValue = 86400;
-                    break;
-            }
-            countdown.textContent = countdownValue + 's';
-
-            // Set time period
-            const end = new Date(now.getTime() + countdownValue * 1000);
-            const formatTime = date =>
-                `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
-            timePeriod.textContent = `${formatTime(now)} ~ ${formatTime(end)}`;
-
-            // Clear existing countdown if any
-            if (countdownTimer) clearInterval(countdownTimer);
-
-            // Start countdown
-            countdownTimer = setInterval(() => {
-                countdownValue--;
-                countdown.textContent = countdownValue + 's';
-                if (countdownValue <= 0) {
-                    clearInterval(countdownTimer);
+                switch (interval) {
+                    case '60S':
+                        countdownValue = 60;
+                        break;
+                    case '120S':
+                        countdownValue = 120;
+                        break;
+                    case '5M':
+                        countdownValue = 300;
+                        break;
+                    case '10M':
+                        countdownValue = 600;
+                        break;
+                    case '1H':
+                        countdownValue = 3600;
+                        break;
+                    case '24H':
+                        countdownValue = 86400;
+                        break;
                 }
-            }, 1000);
-        } // Set default on page load
-        updateInfoRow(selectedInterval); // Click event for interval buttons intervalButtons.forEach(btn=> {
-        btn.addEventListener('click', function() {
-            intervalButtons.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            selectedInterval = this.textContent;
+                countdown.textContent = countdownValue + 's';
+
+                const end = new Date(now.getTime() + countdownValue * 1000);
+                const formatTime = date =>
+                    `${date.getHours().toString().padStart(2,'0')}:${date.getMinutes().toString().padStart(2,'0')}`;
+                timePeriod.textContent = `${formatTime(now)} ~ ${formatTime(end)}`;
+
+                if (countdownTimer) clearInterval(countdownTimer);
+
+                countdownTimer = setInterval(() => {
+                    countdownValue--;
+                    countdown.textContent = countdownValue + 's';
+                    if (countdownValue <= 0) {
+                        clearInterval(countdownTimer);
+                    }
+                }, 1000);
+            }
+
             updateInfoRow(selectedInterval);
-        });
-        });
+
+            intervalButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    intervalButtons.forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedInterval = this.textContent;
+                    updateInfoRow(selectedInterval);
+                });
+            });
         });
     </script>
+
     <script>
         // Trade balance from backend
         const tradeBalance = {{ $wallet->trade_balance ?? 0 }};
 
         // Initialize percentage buttons and update amounts
         function initializeTradeForms() {
-            // Initialize both forms
             initializeTradeForm('buy', tradeBalance);
             initializeTradeForm('sell', tradeBalance);
         }
@@ -523,18 +515,13 @@
 
             // Percentage buttons click event
             form.find('.percent-btn').on('click', function() {
-                // Remove active class from all buttons
                 form.find('.percent-btn').removeClass('active');
-                // Add active class to clicked button
                 $(this).addClass('active');
 
                 const percent = $(this).data('percent');
-                // Update hidden input
                 $(`#${formType}-percentage-input`).val(percent);
-                // Update button text
                 $(`#${formType}-btn-text`).text(`${formType === 'buy' ? 'Buy' : 'Sell'} BTC (${percent}%)`);
 
-                // Update trade info
                 updateTradeInfo(formType, percent, balance);
             });
         }
@@ -543,7 +530,6 @@
             const stakeAmount = (balance * percent) / 100;
             const remainingBalance = balance - stakeAmount;
 
-            // Update display
             $(`#${formType}-selected-percent`).text(percent + '%');
             $(`#${formType}-stake-amount`).text(stakeAmount.toFixed(8) + ' USDT');
             $(`#${formType}-remaining-balance`).text(remainingBalance.toFixed(8) + ' USDT');
@@ -572,15 +558,15 @@
                             icon: 'success',
                             title: 'Trade Placed!',
                             html: `
-                        <div class="text-center">
-                            <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
-                            <h4>Trade Status: Pending</h4>
-                            <p>Your trade has been placed successfully and is waiting for admin approval.</p>
-                            <div class="alert alert-info mt-3">
-                                <small>Admin will review and set the result shortly.</small>
+                            <div class="text-center">
+                                <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
+                                <h4>Trade Status: Pending</h4>
+                                <p>Your trade has been placed successfully and is waiting for admin approval.</p>
+                                <div class="alert alert-info mt-3">
+                                    <small>Admin will review and set the result shortly.</small>
+                                </div>
                             </div>
-                        </div>
-                    `,
+                        `,
                             confirmButtonText: 'OK',
                             confirmButtonColor: '#3085d6',
                         }).then((result) => {
@@ -620,6 +606,23 @@
 
 @push('style')
     <style>
+        .trade-table td {
+            color: white !important;
+            border-color: #444;
+        }
+
+        .trade-table thead th {
+            color: #e95a07 !important;
+            border-color: #444;
+            background: #1a1a1a;
+        }
+
+        .end-btn {
+            padding: 4px 12px;
+            font-size: 12px;
+            border-radius: 4px;
+        }
+
         .percent-btn {
             padding: 8px 12px;
             border: 1px solid #ddd;
@@ -765,7 +768,7 @@
             color: #e04f4f;
         }
 
-        /* ===== Right Column (Placeholder) ===== */
+        /* ===== Right Column ===== */
         .trade-graph-area {
             background: #0f0f0f;
             color: #fff;
@@ -864,7 +867,6 @@
             border-radius: 12px;
             overflow: hidden;
         }
-
 
         /* ===== Order Section (Buy/Sell) ===== */
         .order-section {
@@ -977,31 +979,49 @@
             margin-top: 25px;
         }
 
-        .order-history .tabs button {
-            background: transparent;
+        .table-container {
+            border: 1px solid #141414;
+            border-radius: 0.375rem;
+        }
+
+        .table-container::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .table-container::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .table-container::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+        .tab {
+            padding: 10px 20px;
             border: none;
-            color: #aaa;
-            padding: 10px 15px;
-            font-size: 0.95rem;
-            transition: 0.3s ease;
+            background: #f8f9fa;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
         }
 
-        .order-history .tabs button.active,
-        .order-history .tabs button:hover {
-            color: #F46523;
-            border-bottom: 2px solid #F46523;
+        .tab.active {
+            background: #007bff;
+            color: white;
         }
 
-        .no-more {
-            color: #777;
-            font-size: 0.95rem;
+        .tab:hover {
+            background: #e9ecef;
         }
 
-        @media (max-width: 768px) {
-            .market-sidebar {
-                border-right: none;
-                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            }
+        .tab.active:hover {
+            background: #0056b3;
         }
     </style>
 @endpush

@@ -113,7 +113,9 @@ Route::middleware(['auth'])->group(function () {
 //     session(['locale' => $lang]);
 //     return back();
 // })->name('change.lang');
-
+// web.php
+Route::post('/transfer/process', [TransferController::class, 'processTransfer'])->name('transfers.process');
+Route::get('/user/wallet-data', [UserController::class, 'getWalletData'])->name('user.wallet.data');
 Route::get('/lang/{lang}', function ($lang) {
     $allowed = ['en', 'ur', 'fr', 'es', 'ar'];
 

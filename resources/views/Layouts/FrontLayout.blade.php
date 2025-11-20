@@ -639,6 +639,7 @@
             </svg>
             <span>Transactions</span>
         </a>
+
         <a href="{{ route('profile.index') }}" class="nav-item" id="mobileProfile">
             <svg id="fi_6543645" fill="#F46523" enable-background="new 0 0 195 195" height="22"
                 viewBox="0 0 195 195" width="22" xmlns="http://www.w3.org/2000/svg">
