@@ -8,6 +8,7 @@ class Trade extends Model
 {
     protected $fillable = [
         'user_id', 'direction', 'trade_type', 'signal_id', 'crypto_symbol',
+        'crypto_price_at_entry',
         'stake_amount', 'profit_amount', 'profit_rate', 'result', 'start_time', 'end_time',
     ];
 

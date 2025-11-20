@@ -3,10 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserNotification;
-use Illuminate\Http\Request;
 
 class NotificationController extends Controller
 {
+    public function getLatestNotifications()
+    {
+        $notifications = auth()->user()
+            ->notifications()
+            ->latest()
+            ->take(10)
+            ->get()
+            ->map(function ($notif) {
+                return [
+                    'id' => $notif->id,
+                    'title' => $notif->title,
+                    'message' => $notif->message,
+                    'type' => $notif->type,
+                    'is_read' => $notif->is_read,
+                    'time_ago' => $notif->created_at->diffForHumans(),
+                ];
+            });
+
+        $unreadCount = auth()->user()->unreadNotifications()->count();
+
+        return response()->json([
+            'notifications' => $notifications,
+            'unread_count' => $unreadCount,
+        ]);
+    }
+
+    public function getUnreadCount()
+    {
+        $unreadCount = auth()->user()->unreadNotifications()->count();
+
+        return response()->json(['unread_count' => $unreadCount]);
+    }
     // public function index()
     // {
     //     $notifications = auth()->user()
@@ -39,7 +70,7 @@ class NotificationController extends Controller
             ->where('user_id', auth()->id())
             ->first();
 
-        if (!$notification) {
+        if (! $notification) {
             return response()->json(['error' => true], 404);
         }
 

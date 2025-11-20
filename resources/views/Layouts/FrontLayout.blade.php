@@ -326,7 +326,7 @@
                 </a>
                 {{-- <a href="{{ route('help.index') }}" class="nav-item">
                     <i class="fa-regular fa-circle-question"></i>
-                     
+
                 </a> --}}
             </div>
         </div>
@@ -579,7 +579,14 @@
     <!-- MOBILE BOTTOM NAV -->
     <div class="mobile-bottom-nav d-lg-none d-md-none">
         <a href="{{ route('market.index') }}" class="nav-item">
-           <svg id="fi_4186586" fill="#F46523" width="22" height="22" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" data-name="Layer 15"><path d="m24 2v2h2.586l-10.586 10.586-4-4-9.707 9.707 1.414 1.414 8.293-8.293 4 4 12-12v2.586h2v-6z"></path><path d="m8.414 23h-4.828l-1.586 1.586v5.414h8v-5.414z"></path><path d="m13.59 19-1.59 1.59v9.41h8v-9.41l-1.59-1.59z"></path><path d="m23.59 13-1.59 1.59v15.41h8v-15.41l-1.59-1.59z"></path></svg>
+            <svg id="fi_4186586" fill="#F46523" width="22" height="22" viewBox="0 0 32 32"
+                xmlns="http://www.w3.org/2000/svg" data-name="Layer 15">
+                <path d="m24 2v2h2.586l-10.586 10.586-4-4-9.707 9.707 1.414 1.414 8.293-8.293 4 4 12-12v2.586h2v-6z">
+                </path>
+                <path d="m8.414 23h-4.828l-1.586 1.586v5.414h8v-5.414z"></path>
+                <path d="m13.59 19-1.59 1.59v9.41h8v-9.41l-1.59-1.59z"></path>
+                <path d="m23.59 13-1.59 1.59v15.41h8v-15.41l-1.59-1.59z"></path>
+            </svg>
             <span>Market</span>
         </a>
 
@@ -604,12 +611,47 @@
             <span>Assets</span>
         </a>
 
+
+        <a href="{{ route('asset.index') }}" class="nav-item center-btn">
+            <svg height="22" fill="#ffffff" viewBox="0 0 32 32" width="22"
+                xmlns="http://www.w3.org/2000/svg" id="fi_6871722">
+                <g id="crypto_wallet">
+                    <path
+                        d="m18 20c0 .5517578-.4487305 1-1 1h-2v-2h2c.5512695 0 1 .4482422 1 1zm-1-5h-2v2h2c.5512695 0 1-.4482422 1-1s-.4487305-1-1-1zm14-5v16c0 1.6503906-1.3500977 3-3 3h-24c-1.6499023 0-3-1.3496094-3-3v-18c0-2.7597656 2.2402344-5 5-5h18c1.2998047 0 2.4101563.8398438 2.8198242 2h-20.8198242v2h22c1.6499023 0 3 1.3496094 3 3zm-11.7802734 8c.4794922-.5322266.7802734-1.2285156.7802734-2 0-1.6542969-1.3457031-3-3-3v-1h-2v1h-3v2h1v6h-1v2h3v1h2v-1c1.6542969 0 3-1.3457031 3-3 0-.7714844-.3007812-1.4677734-.7802734-2zm7.7802734 0c0-1.1035156-.8969727-2-2-2s-2 .8964844-2 2 .8969727 2 2 2 2-.8964844 2-2z">
+                    </path>
+                </g>
+            </svg>
+            <span>Assets</span>
+        </a>
+
+
         <a href="{{ route('transaction.index') }}" class="nav-item" id="mobileProfile">
-          <svg clip-rule="evenodd" fill-rule="evenodd" fill="#F46523" height="22" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_8377918"><g transform="translate(-148 -148)"><g id="solid"><path d="m166 150.003h-10c-1.657 0-3 1.343-3 3v20.341c0 1.154.662 2.206 1.703 2.705s2.275.357 3.175-.366l.496-.398c.366-.293.886-.293 1.252 0l2.498 2.006c1.096.88 2.655.881 3.753.003l2.5-2c.365-.292.883-.293 1.248-.001l.518.413c.901.719 2.134.858 3.173.358 1.038-.5 1.698-1.551 1.698-2.703v-14.361h-6.014c-.796 0-1.559-.316-2.121-.879-.563-.562-.879-1.325-.879-2.121zm.741 21.67 2.966-2.966c.286-.286.372-.716.217-1.09-.155-.373-.52-.617-.924-.617h-10c-.552 0-1 .448-1 1s.448 1 1 1h7.586s-1.259 1.259-1.259 1.259c-.391.39-.391 1.024 0 1.414.39.391 1.024.391 1.414 0zm-5.482-11.346-2.966 2.966c-.286.286-.372.716-.217 1.09.155.373.52.617.924.617h10c.552 0 1-.448 1-1s-.448-1-1-1h-7.586s1.259-1.259 1.259-1.259c.391-.39.391-1.024 0-1.414-.39-.391-1.024-.391-1.414 0zm6.741-10.204v5.877c0 .265.105.52.293.707.187.188.442.293.707.293h5.897c-.14-.486-.402-.933-.767-1.295l-4.854-4.829c-.359-.357-.799-.614-1.276-.753z"></path></g></g></svg>
+            <svg clip-rule="evenodd" fill-rule="evenodd" fill="#F46523" height="22" stroke-linejoin="round"
+                stroke-miterlimit="2" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg"
+                id="fi_8377918">
+                <g transform="translate(-148 -148)">
+                    <g id="solid">
+                        <path
+                            d="m166 150.003h-10c-1.657 0-3 1.343-3 3v20.341c0 1.154.662 2.206 1.703 2.705s2.275.357 3.175-.366l.496-.398c.366-.293.886-.293 1.252 0l2.498 2.006c1.096.88 2.655.881 3.753.003l2.5-2c.365-.292.883-.293 1.248-.001l.518.413c.901.719 2.134.858 3.173.358 1.038-.5 1.698-1.551 1.698-2.703v-14.361h-6.014c-.796 0-1.559-.316-2.121-.879-.563-.562-.879-1.325-.879-2.121zm.741 21.67 2.966-2.966c.286-.286.372-.716.217-1.09-.155-.373-.52-.617-.924-.617h-10c-.552 0-1 .448-1 1s.448 1 1 1h7.586s-1.259 1.259-1.259 1.259c-.391.39-.391 1.024 0 1.414.39.391 1.024.391 1.414 0zm-5.482-11.346-2.966 2.966c-.286.286-.372.716-.217 1.09.155.373.52.617.924.617h10c.552 0 1-.448 1-1s-.448-1-1-1h-7.586s1.259-1.259 1.259-1.259c.391-.39.391-1.024 0-1.414-.39-.391-1.024-.391-1.414 0zm6.741-10.204v5.877c0 .265.105.52.293.707.187.188.442.293.707.293h5.897c-.14-.486-.402-.933-.767-1.295l-4.854-4.829c-.359-.357-.799-.614-1.276-.753z">
+                        </path>
+                    </g>
+                </g>
+            </svg>
             <span>Transactions</span>
         </a>
         <a href="{{ route('profile.index') }}" class="nav-item" id="mobileProfile">
-           <svg id="fi_6543645" fill="#F46523" enable-background="new 0 0 195 195" height="22" viewBox="0 0 195 195" width="22" xmlns="http://www.w3.org/2000/svg"><g id="icon_11_"><path d="m120.48 158.35c-1.51.71-3.19 1.1-4.96 1.1h-82.24c-6.5 0-11.78-5.27-11.78-11.78 0-13.48 5.47-25.68 14.3-34.52s21.04-14.3 34.52-14.3h8.16c4.92 0 9.68.73 14.16 2.08l-.04.07c-1.4 2.43-1.77 5.26-1.05 7.97.73 2.71 2.47 4.98 4.9 6.38l1.12.65c-.13 1.3-.2 2.61-.2 3.92s.07 2.62.2 3.92l-1.12.65c-2.43 1.4-4.17 3.67-4.9 6.38-.72 2.71-.35 5.54 1.05 7.97l5.49 9.5c1.87 3.24 5.36 5.26 9.1 5.26 1.84 0 3.65-.49 5.25-1.41l1.12-.65c2.13 1.53 4.41 2.85 6.8 3.92v1.3c0 .54.04 1.07.12 1.59z"></path><circle cx="74.4" cy="62" r="26.45"></circle><path d="m172.25 131.42-5.99-3.46c.69-2.57 1.06-5.26 1.06-8.04s-.37-5.48-1.06-8.04l5.99-3.46c1.2-.69 1.61-2.22.92-3.42l-5.49-9.5c-.69-1.2-2.22-1.61-3.42-.92l-5.99 3.46c-3.8-3.8-8.58-6.62-13.93-8.05v-6.91c0-1.38-1.12-2.5-2.5-2.5h-10.97c-1.38 0-2.5 1.12-2.5 2.5v6.91c-5.35 1.42-10.13 4.24-13.93 8.05l-5.99-3.46c-1.2-.69-2.73-.28-3.42.92l-5.49 9.5c-.69 1.2-.28 2.73.92 3.42l5.99 3.46c-.69 2.57-1.06 5.26-1.06 8.04s.37 5.48 1.06 8.04l-5.99 3.46c-1.2.69-1.61 2.22-.92 3.42l5.49 9.5c.69 1.2 2.22 1.61 3.42.92l5.99-3.46c3.8 3.8 8.58 6.62 13.93 8.05v6.91c0 1.38 1.12 2.5 2.5 2.5h10.97c1.38 0 2.5-1.12 2.5-2.5v-6.91c5.35-1.42 10.13-4.24 13.93-8.05l5.99 3.46c1.2.69 2.73.28 3.42-.92l5.49-9.5c.69-1.2.28-2.73-.92-3.42zm-35.9 1.13c-6.98 0-12.63-5.66-12.63-12.63 0-6.98 5.66-12.63 12.63-12.63s12.63 5.66 12.63 12.63-5.65 12.63-12.63 12.63z"></path></g></svg>
+            <svg id="fi_6543645" fill="#F46523" enable-background="new 0 0 195 195" height="22"
+                viewBox="0 0 195 195" width="22" xmlns="http://www.w3.org/2000/svg">
+                <g id="icon_11_">
+                    <path
+                        d="m120.48 158.35c-1.51.71-3.19 1.1-4.96 1.1h-82.24c-6.5 0-11.78-5.27-11.78-11.78 0-13.48 5.47-25.68 14.3-34.52s21.04-14.3 34.52-14.3h8.16c4.92 0 9.68.73 14.16 2.08l-.04.07c-1.4 2.43-1.77 5.26-1.05 7.97.73 2.71 2.47 4.98 4.9 6.38l1.12.65c-.13 1.3-.2 2.61-.2 3.92s.07 2.62.2 3.92l-1.12.65c-2.43 1.4-4.17 3.67-4.9 6.38-.72 2.71-.35 5.54 1.05 7.97l5.49 9.5c1.87 3.24 5.36 5.26 9.1 5.26 1.84 0 3.65-.49 5.25-1.41l1.12-.65c2.13 1.53 4.41 2.85 6.8 3.92v1.3c0 .54.04 1.07.12 1.59z">
+                    </path>
+                    <circle cx="74.4" cy="62" r="26.45"></circle>
+                    <path
+                        d="m172.25 131.42-5.99-3.46c.69-2.57 1.06-5.26 1.06-8.04s-.37-5.48-1.06-8.04l5.99-3.46c1.2-.69 1.61-2.22.92-3.42l-5.49-9.5c-.69-1.2-2.22-1.61-3.42-.92l-5.99 3.46c-3.8-3.8-8.58-6.62-13.93-8.05v-6.91c0-1.38-1.12-2.5-2.5-2.5h-10.97c-1.38 0-2.5 1.12-2.5 2.5v6.91c-5.35 1.42-10.13 4.24-13.93 8.05l-5.99-3.46c-1.2-.69-2.73-.28-3.42.92l-5.49 9.5c-.69 1.2-.28 2.73.92 3.42l5.99 3.46c-.69 2.57-1.06 5.26-1.06 8.04s.37 5.48 1.06 8.04l-5.99 3.46c-1.2.69-1.61 2.22-.92 3.42l5.49 9.5c.69 1.2 2.22 1.61 3.42.92l5.99-3.46c3.8 3.8 8.58 6.62 13.93 8.05v6.91c0 1.38 1.12 2.5 2.5 2.5h10.97c1.38 0 2.5-1.12 2.5-2.5v-6.91c5.35-1.42 10.13-4.24 13.93-8.05l5.99 3.46c1.2.69 2.73.28 3.42-.92l5.49-9.5c.69-1.2.28-2.73-.92-3.42zm-35.9 1.13c-6.98 0-12.63-5.66-12.63-12.63 0-6.98 5.66-12.63 12.63-12.63s12.63 5.66 12.63 12.63-5.65 12.63-12.63 12.63z">
+                    </path>
+                </g>
+            </svg>
             <span>Account</span>
         </a>
     </div>
@@ -660,18 +702,18 @@
             toastr.info("{{ session('info') }}");
         @endif
     </script>
-
     <script>
         const messagesBtn = document.querySelector('.messages-btn');
         const panel = document.getElementById('notificationPanel');
 
-        // Multiple message buttons support
-        document.querySelectorAll('.messages-btn').forEach(btn => {
-            btn.addEventListener('click', function(e) {
-                e.preventDefault();
-                e.stopPropagation();
-                panel.classList.toggle('show');
-            });
+        messagesBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            panel.classList.toggle('show');
+
+            // Panel kholne par notifications refresh karen
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
         });
         // Close only when clicking outside
         document.addEventListener('click', function(e) {
@@ -680,10 +722,83 @@
             }
         });
 
-        $(document).on('click', '.delete-note', function() {
+        // Real-time notifications load karne ka function
+        function loadNotifications() {
+            $.get('/user/notifications/latest', function(response) {
+                updateNotificationPanel(response.notifications);
+                updateNotificationBadge(response.unread_count);
+            });
+        }
+
+        // Notification panel update kare
+        function updateNotificationPanel(notifications) {
+            if (notifications.length === 0) {
+                panel.innerHTML = `
+            <h5 class="title">Notifications</h5>
+            <div id="emptyNoti" class="text-center py-4 text-muted">
+                <i class="fa-regular fa-bell-slash fs-1"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+                return;
+            }
+
+            let notificationsHtml = '<h5 class="title">Notifications</h5>';
+
+            notifications.forEach(notif => {
+                const typeClass = `text-${notif.type}`;
+                const icon = getNotificationIcon(notif.type);
+
+                notificationsHtml += `
+            <div class="notif-item ${notif.is_read ? '' : 'unread'}">
+                <div class="notif-text">
+                    <strong class="${typeClass}">
+                        <i class="fa-solid ${icon} me-1"></i>${notif.title}
+                    </strong>
+                    <p>${notif.message}</p>
+                </div>
+                <span class="time">${notif.time_ago}</span>
+                <span class="delete-note" data-id="${notif.id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </div>
+        `;
+            });
+
+            panel.innerHTML = notificationsHtml;
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                'success': 'fa-trophy',
+                'danger': 'fa-exclamation-triangle',
+                'warning': 'fa-clock',
+                'info': 'fa-info-circle'
+            };
+            return icons[type] || 'fa-bell';
+        }
+
+        // Notification badge update kare
+        function updateNotificationBadge(count) {
+            let badge = $('.notif-badge');
+
+            if (count > 0) {
+                if (badge.length === 0) {
+                    $('.messages-btn').append(`<span class="notif-badge">${count}</span>`);
+                } else {
+                    badge.text(count);
+                }
+            } else {
+                badge.remove();
+            }
+        }
+
+        // Delete notification (Aapka existing code)
+        $(document).on('click', '.delete-note', function(e) {
+            e.stopPropagation();
 
             let id = $(this).data('id');
-            let noteBox = $(this).closest('.notif-item'); // FIXED
+            let noteBox = $(this).closest('.notif-item');
 
             $.ajax({
                 url: "/notification/" + id,
@@ -691,28 +806,152 @@
                 data: {
                     _token: "{{ csrf_token() }}"
                 },
-
                 success: function(res) {
                     if (res.success) {
+                        noteBox.fadeOut(300, function() {
+                            $(this).remove();
+                            loadNotifications(); // Refresh notifications
+                        });
+                    }
+                }
+            });
+        });
 
+        // Auto-refresh notifications every 30 seconds
+        setInterval(function() {
+            // Badge count hamesha update kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+
+            // Agar panel open hai toh notifications refresh kare
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+        }, 30000);
+
+        // Initial load
+        $(document).ready(function() {
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        });
+    </script>
+
+    {{-- <script>
+        const messagesBtn = document.querySelector('.messages-btn');
+        const panel = document.getElementById('notificationPanel');
+
+        messagesBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            panel.classList.toggle('show');
+
+            // Panel kholne par notifications refresh karen
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+        });
+
+        // Click outside → hide panel
+        document.addEventListener('click', function() {
+            panel.classList.remove('show');
+        });
+
+        // Real-time notifications load karne ka function
+        function loadNotifications() {
+            $.get('/user/notifications', function(response) {
+                updateNotificationPanel(response.notifications);
+                updateNotificationBadge(response.unread_count);
+            });
+        }
+
+        // Notification panel update kare
+        function updateNotificationPanel(notifications) {
+            if (notifications.length === 0) {
+                panel.innerHTML = `
+            <h5 class="title">Notifications</h5>
+            <div id="emptyNoti" class="text-center py-4 text-muted">
+                <i class="fa-regular fa-bell-slash fs-1"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+                return;
+            }
+
+            let notificationsHtml = '<h5 class="title">Notifications</h5>';
+
+            notifications.forEach(notif => {
+                const icon = notif.type === 'trade_win' ? 'fa-trophy' : 'fa-info-circle';
+                const textClass = notif.type === 'trade_win' ? 'text-success' : 'text-warning';
+
+                notificationsHtml += `
+            <div class="notif-item ${notif.is_read ? '' : 'unread'}">
+                <div class="notif-text">
+                    <strong class="${textClass}">
+                        <i class="fa-solid ${icon} me-1"></i>${notif.title}
+                    </strong>
+                    <p>${notif.message}</p>
+                </div>
+                <span class="time">${notif.created_at}</span>
+                <span class="delete-note" data-id="${notif.id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </div>
+        `;
+            });
+
+            panel.innerHTML = notificationsHtml;
+        }
+
+        // Notification badge update kare
+        function updateNotificationBadge(count) {
+            let badge = $('.notif-badge');
+
+            if (count > 0) {
+                if (badge.length === 0) {
+                    // Agar badge nahi hai toh naya banaye
+                    $('.messages-btn').append(`<span class="notif-badge">${count}</span>`);
+                } else {
+                    badge.text(count);
+                }
+            } else {
+                badge.remove();
+            }
+        }
+
+        // Delete notification (Aapka existing code - perfect hai)
+        $(document).on('click', '.delete-note', function(e) {
+            e.stopPropagation(); // Panel band hone se bachaye
+
+            let id = $(this).data('id');
+            let noteBox = $(this).closest('.notif-item');
+
+            $.ajax({
+                url: "/notification/" + id,
+                type: "DELETE",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(res) {
+                    if (res.success) {
                         noteBox.fadeOut(300, function() {
                             $(this).remove();
 
-                            // -------- UPDATE BADGE COUNT -------- //
+                            // Badge count update
                             let badge = $('.notif-badge');
                             if (badge.length) {
                                 let count = parseInt(badge.text()) - 1;
-
                                 if (count > 0) {
                                     badge.text(count);
                                 } else {
-                                    badge.remove(); // hide badge completely
+                                    badge.remove();
                                 }
                             }
 
-                            // -------- SHOW EMPTY MESSAGE -------- //
+                            // Empty message show kare
                             if ($('#notificationPanel .notif-item').length === 0) {
-                                $('#notificationPanel').append(`
+                                $('#notificationPanel').html(`
+                            <h5 class="title">Notifications</h5>
                             <div id="emptyNoti" class="text-center py-4 text-muted">
                                 <i class="fa-regular fa-bell-slash fs-1"></i>
                                 <p>No notifications</p>
@@ -724,7 +963,27 @@
                 }
             });
         });
-    </script>
+
+        // Auto-refresh notifications every 30 seconds
+        setInterval(function() {
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+
+            // Badge count hamesha update kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        }, 30000);
+
+        // Initial load
+        $(document).ready(function() {
+            // Sirf badge count load kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        });
+    </script> --}}
 
     @stack('scripts')
 

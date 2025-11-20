@@ -8,11 +8,11 @@
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
-                <h6 class="m-0 font-weight-bold text-primary">Recent Platform Activity</h6>
+                <h6 class="m-0 font-weight-bold">Recent Platform Activity</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped" id="activityTable">
+                    <table class="table table-hover" id="activityTable">
                         <thead>
                             <tr>
                                 <th>User Email</th>
@@ -32,9 +32,7 @@
                                     $actionType = $user->account_status;
                                     $badgeColor = match ($actionType) {
                                         'active' => 'bg-success',
-                                        'locked' => 'bg-warning',
                                         'deactivated' => 'bg-danger',
-                                        default => 'bg-secondary',
                                     };
 
                                     $kycBadgeColor = match ($user->kyc_status) {
@@ -64,11 +62,12 @@
                                     <td>{{ optional($user->last_login_at)?->format('Y-m-d H:i') ?? 'Never' }}</td>
                                     <td>
                                         <div class="dropdown">
-                                            <button class="btn btn-sm btn-secondary dropdown-toggle" type="button"
-                                                data-bs-toggle="dropdown" aria-expanded="false">
-                                                <i class="bi bi-gear"></i>
+                                            <button class="btn btn-light btn-sm p-2 rounded-circle" type="button"
+                                                data-bs-toggle="dropdown">
+                                                <i class="bi bi-three-dots-vertical"></i>
                                             </button>
-                                            <ul class="dropdown-menu">
+
+                                            <ul class="dropdown-menu dropdown-menu-end">
                                                 <li>
                                                     <a class="dropdown-item update-user" href="#"
                                                         data-user-id="{{ $user->id }}"
@@ -76,9 +75,10 @@
                                                         data-user-level="{{ $user->level }}"
                                                         data-user-account-status="{{ $user->account_status }}"
                                                         data-user-kyc-status="{{ $user->kyc_status }}">
-                                                        <i class="bi bi-pencil me-2"></i> Update
+                                                        <i class="bi bi-pencil me-2 text-primary"></i> Update
                                                     </a>
                                                 </li>
+
                                                 <li>
                                                     <a class="dropdown-item text-danger delete-user" href="#"
                                                         data-user-id="{{ $user->id }}">
@@ -140,11 +140,6 @@
                                     <label class="form-check-label" for="account_active">Active</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="account_status" id="account_locked"
-                                        value="locked">
-                                    <label class="form-check-label" for="account_locked">Locked</label>
-                                </div>
-                                <div class="form-check">
                                     <input class="form-check-input" type="radio" name="account_status"
                                         id="account_deactivated" value="deactivated">
                                     <label class="form-check-label" for="account_deactivated">Deactivated</label>
@@ -162,8 +157,8 @@
                                     <label class="form-check-label" for="kyc_verified">Verified</label>
                                 </div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kyc_status"
-                                        id="kyc_not_verified" value="not_verified">
+                                    <input class="form-check-input" type="radio" name="kyc_status" id="kyc_not_verified"
+                                        value="not_verified">
                                     <label class="form-check-label" for="kyc_not_verified">Not Verified</label>
                                 </div>
                                 <div class="form-check">
@@ -259,3 +254,46 @@
         });
     </script>
 @endsection
+<style>
+    /* -- RESPONSIVE TABLE -- */
+    @media (max-width: 768px) {
+        table thead {
+            display: none;
+        }
+
+        table tbody tr {
+            display: block;
+            margin-bottom: 15px;
+            background: #fff;
+            border-radius: 8px;
+            padding: 12px;
+            box-shadow: 0px 3px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        table tbody tr td {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 5px;
+            border: none;
+            font-size: 14px;
+        }
+
+        table tbody tr td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: #555;
+        }
+
+        .dropdown-menu {
+            position: absolute !important;
+            inset: auto auto 0px 0px !important;
+            transform: translate(0px, -10px) !important;
+        }
+    }
+
+    /* 3-dots button styling */
+    .btn-light.btn-sm {
+        background: #f1f1f1;
+        border: none;
+    }
+</style>
