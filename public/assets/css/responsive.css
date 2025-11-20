@@ -1,0 +1,171 @@
+@media (max-width: 477px) {
+
+    *{
+        font-family: 'Poppins';
+    }
+
+    button{
+        font-family: sans-serif;
+    }
+    /* ==== Home page ====  */
+    .navbar {
+        padding: 10px;
+    }
+
+    .navbar .container-fluid {
+        width: 100%;
+    }
+
+    .navbar-brand {
+        margin-left: 12px;
+    }
+
+    .navbar-brand img {
+        width: 58px;
+    }
+
+    .main .col-7 p {
+        text-align: center;
+        font-size: 13px;
+    }
+
+    .main {
+        padding: 20px;
+        flex-direction: column;
+    }
+
+    .main .col-7 {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .main .content .small-head {
+        padding: 7px 11px;
+        font-size: 11px;
+        font-family: 'sans-sarif';
+
+    }
+
+    .main .content h1 {
+        font-size: 39px;
+        text-align: center;
+    }
+
+    .hero-btns .btn1 {
+        font-size: 12px;
+        padding: 12px 12px;
+        width: 89px;
+    }
+
+    .hero-btns .btn2 {
+        font-size: 12px;
+        padding: 11px 12px;
+        width: 89px;
+    }
+
+    .main .col-5 {
+        width: 100%;
+    }
+
+    .crypto-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+    }
+
+    .hooks-section {
+        padding: 40px 0;
+    }
+
+
+    .last-section .heading {
+        font-size: 25px;
+    }
+
+    .last-section .lottie-animation {
+        width: 240px;
+        height: 240px;
+    }
+
+    .last-graphic {
+        position: absolute;
+        left: -88px;
+        top: -118px;
+    }
+
+    .last-graphic dotlottie-wc {
+        width: 200px;
+        height: 200px;
+    }
+
+    .navbar-nav .nav-item {
+        gap: 6px;
+    }
+
+    /* .navbar-nav .container-fluid{
+        width: auto;
+    } */
+
+    .user-dropdown.show .animate-dropdown {
+        position: absolute;
+    }
+
+    /* ==== Market page ====  */
+
+    .table-responsive .table th {
+        font-size: 14px;
+
+    }
+
+    .table-responsive .table #cryptoBody tr img {
+        width: 20px;
+    }
+
+    .table-responsive .table #cryptoBody tr td {
+        font-size: 14px;
+    }
+
+
+
+    /* ==== Trade page ====  */
+
+    .main-container .trade-graph-area {
+        padding: 8px;
+    }
+
+    .main-container .trade-graph-area .trade-stats {
+        gap: 10px;
+    }
+
+    .main-container .trade-graph-area .interval-btn {
+        padding: 7px 17px;
+        font-size: 12px;
+    }
+
+    .main-container .trade-graph-area .info-row {
+        gap: 12px;
+    }
+
+    .chart-container {
+        padding: 0px !important;
+    }
+
+    .order-history {
+        padding: 0px !important;
+
+    }
+
+    .order-history .tabs button {
+        padding: 8px 0px !important;
+        font-size: 12px !important;
+
+    }
+
+
+    .brand-footer .footer-logo img {
+        width: 80px;
+    }
+}

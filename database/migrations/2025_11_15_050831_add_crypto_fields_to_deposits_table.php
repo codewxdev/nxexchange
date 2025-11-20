@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::table('deposits', function (Blueprint $table) {
             $table->string('currency')->after('amount');
             $table->string('invoice_id')->nullable()->after('payment_gateway');
-            $table->string('address')->niullable()->after('invoice_id');
+            $table->string('address')->nullable()->after('invoice_id');
         });
     }
 

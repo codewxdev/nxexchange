@@ -19,31 +19,41 @@ use App\Http\Controllers\TransferController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\WithdrawController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('index');
 })->name('home');
 
-Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
-Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
-Route::get('/market', [MarketController::class, 'index'])->name('market.index');
-Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');
+Route::middleware(['auth', 'checkUserStatus'])->group(function () {
+    Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
+    Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
+    Route::get('/market', [MarketController::class, 'index'])->name('market.index');
+    Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');
+    Route::get('/transactions', [WalletController::class, 'transaction'])->name('transaction.index');
+    Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
+    Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
+
+    Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
+    Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');
+    Route::get('/deposit/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
+    Route::get('/identity-verification', [KycController::class, 'index'])->name('kyc.index');
+    Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
+    Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])->name('notification.delete');
+
+});
 
 Route::get('/help', [HelpController::class, 'index'])->name('help.index');
-Route::get('/transactions', [WalletController::class, 'transaction'])->name('transaction.index');
 Route::get('/about', [AboutController::class, 'index'])->name('about.index');
-Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
-Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
-
 Route::get('/help/terms', [HelpController::class, 'terms'])->name('help.terms');
 Route::get('/help/privacy', [HelpController::class, 'privacy'])->name('help.privacy');
 Route::get('/help/financial', [HelpController::class, 'financial'])->name('help.financial');
-
 Route::get('/register', [RegisterController::class, 'ShowRegister'])->name('register.index');
 Route::post('/register-store', [RegisterController::class, 'storeRegisterForm'])->name('register.store');
 Route::post('/send-code', [RegisterController::class, 'sendCode'])->name('send.code');
-
 Route::post('/login-store', [LoginController::class, 'StoreLoginForm'])->name('login.store');
 Route::get('/login', [LoginController::class, 'ShowLogin'])->name('login.index');
 Route::get('password/reset', [ForgetPasswordContoller::class, 'showLinkRequestForm'])->name('password.request');
@@ -52,10 +62,8 @@ Route::post('password/email', [ForgetPasswordContoller::class, 'sendResetLinkEma
 Route::get('password/reset/{token}', [ForgetPasswordContoller::class, 'showResetForm'])->name('password.reset');
 Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('password.update');
 
-Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
-
 // dashboard route start here
-Route::middleware('isAdmin')->middleware(['auth', 'checkUserStatus'])->group(function () {
+Route::middleware(['isAdmin', 'auth', 'checkUserStatus'])->group(function () {
     Route::get('/admin/dashboard', [UserController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
     Route::prefix('admin')->group(function () {
@@ -92,20 +100,35 @@ Route::middleware('isAdmin')->middleware(['auth', 'checkUserStatus'])->group(fun
 });
 
 Route::get('/crypto', [CryptoController::class, 'index'])->name('crypto.index');
-// web.php
 Route::post('/execute-trade', [TradeController::class, 'executeTrade'])->name('execute.trade');
 Route::get('/crypto-data', [CryptoController::class, 'fetchData'])->name('crypto.data');
 Route::post('/wallet/address/store', [WalletController::class, 'store'])->name('wallet.address.store');
-Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
-Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');
-Route::get('/deposit/{deposit}', [DepositController::class, 'show'])->name('deposits.show');
-Route::get('/identity-verification', [KycController::class, 'index'])->name('kyc.index');
-Route::post('/kyc-store', [KycController::class, 'store'])->name('kyc.store');
-Route::delete('/notification/{id}', [NotificationController::class, 'destroy'])
-    ->name('notification.delete');
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/user/notifications/latest', [NotificationController::class, 'getLatestNotifications']);
     Route::get('/user/notifications/count', [NotificationController::class, 'getUnreadCount']);
 });
+
+// Route::get('/lang/{lang}', function ($lang) {
+//     session(['locale' => $lang]);
+//     return back();
+// })->name('change.lang');
+
+Route::get('/lang/{lang}', function ($lang) {
+    $allowed = ['en', 'ur', 'fr', 'es', 'ar'];
+
+    if (! in_array($lang, $allowed)) {
+        $lang = 'en';
+    }
+
+    session(['locale' => $lang]);
+
+    return back();
+})->name('change.lang');
+
+// Route::post('/set-language', function () {
+//     session(['app_locale' => request('lang')]);
+//     return response()->json(['success' => true]);
+// });
 
 // Route::get('/invite', [UserController::class, 'index'])->middleware('auth');

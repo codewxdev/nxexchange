@@ -6,25 +6,47 @@
          <div class="heading">
              <div class="link">
                  <a href="{{ url()->previous() }}"><i class="fa-solid fa-arrow-left-long"></i></a>
-                 <a href="#">Register</a>
+                 <a href="#">{{ t('Register') }}
+                 </a>
              </div>
-             <select id="dropdown">
+             {{-- <select id="dropdown">
                  <option value="">English</option>
                  <option value="">Urdu</option>
                  <option value="">bangali</option>
                  <option value="">pashto</option>
                  <option value="">French</option>
                  <option value="">Urdu</option>
+             </select> --}}
+             <select onchange="window.location.href=this.value">
+                 <option value="{{ route('change.lang', 'en') }}" {{ session('locale') == 'en' ? 'selected' : '' }}>English
+                 </option>
+                 <option value="{{ route('change.lang', 'ur') }}" {{ session('locale') == 'ur' ? 'selected' : '' }}>Urdu
+                 </option>
+                 <option value="{{ route('change.lang', 'fr') }}" {{ session('locale') == 'fr' ? 'selected' : '' }}>French
+                 </option>
+                 <option value="{{ route('change.lang', 'es') }}" {{ session('locale') == 'es' ? 'selected' : '' }}>Spanish
+                 </option>
              </select>
+
          </div>
 
          <!-- Form -->
          <div class="form-container">
              <form action="{{ route('register.store') }}" method="POST">
                  @csrf
+                 {{-- Name --}}
+                 <div class="mb-3">
+                     <label class="form-label">{{ t('Your Name') }}</label>
+                     <input type="text" class="form-control @error('name') is-invalid @enderror" id="name"
+                         name="name" value="{{ old('name') }}" placeholder="Enter your full name">
+                     @error('name')
+                         <div class="invalid-feedback">{{ $message }}</div>
+                     @enderror
+                 </div>
+
                  {{-- Email --}}
                  <div class="mb-3">
-                     <label class="form-label">Your Mailbox</label>
+                     <label class="form-label">{{ t('Your Mailbox') }}</label>
                      <input type="email" class="form-control @error('email') is-invalid @enderror" id="email"
                          name="email" value="{{ old('email') }}" placeholder="Enter your email">
                      @error('email')
@@ -34,7 +56,7 @@
 
                  {{-- Verification Code --}}
                  <div class="mb-3">
-                     <label class="form-label">E-mail Verification Code</label>
+                     <label class="form-label">{{ t('Enter Verification Code') }}</label>
                      <div class="verify-div">
                          <input type="text" class="form-control @error('code') is-invalid @enderror" id="code"
                              name="code" placeholder="Enter verification code" value="{{ old('code') }}">
@@ -47,7 +69,7 @@
 
                  {{-- Password --}}
                  <div class="mb-3">
-                     <label class="form-label">Your Password</label>
+                     <label class="form-label">{{ t('Your Password') }}</label>
                      <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                          name="password" placeholder="Enter password">
                      @error('password')
@@ -57,13 +79,13 @@
 
                  {{-- Confirm Password --}}
                  <div class="mb-3">
-                     <label class="form-label">Enter Password Again</label>
+                     <label class="form-label">{{ t('Your Password Name') }}</label>
                      <input type="password" class="form-control" id="password_confirmation" name="password_confirmation"
                          placeholder="Confirm password">
                  </div>
                  {{-- Invitation code --}}
                  <div class="mb-3">
-                     <label class="form-label">Enter Invitation Code</label>
+                     <label class="form-label">{{ t('Enter Invitation Code') }}</label>
                      <input type="text" name="invitation_code"
                          class="form-control @error('invitation_code') is-invalid @enderror"
                          value="{{ request('ref') ?? old('invitation_code') }}" placeholder="Invitation code">
@@ -77,12 +99,11 @@
                  <div class="form-check mb-3">
                      <input type="checkbox" name="remember" class="form-check-input" id="remember"
                          {{ old('remember') ? 'checked' : '' }}>
-                     <label class="form-check-label" for="remember">Remember me</label>
+                     <label class="form-check-label" for="remember">{{ t('Remember me') }}</label>
                  </div>
 
-                 <button type="submit" class="formbtn1">Register</button>
-                 <a href="{{ route('login.index') }}"><button type="button" class="formbtn2">Already Have An
-                         Account?</button></a>
+                 <button type="submit" class="formbtn1">{{ t('Register') }}</button>
+                 <a href="{{ route('login.index') }}"><button type="button" class="formbtn2">{{ t('Already Have An Account') }}?</button></a>
              </form>
          </div>
      </div>

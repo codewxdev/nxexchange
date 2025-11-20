@@ -12,7 +12,8 @@
         "php": "^8.2",
         "laravel/framework": "^12.0",
         "laravel/tinker": "^2.10.1",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "simplesoftwareio/simple-qrcode": "^4.2",
+        "stichoza/google-translate-php": "^5.3"
     },
     "require-dev": {
         "fakerphp/faker": "^1.23",
@@ -29,7 +30,11 @@
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
             "Database\\Seeders\\": "database/seeders/"
-        }
+        },
+        "files": [
+            "app/Helpers/TranslateHelper.php",
+            "app/Helpers/Notify.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -87,8 +92,6 @@
         }
     },
     "minimum-stability": "stable",
-    "prefer-stable": true,
-    "files": [
-        "app/Helpers/Notify.php"
-    ]
+    "prefer-stable": true
+     
 }

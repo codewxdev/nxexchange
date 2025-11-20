@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
              $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->decimal('amount', 16, 8);
-            $table->string('payment_gateway');
+            $table->string('payment_gateway')->nullable();
             $table->enum('status', ['pending', 'confirmed', 'failed'])->default('pending');
             $table->timestamp('date_time')->useCurrent();
             $table->timestamps();

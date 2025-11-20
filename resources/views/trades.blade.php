@@ -8,10 +8,13 @@
 
             <div class="col-lg-3 col-md-4 market-sidebar">
                 <!-- Selected Coin -->
-                <div class="selected-coin d-flex align-items-center mb-3">
-                    <img id="selected-coin-img" src="{{ $currencies[0]['image'] }}" alt="" width="40" height="40">
-                    <span id="selected-coin-name" class="ms-2 fw-bold">{{ strtoupper($currencies[0]['symbol']) }}</span>
-                </div>
+                @if (!empty($currencies))
+                    <div class="selected-coin d-flex align-items-center mb-3">
+                        <img id="selected-coin-img" src="{{ $currencies[0]['image'] }}" alt="" width="40"
+                            height="40">
+                        <span id="selected-coin-name" class="ms-2 fw-bold">{{ strtoupper($currencies[0]['symbol']) }}</span>
+                    </div>
+                @endif
 
                 <h3 class="market-title">Markets</h3>
 
@@ -306,7 +309,7 @@
                     }
                 },
                 title: {
-                    text: 'NXExchange Market Trend',
+                    text: 'NXExchange',
                     align: 'left',
                     style: {
                         color: '#fff'
