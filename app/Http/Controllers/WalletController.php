@@ -9,18 +9,44 @@ use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
 {
+    // public function store(Request $request)
+    // {
+    //     $request->validate([
+    //         'address' => 'required|string|max:255'
+    //     ]);
+
+    //     auth()->user()->update([
+    //         'address' => $request->address
+    //     ]);
+
+    //     return back()->with('success', 'Wallet address successfully updated!');
+    // }
+
     public function store(Request $request)
-    {
-        // $request->validate([
-        //     'address' => 'required|string|max:255'
-        // ]);
+{
+    $request->validate([
+        'address' => 'required|string|max:255',
+    ]);
 
-        // auth()->user()->update([
-        //     'wallet_address' => $request->address
-        // ]);
+    $user = auth()->user();
 
-        // return back()->with('success', 'Wallet address saved!');
+    // Check if address already exists
+    if ($user->address) {
+        // ----- UPDATE LOGIC -----
+        $user->update([
+            'address' => $request->address,
+        ]);
+
+        return back()->with('success', 'Wallet address updated successfully!');
+    } else {
+        // ----- CREATE LOGIC -----
+        $user->update([
+            'address' => $request->address,
+        ]);
+
+        return back()->with('success', 'Wallet address saved successfully!');
     }
+}
 
     public function transaction()
     {
@@ -31,7 +57,7 @@ class WalletController extends Controller
     {
         try {
             $wallets = Wallet::with(['user'])->get();
-
+              
             return view('admin.wallet', compact('wallets'));
 
         } catch (\Exception $e) {

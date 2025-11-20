@@ -40,6 +40,7 @@ class User extends Authenticatable
         'country',
         'referral_code',
         'referred_by',
+        'address',
     ];
 
     /**

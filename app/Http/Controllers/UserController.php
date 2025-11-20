@@ -31,7 +31,7 @@ class UserController extends Controller
         // $uses = $invitation->uses;
 
         // Generate referral link
-        $referral_link = url('/register?ref='.$user->referral_code);
+        $referral_link = url('/register?ref=' . $user->referral_code);
 
         return view('share', [
             'user' => $user,
@@ -55,7 +55,6 @@ class UserController extends Controller
             DB::table('sessions')
                 ->where('user_id', $user->id)
                 ->delete();
-
         }
 
         $user->update([
@@ -82,7 +81,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Error deleting user: '.$e->getMessage(),
+                'message' => 'Error deleting user: ' . $e->getMessage(),
             ], 500);
         }
     }
@@ -153,13 +152,13 @@ class UserController extends Controller
                 'deactivatedUsers',
                 'lastMonthTradesData'
             ));
-
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-    public function  profile(){
+    }
 
+    public function  profile()
+    {
         return view('profile');
-
     }
 }

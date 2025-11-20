@@ -77,6 +77,7 @@ Route::middleware(['isAdmin', 'auth', 'checkUserStatus'])->group(function () {
     });
     Route::get('deposit', [DepositController::class, 'index'])->name('deposits.index');
     Route::get('withdraw', [WithdrawController::class, 'index'])->name('withdraws.index');
+    Route::post('withdraw', [WithdrawController::class, 'store'])->name('withdraw.store');
     Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
     Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
     Route::get('trade', [TradeController::class, 'history'])->name('trade.dashboard');

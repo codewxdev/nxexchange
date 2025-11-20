@@ -19,6 +19,7 @@
                                 <th>User Email</th>
                                 <th>Exchange Balance</th>
                                 <th>Trade Balance</th>
+                                <th>Wallet Address</th>
 
                             </tr>
                         </thead>
@@ -29,6 +30,7 @@
                                     <td>{{ $trade->user->email ?? 'N/A' }}</td>
                                     <td>{{ $wallet->exchange_balance }}</td>
                                     <td>{{ $wallet->trade_balance }}</td>
+                                     <td>{{ auth()->user()->address }}</td>
                                 </tr>
                             @empty
                                 <tr>
