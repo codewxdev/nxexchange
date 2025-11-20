@@ -13,10 +13,15 @@
         integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <title>Nx Exchange</title>
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('assets/css/responsive.css') }}">
     @stack('style')
-    <style>
+    {{-- <style>
         .user-dropdown {
             position: relative;
         }
@@ -221,76 +226,169 @@
             /* background: #ffe2e2; */
             color: #f44336;
         }
+    </style> --}}
+
+    <style>
+        /* MOBILE BOTTOM NAV */
+        .mobile-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #010101;
+            box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.25);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 8px 0;
+            z-index: 9999;
+            border-top: 2px solid #F46523;
+        }
+
+        .mobile-bottom-nav .nav-item {
+            color: #fff;
+            text-decoration: none;
+            font-size: 12px;
+            text-align: center;
+            flex: 1;
+            position: relative;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-family: 'Poppins' !important;
+        }
+
+        .mobile-bottom-nav .nav-item i {
+            font-size: 20px;
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        /* ..mobile-bottom-nav .nav-item span{
+              font-family: 'Poppins' !important;
+        } */
+
+        .mobile-bottom-nav .nav-item:hover {
+            color: #F46523;
+        }
+
+        .mobile-bottom-nav .center-btn {
+            background: #F46523;
+            padding: 6px 10px;
+            border-radius: 14px;
+            color: #fff !important;
+            margin-top: -20px;
+            box-shadow: 0 5px 15px rgba(244, 101, 35, 0.5);
+        }
+
+        .mobile-bottom-nav .center-btn i {
+            font-size: 22px;
+        }
+
+        /* Notification Badge in bottom nav */
+        .bottom-badge {
+            position: absolute;
+            top: -4px;
+            right: 32%;
+            background: #ff2727;
+            color: #fff;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+        }
+
+        .nav-item a {
+            font-family: 'Poppins' !important;
+        }
     </style>
-
-
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ route('home') }}"><img src="{{ asset('assets/images/logo3.png') }}"
                     alt="" width="80px"></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('market.index') }}">Market</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('trade.index') }}">Trade</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{{ route('asset.index') }}">Assets</a>
-                    </li>
-                </ul>
-                @if (auth()->user())
-                    <ul class="navbar-nav  mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page"
-                                href="{{ route('transaction.index') }}">Transaction Records</a>
-                        </li>
-                        <li class="nav-item position-relative">
-                            <a class="nav-link active messages-btn" aria-current="page" href="javascript:void(0)">
-                                Messages
-                            </a>
-                            @php
-                                $unread = auth()->user()->notifications()->where('is_read', false)->count();
-                            @endphp
-                            <!-- Notification badge -->
-                            @if (!empty($unread))
-                                <span class="notif-badge">{{ $unread }}</span>
-                            @endif
+            <!-- MOBILE TOP ICON BAR -->
+            <div class="d-flex gap-3 ms-auto d-lg-none d-md-none">
 
-                        </li>
+                <a href="javascript:void(0)" class="text-white text-center messages-btn" style="font-size:14px">
+                    <i class="fa-solid fa-bell" style="font-size:17px"></i>
 
-                        <!-- Notification Panel Wrapper -->
-                        <div id="notificationPanel" class="notification-panel">
-                            <h5 class="title">Notifications</h5>
-                            @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
-                                <div class="notif-item">
-                                    <div class="notif-text">
-                                        <strong>{{ $notif->title }}</strong>
-                                        <p>{{ $notif->message }}</p>
-                                    </div>
-                                    <span class="time">{{ $notif->created_at->diffForHumans() }}</span>
-                                    <span class="delete-note" data-id="{{ $notif->id }}">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </span>
+                </a>
+
+                <a href="{{ route('share.index') }}" class="text-white text-center" style="font-size:14px">
+                    <i class="fa-solid fa-share-nodes" style="font-size:17px"></i>
+
+                </a>
+                <a href="{{ route('help.index') }}" class="text-white text-center" style="font-size:14px">
+                    <i class="fa-regular fa-circle-question" style="font-size:17px"></i>
+
+                </a>
+
+                {{-- <a href="{{ route('help.index') }}" class="nav-item">
+                    <i class="fa-regular fa-circle-question"></i>
+                     
+                </a> --}}
+
+            </div>
+
+        </div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('market.index') }}">Market</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('trade.index') }}">Trade</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{ route('asset.index') }}">Assets</a>
+                </li>
+            </ul>
+            @if (auth()->user())
+                <ul class="navbar-nav  mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page"
+                            href="{{ route('transaction.index') }}">Transaction Records</a>
+                    </li>
+                    <li class="nav-item position-relative">
+                        <a class="nav-link active messages-btn" aria-current="page" href="javascript:void(0)">
+                            Messages
+                        </a>
+                        @php
+                            $unread = auth()->user()->notifications()->where('is_read', false)->count();
+                        @endphp
+                        <!-- Notification badge -->
+                        @if (!empty($unread))
+                            <span class="notif-badge">{{ $unread }}</span>
+                        @endif
+
+                    </li>
+
+                    <!-- Notification Panel Wrapper -->
+                    {{-- <div id="notificationPanel" class="notification-panel">
+                        <h5 class="title">Notifications</h5>
+                        @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
+                            <div class="notif-item">
+                                <div class="notif-text">
+                                    <strong>{{ $notif->title }}</strong>
+                                    <p>{{ $notif->message }}</p>
                                 </div>
-                            @empty
-                                <div id="emptyNoti" class="text-center py-4 text-muted">
-                                    <i class="fa-regular fa-bell-slash fs-1"></i>
-                                    <p>No notifications</p>
-                                </div>
-                            @endforelse
-                        </div>
+                                <span class="time">{{ $notif->created_at->diffForHumans() }}</span>
+                                <span class="delete-note" data-id="{{ $notif->id }}">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </span>
+                            </div>
+                        @empty
+                            <div id="emptyNoti" class="text-center py-4 text-muted">
+                                <i class="fa-regular fa-bell-slash fs-1"></i>
+                                <p>No notifications</p>
+                            </div>
+                        @endforelse
+                    </div> --}}
 
-                        {{-- <div id="notificationList">
+                    {{-- <div id="notificationList">
                             @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $note)
                                 <div class="single-note d-flex justify-content-between align-items-start mb-2 p-2">
                                     <div>
@@ -311,70 +409,69 @@
                         </div> --}}
 
 
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('share.index') }}">Share</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link active" aria-current="page" href="{{ route('help.index') }}">Help</a>
-                        </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ route('share.index') }}">Share</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{{ route('help.index') }}">Help</a>
+                    </li>
 
-                        <li class="nav-item dropdown user-dropdown d-flex">
-                            <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
-                            <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
-                                {{ auth()->user()->email }}
-                            </a>
+                    <li class="nav-item dropdown user-dropdown d-flex">
+                        <span class="profile-icon">{{ strtoupper(substr(auth()->user()->email, 0, 1)) }}</span>
+                        <a class="nav-link active dropdown-toggle" href="#" id="userDropdown" role="button">
+                            {{ auth()->user()->email }}
+                        </a>
 
-                            <div class="dropdown-menu dropdown-menu-end animate-dropdown"
-                                aria-labelledby="userDropdown">
-                                <div class="px-3 py-2">
-                                    <p><strong>ID:</strong> {{ auth()->user()->id }}</p>
-                                    <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
-                                    <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
-                                    @php
-                                        $kyc = auth()->user()->kyc_status;
-                                    @endphp
+                        <div class="dropdown-menu dropdown-menu-end animate-dropdown" aria-labelledby="userDropdown">
+                            <div class="px-3 py-2">
+                                <p><strong>ID:</strong> {{ auth()->user()->id }}</p>
+                                <p><strong>Name:</strong> {{ auth()->user()->name }}</p>
+                                <p><strong>Email:</strong> {{ auth()->user()->email }}</p>
+                                @php
+                                    $kyc = auth()->user()->kyc_status;
+                                @endphp
 
-                                    @if ($kyc === 'pending' && auth()->user()->role !== 'admin')
-                                        <span class="kyc-badge kyc-pending"> Pending Verification</span>
-                                    @elseif ($kyc === 'verified' && auth()->user()->role !== 'admin')
-                                        <span class="kyc-badge kyc-verified">✔ Verified</span>
-                                    @elseif (auth()->user()->role !== 'admin')
-                                        <a href="{{ route('kyc.index') }}" class="kyc-btn">Verify Your Identity</a>
-                                    @endif
+                                @if ($kyc === 'pending' && auth()->user()->role !== 'admin')
+                                    <span class="kyc-badge kyc-pending"> Pending Verification</span>
+                                @elseif ($kyc === 'verified' && auth()->user()->role !== 'admin')
+                                    <span class="kyc-badge kyc-verified">✔ Verified</span>
+                                @elseif (auth()->user()->role !== 'admin')
+                                    <a href="{{ route('kyc.index') }}" class="kyc-btn">Verify Your Identity</a>
+                                @endif
 
-                                    <!-- Add more info as needed -->
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item text-danger" href="{{ route('logout') }}"
-                                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                        Logout
-                                    </a>
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                        class="d-none">
-                                        @csrf
-                                    </form>
-                                    @if (auth()->user()->role == 'admin')
-                                        <a href="{{ route('admin.dashboard') }}" class="admin-btn">Admin Panel</a>
-                                    @endif
+                                <!-- Add more info as needed -->
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item text-danger" href="{{ route('logout') }}"
+                                    onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    Logout
+                                </a>
+                                <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                                    class="d-none">
+                                    @csrf
+                                </form>
+                                @if (auth()->user()->role == 'admin')
+                                    <a href="{{ route('admin.dashboard') }}" class="admin-btn">Admin Panel</a>
+                                @endif
 
-                                </div>
                             </div>
-                        </li>
+                        </div>
+                    </li>
 
-                    </ul>
-                @else
-                    <div class="btns">
-                        <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign
-                                In</button></a>
-                        <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
-                                now</button></a>
-                    </div>
-                    {{-- <select name="" id="language">
+                </ul>
+            @else
+                <div class="btns">
+                    <a href="{{ route('login.index') }}"><button class="btn btn-primary btn1">Sign
+                            In</button></a>
+                    <a href="{{ route('register.index') }}"><button class="btn btn-primary btn2">Register
+                            now</button></a>
+                </div>
+                {{-- <select name="" id="language">
                         <option value="en">English</option>
                         <option value="fr">French</option>
                         <option value="de">Duch</option>
                         <option value="de">Duch</option>
                     </select> --}}
-                    <select onchange="window.location.href=this.value" id="language">
+                {{-- <select onchange="window.location.href=this.value" id="language">
                         <option value="{{ route('change.lang', 'en') }}"
                             {{ session('locale') == 'en' ? 'selected' : '' }}>English
                         </option>
@@ -387,10 +484,34 @@
                         <option value="{{ route('change.lang', 'es') }}"
                             {{ session('locale') == 'es' ? 'selected' : '' }}>Spanish
                         </option>
-                    </select>
-                @endif
+                    </select> --}}
+            @endif
 
-            </div>
+        </div>
+        <!-- Notification Panel Wrapper -->
+        <div id="notificationPanel" class="notification-panel">
+            <h5 class="title">Notifications</h5>
+            @if (!empty(auth()->user()->notifications()))
+                @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
+                    <div class="notif-item">
+                        <div class="notif-text">
+                            <strong>{{ $notif->title }}</strong>
+                            <p>{{ $notif->message }}</p>
+                        </div>
+                        <span class="time">{{ $notif->created_at->diffForHumans() }}</span>
+                        <span class="delete-note" data-id="{{ $notif->id }}">
+                            <i class="fa-solid fa-xmark"></i>
+                        </span>
+                    </div>
+                @empty
+                    <div id="emptyNoti" class="text-center py-4 text-muted">
+                        <i class="fa-regular fa-bell-slash fs-1"></i>
+                        <p>No notifications</p>
+                    </div>
+                @endforelse
+            @endif
+
+        </div>
         </div>
     </nav>
 
@@ -459,6 +580,47 @@
         </div>
     </footer>
 
+    <!-- MOBILE BOTTOM NAV -->
+    <div class="mobile-bottom-nav d-lg-none d-md-none">
+        <a href="{{ route('market.index') }}" class="nav-item">
+           <svg id="fi_4186586" fill="#F46523" width="22" height="22" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" data-name="Layer 15"><path d="m24 2v2h2.586l-10.586 10.586-4-4-9.707 9.707 1.414 1.414 8.293-8.293 4 4 12-12v2.586h2v-6z"></path><path d="m8.414 23h-4.828l-1.586 1.586v5.414h8v-5.414z"></path><path d="m13.59 19-1.59 1.59v9.41h8v-9.41l-1.59-1.59z"></path><path d="m23.59 13-1.59 1.59v15.41h8v-15.41l-1.59-1.59z"></path></svg>
+            <span>Market</span>
+        </a>
+
+        <a href="{{ route('trade.index') }}" class="nav-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="22" height="22">
+                <g fill="#F46523">
+                    <path
+                        d="M15.05 27.44h-1.695v-3.364a1 1 0 0 0-2 0v3.364H9.66a2 2 0 0 0-2 2v24.19a2 2 0 0 0 2 2h1.695v3.37a1 1 0 0 0 2 0v-3.37h1.695a2 2 0 0 0 2-2v-24.19a2 2 0 0 0-2-2z" />
+                    <path
+                        d="M28.14 15.04h-1.688v-3.364a1 1 0 0 0-2 0v3.364h-1.692a2 2 0 0 0-2 2v24.19a2 2 0 0 0 2 2h1.692v3.37a1 1 0 0 0 2 0v-3.37h1.688a2 2 0 0 0 2-2v-24.19a2 2 0 0 0-2-2z" />
+                    <path
+                        d="M41.24 22.01h-1.692v-3.367a1 1 0 0 0-2 0v3.367h-1.688a2 2 0 0 0-2 2v24.19a2 2 0 0 0 2 2h1.688v3.366a1 1 0 0 0 2 0v-3.366h1.692a2 2 0 0 0 2-2v-24.19a2 2 0 0 0-2-2z" />
+                    <path
+                        d="M54.34 8.37h-1.695v-3.37a1 1 0 0 0-2 0v3.37H48.95a2 2 0 0 0-2 2v24.19a2 2 0 0 0 2 2h1.695v3.364a1 1 0 0 0 2 0v-3.364h1.695a2 2 0 0 0 2-2v-24.19a2 2 0 0 0-2-2z" />
+                </g>
+            </svg>
+            <span>Trade</span>
+        </a>
+
+
+
+        <a href="{{ route('asset.index') }}" class="nav-item center-btn">
+           <svg height="22" fill="#ffffff" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_6871722"><g id="crypto_wallet"><path d="m18 20c0 .5517578-.4487305 1-1 1h-2v-2h2c.5512695 0 1 .4482422 1 1zm-1-5h-2v2h2c.5512695 0 1-.4482422 1-1s-.4487305-1-1-1zm14-5v16c0 1.6503906-1.3500977 3-3 3h-24c-1.6499023 0-3-1.3496094-3-3v-18c0-2.7597656 2.2402344-5 5-5h18c1.2998047 0 2.4101563.8398438 2.8198242 2h-20.8198242v2h22c1.6499023 0 3 1.3496094 3 3zm-11.7802734 8c.4794922-.5322266.7802734-1.2285156.7802734-2 0-1.6542969-1.3457031-3-3-3v-1h-2v1h-3v2h1v6h-1v2h3v1h2v-1c1.6542969 0 3-1.3457031 3-3 0-.7714844-.3007812-1.4677734-.7802734-2zm7.7802734 0c0-1.1035156-.8969727-2-2-2s-2 .8964844-2 2 .8969727 2 2 2 2-.8964844 2-2z"></path></g></svg>
+            <span>Assets</span>
+        </a>
+ 
+
+        <a href="{{ route('transaction.index') }}" class="nav-item" id="mobileProfile">
+          <svg clip-rule="evenodd" fill-rule="evenodd" fill="#F46523" height="22" stroke-linejoin="round" stroke-miterlimit="2" viewBox="0 0 32 32" width="22" xmlns="http://www.w3.org/2000/svg" id="fi_8377918"><g transform="translate(-148 -148)"><g id="solid"><path d="m166 150.003h-10c-1.657 0-3 1.343-3 3v20.341c0 1.154.662 2.206 1.703 2.705s2.275.357 3.175-.366l.496-.398c.366-.293.886-.293 1.252 0l2.498 2.006c1.096.88 2.655.881 3.753.003l2.5-2c.365-.292.883-.293 1.248-.001l.518.413c.901.719 2.134.858 3.173.358 1.038-.5 1.698-1.551 1.698-2.703v-14.361h-6.014c-.796 0-1.559-.316-2.121-.879-.563-.562-.879-1.325-.879-2.121zm.741 21.67 2.966-2.966c.286-.286.372-.716.217-1.09-.155-.373-.52-.617-.924-.617h-10c-.552 0-1 .448-1 1s.448 1 1 1h7.586s-1.259 1.259-1.259 1.259c-.391.39-.391 1.024 0 1.414.39.391 1.024.391 1.414 0zm-5.482-11.346-2.966 2.966c-.286.286-.372.716-.217 1.09.155.373.52.617.924.617h10c.552 0 1-.448 1-1s-.448-1-1-1h-7.586s1.259-1.259 1.259-1.259c.391-.39.391-1.024 0-1.414-.39-.391-1.024-.391-1.414 0zm6.741-10.204v5.877c0 .265.105.52.293.707.187.188.442.293.707.293h5.897c-.14-.486-.402-.933-.767-1.295l-4.854-4.829c-.359-.357-.799-.614-1.276-.753z"></path></g></g></svg>
+            <span>Transactions</span>
+        </a>
+        <a href="{{ route('profile.index') }}" class="nav-item" id="mobileProfile">
+           <svg id="fi_6543645" fill="#F46523" enable-background="new 0 0 195 195" height="22" viewBox="0 0 195 195" width="22" xmlns="http://www.w3.org/2000/svg"><g id="icon_11_"><path d="m120.48 158.35c-1.51.71-3.19 1.1-4.96 1.1h-82.24c-6.5 0-11.78-5.27-11.78-11.78 0-13.48 5.47-25.68 14.3-34.52s21.04-14.3 34.52-14.3h8.16c4.92 0 9.68.73 14.16 2.08l-.04.07c-1.4 2.43-1.77 5.26-1.05 7.97.73 2.71 2.47 4.98 4.9 6.38l1.12.65c-.13 1.3-.2 2.61-.2 3.92s.07 2.62.2 3.92l-1.12.65c-2.43 1.4-4.17 3.67-4.9 6.38-.72 2.71-.35 5.54 1.05 7.97l5.49 9.5c1.87 3.24 5.36 5.26 9.1 5.26 1.84 0 3.65-.49 5.25-1.41l1.12-.65c2.13 1.53 4.41 2.85 6.8 3.92v1.3c0 .54.04 1.07.12 1.59z"></path><circle cx="74.4" cy="62" r="26.45"></circle><path d="m172.25 131.42-5.99-3.46c.69-2.57 1.06-5.26 1.06-8.04s-.37-5.48-1.06-8.04l5.99-3.46c1.2-.69 1.61-2.22.92-3.42l-5.49-9.5c-.69-1.2-2.22-1.61-3.42-.92l-5.99 3.46c-3.8-3.8-8.58-6.62-13.93-8.05v-6.91c0-1.38-1.12-2.5-2.5-2.5h-10.97c-1.38 0-2.5 1.12-2.5 2.5v6.91c-5.35 1.42-10.13 4.24-13.93 8.05l-5.99-3.46c-1.2-.69-2.73-.28-3.42.92l-5.49 9.5c-.69 1.2-.28 2.73.92 3.42l5.99 3.46c-.69 2.57-1.06 5.26-1.06 8.04s.37 5.48 1.06 8.04l-5.99 3.46c-1.2.69-1.61 2.22-.92 3.42l5.49 9.5c.69 1.2 2.22 1.61 3.42.92l5.99-3.46c3.8 3.8 8.58 6.62 13.93 8.05v6.91c0 1.38 1.12 2.5 2.5 2.5h10.97c1.38 0 2.5-1.12 2.5-2.5v-6.91c5.35-1.42 10.13-4.24 13.93-8.05l5.99 3.46c1.2.69 2.73.28 3.42-.92l5.49-9.5c.69-1.2.28-2.73-.92-3.42zm-35.9 1.13c-6.98 0-12.63-5.66-12.63-12.63 0-6.98 5.66-12.63 12.63-12.63s12.63 5.66 12.63 12.63-5.65 12.63-12.63 12.63z"></path></g></svg>
+            <span>Account</span>
+        </a>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dropdownToggle = document.getElementById('userDropdown');
@@ -510,14 +672,19 @@
         const messagesBtn = document.querySelector('.messages-btn');
         const panel = document.getElementById('notificationPanel');
 
-        messagesBtn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            panel.classList.toggle('show');
+        // Multiple message buttons support
+        document.querySelectorAll('.messages-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                panel.classList.toggle('show');
+            });
         });
-
-        // Click outside → hide panel
-        document.addEventListener('click', function() {
-            panel.classList.remove('show');
+        // Close only when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!panel.contains(e.target) && !e.target.closest('.messages-btn')) {
+                panel.classList.remove('show');
+            }
         });
 
         $(document).on('click', '.delete-note', function() {

@@ -27,6 +27,7 @@ html,
 body {
     height: 100%;
     background: var(--color-bg-main);
+     font-family: 'Poppins';
 }
 
 a{
@@ -66,6 +67,7 @@ a{
     color: var(--color-text-white);
     text-decoration: none;
     font-weight: 500;
+    font-family: 'Poppins';
 }
 
 .heading .link i {
@@ -165,6 +167,8 @@ a{
 .formbtn2:hover {
     background: var(--color-bg-gray-hover);
 }
+
+ 
 
 /* ====== RESPONSIVE ====== */
 @media (max-width: 576px) {

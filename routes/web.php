@@ -46,6 +46,7 @@ Route::middleware(['auth', 'checkUserStatus'])->group(function () {
     Route::get('/contact', [ContactController::class, 'index'])->name('contact.index');
     Route::get('/share', [UserController::class, 'shareIndex'])->name('share.index');
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+    Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
 
     Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
     Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');

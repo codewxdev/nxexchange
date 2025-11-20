@@ -86,4 +86,10 @@ class UserController extends Controller
             ], 500);
         }
     }
+
+    public function  profile(){
+
+        return view('profile');
+        
+    }
 }

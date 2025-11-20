@@ -78,7 +78,9 @@ class DepositController extends Controller
             $deposit->update(['status' => 'failed']);
         }
 
-        return response()->json(['success' => true]);
+        // return response()->json(['success' => true]);
+        // return redirect()->route('asset.');
+
     }
 
     public function show(Deposit $deposit)

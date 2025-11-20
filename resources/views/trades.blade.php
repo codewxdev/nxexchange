@@ -287,7 +287,7 @@
                     }
                 },
                 title: {
-                    text: 'NXExchange Market Trend',
+                    text: 'NXExchange',
                     align: 'left',
                     style: {
                         color: '#fff'
