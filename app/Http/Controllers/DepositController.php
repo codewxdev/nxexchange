@@ -39,13 +39,13 @@ class DepositController extends Controller
             // … other required parameters from API docs
         ];
         $response = $nowPayments->createInvoice($invoiceData);
-         
+
         if (isset($response['id'])) {
             $deposit->update([
-            'invoice_id' => $response['id'],    
-            'address' => $response['invoice_url'] ?? null,  // NEW
-        
-    ]);
+                'invoice_id' => $response['id'],
+                'address' => $response['invoice_url'] ?? null,  // NEW
+
+            ]);
 
             return redirect()->route('deposits.show', $deposit)->with('success', 'Invoice created. Please complete payment.');
         } else {
@@ -56,14 +56,14 @@ class DepositController extends Controller
     public function ipn(Request $request)
     {
 
-    $receivedSignature = $request->header('x-nowpayments-signature');
-    $secretKey = env('NOWPAYMENTS_IPN_SECRET'); // from dashboard
+        $receivedSignature = $request->header('x-nowpayments-signature');
+        $secretKey = env('NOWPAYMENTS_IPN_SECRET'); // from dashboard
 
-    $generatedSignature = hash_hmac('sha512', $request->getContent(), $secretKey);
+        $generatedSignature = hash_hmac('sha512', $request->getContent(), $secretKey);
 
-    if ($receivedSignature !== $generatedSignature) {
-        return response()->json(['error' => 'Invalid signature'], 401);
-    }
+        if ($receivedSignature !== $generatedSignature) {
+            return response()->json(['error' => 'Invalid signature'], 401);
+        }
         // Validate signature if provided by NOWPayments (check docs)
         $invoiceId = $request->invoice_id;
         $status = $request->payment_status;
@@ -78,7 +78,7 @@ class DepositController extends Controller
             $deposit->update(['status' => 'failed']);
         }
 
-        // return response()->json(['success' => true]);
+        return response()->json(['success' => true]);
         // return redirect()->route('asset.');
 
     }
@@ -88,7 +88,7 @@ class DepositController extends Controller
         return view('payment', compact('deposit'));
     }
 
-   
+
     public function updateStatus(Request $request, Deposit $deposit)
     {
         $deposit->update([

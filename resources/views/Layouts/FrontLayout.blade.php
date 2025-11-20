@@ -3,7 +3,13 @@
 
 <head>
     <!-- Required meta tags -->
-    <meta charset="utf-8">
+    {{-- <meta charset="utf-8"> --}}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>NX Exchange – Fast, Secure & Low-Fee Crypto Trading</title>
+    <meta name="description"
+        content="NX Exchange offers secure crypto trading with fast execution, safe wallets, and easy deposits & withdrawals. Trade BTC, ETH, and more with confidence.">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="shortcut icon" href="{{ asset('assets/images/logo3.png') }}" type="image/x-icon">
     <!-- Bootstrap CSS -->
@@ -312,27 +318,37 @@
             <!-- MOBILE TOP ICON BAR -->
             <div class="d-flex gap-3 ms-auto d-lg-none d-md-none">
 
-                <a href="javascript:void(0)" class="text-white text-center messages-btn" style="font-size:14px">
+                {{-- <a href="javascript:void(0)" class="text-white text-center messages-btn" style="font-size:14px">
                     <i class="fa-solid fa-bell" style="font-size:17px"></i>
-
+                </a> --}}
+                <a href="javascript:void(0)" class="text-white text-center messages-btn position-relative"
+                    style="font-size:14px">
+                    <i class="fa-solid fa-bell" style="font-size:17px"></i>
+                    <!-- Badge count -->
+                    @php
+                        $notifications = count(auth()->user()->notifications()->latest()->take(10)->get());
+                    @endphp
+                    @if (auth()->user())
+                     @foreach (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                            {{ $notifications }}
+                        </span>
+                        @endforeach
+                    @endif
                 </a>
 
                 <a href="{{ route('share.index') }}" class="text-white text-center" style="font-size:14px">
                     <i class="fa-solid fa-share-nodes" style="font-size:17px"></i>
-
                 </a>
+
                 <a href="{{ route('help.index') }}" class="text-white text-center" style="font-size:14px">
                     <i class="fa-regular fa-circle-question" style="font-size:17px"></i>
-
                 </a>
-
                 {{-- <a href="{{ route('help.index') }}" class="nav-item">
                     <i class="fa-regular fa-circle-question"></i>
 
                 </a> --}}
-
             </div>
-
         </div>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
@@ -491,7 +507,7 @@
         <!-- Notification Panel Wrapper -->
         <div id="notificationPanel" class="notification-panel">
             <h5 class="title">Notifications</h5>
-            @if (!empty(auth()->user()->notifications()))
+            @if (auth()->user())
                 @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
                     <div class="notif-item">
                         <div class="notif-text">
@@ -610,10 +626,8 @@
             <span>Trade</span>
         </a>
 
-
-
-        <a href="{{ route('asset.index') }}" class="nav-item center-btn">
-            <svg height="22" fill="#ffffff" viewBox="0 0 32 32" width="22"
+        <a href="{{ route('asset.index') }}" class="nav-item ">
+            <svg height="22" fill="#F46523" viewBox="0 0 32 32" width="22"
                 xmlns="http://www.w3.org/2000/svg" id="fi_6871722">
                 <g id="crypto_wallet">
                     <path
@@ -623,6 +637,19 @@
             </svg>
             <span>Assets</span>
         </a>
+
+
+        {{-- <a href="{{ route('asset.index') }}" class="nav-item center-btn">
+            <svg height="22" fill="#ffffff" viewBox="0 0 32 32" width="22"
+                xmlns="http://www.w3.org/2000/svg" id="fi_6871722">
+                <g id="crypto_wallet">
+                    <path
+                        d="m18 20c0 .5517578-.4487305 1-1 1h-2v-2h2c.5512695 0 1 .4482422 1 1zm-1-5h-2v2h2c.5512695 0 1-.4482422 1-1s-.4487305-1-1-1zm14-5v16c0 1.6503906-1.3500977 3-3 3h-24c-1.6499023 0-3-1.3496094-3-3v-18c0-2.7597656 2.2402344-5 5-5h18c1.2998047 0 2.4101563.8398438 2.8198242 2h-20.8198242v2h22c1.6499023 0 3 1.3496094 3 3zm-11.7802734 8c.4794922-.5322266.7802734-1.2285156.7802734-2 0-1.6542969-1.3457031-3-3-3v-1h-2v1h-3v2h1v6h-1v2h3v1h2v-1c1.6542969 0 3-1.3457031 3-3 0-.7714844-.3007812-1.4677734-.7802734-2zm7.7802734 0c0-1.1035156-.8969727-2-2-2s-2 .8964844-2 2 .8969727 2 2 2 2-.8964844 2-2z">
+                    </path>
+                </g>
+            </svg>
+            <span>Assets</span>
+        </a> --}}
 
 
         <a href="{{ route('transaction.index') }}" class="nav-item" id="mobileProfile">

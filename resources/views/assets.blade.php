@@ -8,8 +8,8 @@
             <div class="col-12 glass-card text-center py-4">
                 <h2 class="fw-bold text-white mb-1">Total Account Assets</h2>
                 <p class="text-muted mb-2">All balances converted to USD</p>
-                <h1 class="main-balance mb-0">${{ $wallet->exchange_balance + $wallet->trade_balance }}</h1>
-                {{-- <span class="text-secondary">≈ 0.00 USD</span> --}}
+                <h1 class="main-balance mb-0">$00.00</h1>
+                <span class="text-secondary">≈ 0.00 USD</span>
             </div>
 
             <!-- ===== Quick Actions ===== -->
@@ -19,11 +19,11 @@
                         <i class="fa-solid fa-download"></i>
                         <span>Deposit</span>
                     </div>
-                    <div class="col-6 col-md-3 action-box">
+                    <div class="col-6 col-md-3 action-box" data-bs-toggle="modal" data-bs-target="#withdrawModal">
                         <i class="fa-solid fa-upload"></i>
                         <span>Withdraw</span>
                     </div>
-                    <div class="col-6 col-md-3 action-box" data-bs-target="#transferModal" data-bs-toggle="modal">
+                    <div class="col-6 col-md-3 action-box">
                         <i class="fa-solid fa-right-left"></i>
                         <span>Transfer</span>
                     </div>
@@ -48,16 +48,30 @@
                             </div>
                         </div>
                         <div class="usd">
-                            <h4>{{ $wallet->exchange_balance }}</h4>
+                            <h4>0</h4>
                             <small>≈ USD</small>
                         </div>
                     </div>
 
                     <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
+                            <i class="fa-solid fa-coins"></i>
+                            <div class="heading">
+                                <h5>Spot Account</h5>
+                                <span>USDT</span>
+                            </div>
+                        </div>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div> --}}
+
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
                             <i class="fa-solid fa-file-contract"></i>
                             <div class="heading">
-                                <h5>Contract Account</h5>
+                                <h5>Trade Account</h5>
                                 <span>USDT</span>
                             </div>
                         </div>
@@ -66,84 +80,20 @@
                             <small>≈ USD</small>
                         </div>
                     </div>
-                </div>
-            </div>
 
-        </div>
-    </div>
-    {{-- Success/Error Messages --}}
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="fa fa-check-circle"></i> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    @endif
-
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <strong>Success!</strong> {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            <strong>Error!</strong> {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    <div class="modal fade" id="transferModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content glass-card p-3">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title text-white">Transfer Funds</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="transferForm" action="{{ route('transfers.process') }}" method="POST">
-                        @csrf
-
-                        <!-- From Account -->
-                        <label class="text-white mb-1">From Account</label>
-                        <select name="from_account" class="form-control mb-3" id="fromAccount" required>
-                            <option value="">Select Source</option>
-                            <option value="trade">Trade Account</option>
-                            <option value="exchange">Exchange Account</option>
-                        </select>
-
-                        <!-- To Account -->
-                        <label class="text-white mb-1">To Account</label>
-                        <select name="to_account" class="form-control mb-3" id="toAccount" required>
-                            <option value="">Select Destination</option>
-                            <option value="exchange">Exchange Account</option>
-                            <option value="trade">Trade Account</option>
-                        </select>
-
-                        <!-- Amount -->
-                        <label class="text-white mb-1">Amount (USD)</label>
-                        <input type="number" name="amount" class="form-control mb-3" placeholder="Enter amount"
-                            step="0.01" min="0.01" required id="transferAmount">
-
-                        <!-- Account Balances -->
-                        <div class="balance-info mb-3 p-2 rounded" style="background: rgba(255,255,255,0.1);">
-                            <div class="d-flex justify-content-between">
-                                <small class="text-muted">Trade Balance:</small>
-                                <small class="text-white"
-                                    id="tradeBalance">${{ number_format($wallet->trade_balance, 2) }}</small>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <small class="text-muted">Exchange Balance:</small>
-                                <small class="text-white"
-                                    id="exchangeBalance">${{ number_format($wallet->exchange_balance, 2) }}</small>
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-chart-line"></i>
+                            <div class="heading">
+                                <h5>Investment Account</h5>
+                                <span>USDT</span>
                             </div>
                         </div>
-
-                        <button type="submit" class="address-btn w-100">
-                            Proceed to Transfer
-                        </button>
-                    </form>
+                        <div class="usd">
+                            <h4>0</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -163,10 +113,11 @@
                         @csrf
 
                         <label class="text-white mb-1">Wallet Address</label>
-                        <input type="text" name="address" class="form-control mb-3"
-                            placeholder="Enter wallet address" required>
+                        <input type="text" name="address" class="form-control mb-3" placeholder="Enter wallet address"
+                            required>
 
                         <button type="submit" class="address-btn w-100">Save Address</button>
+                        @endif
                     </form>
                 </div>
 
@@ -189,8 +140,7 @@
                         @csrf
 
                         <label class="text-white mb-1">Amount (USD)</label>
-                        <input type="number" name="amount" class="form-control mb-3" placeholder="Enter amount"
-                            required>
+                        <input type="number" name="amount" class="form-control mb-3" placeholder="Enter amount" required>
 
                         <label class="text-white mb-1">Currency</label>
                         <select name="currency" class="form-control mb-3" disabled>
@@ -198,6 +148,43 @@
                         </select>
 
                         <button type="submit" class="address-btn w-100">Proceed</button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+    <!-- ===== Withdraw Modal ===== -->
+    <div class="modal fade" id="withdrawModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content glass-card p-3">
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">Make a Withdrawal</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="withdrawForm" action="{{ route('withdraw.store') }}" method="POST">
+                        @csrf
+
+                        <label class="text-white mb-1">Amount (USD)</label>
+                        <input type="number" min="20" name="amount" id="withdrawAmount"
+                            class="form-control mb-3" placeholder="Minimum $20" required>
+
+                        <label class="text-white mb-1">Withdrawal Address</label>
+                        <input type="text" name="address" class="form-control mb-3"
+                            placeholder="Your USDT wallet address" required>
+
+                        <label class="text-white mb-1">Fee (3%) Auto Applied</label>
+                        <input type="text" class="form-control mb-3" id="withdrawFee" disabled placeholder="0.00">
+
+                        <label class="text-white mb-1">Net Amount You Will Receive</label>
+                        <input type="text" class="form-control mb-3" id="withdrawNet" disabled placeholder="0.00">
+
+                        <button type="submit" class="address-btn w-100">Submit Withdraw Request</button>
                     </form>
                 </div>
 
@@ -346,166 +333,4 @@
             }
         }
     </style>
-@endpush
-
-@push('script')
-    {{-- <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const transferForm = document.getElementById('transferForm');
-
-            transferForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(this);
-                const submitBtn = this.querySelector('button[type="submit"]');
-                const originalText = submitBtn.innerHTML;
-
-                submitBtn.innerHTML = '<i class="fa fa-spinner fa-spin"></i> Processing...';
-                submitBtn.disabled = true;
-
-                fetch(this.action, {
-                        method: 'POST',
-                        body: formData,
-                        headers: {
-                            'X-Requested-With': 'XMLHttpRequest',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    })
-                    .then(response => {
-                        // Check if response is JSON
-                        const contentType = response.headers.get('content-type');
-                        if (contentType && contentType.includes('application/json')) {
-                            return response.json();
-                        } else {
-                            // If not JSON, it might be a redirect
-                            throw new Error('Server returned non-JSON response');
-                        }
-                    })
-                    .then(data => {
-                        if (data.success) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Success!',
-                                text: data.message,
-                                confirmButtonText: 'OK'
-                            }).then(() => {
-                                $('#transferModal').modal('hide');
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Error!',
-                                text: data.message,
-                                confirmButtonText: 'OK'
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error:', error);
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Error!',
-                            text: 'Transfer failed. Please try again.',
-                            confirmButtonText: 'OK'
-                        });
-                    })
-                    .finally(() => {
-                        submitBtn.innerHTML = originalText;
-                        submitBtn.disabled = false;
-                    });
-            });
-
-            // Account selection logic
-            const fromAccount = document.getElementById('fromAccount');
-            const toAccount = document.getElementById('toAccount');
-
-            fromAccount.addEventListener('change', function() {
-                if (this.value && !toAccount.value) {
-                    toAccount.value = this.value === 'trade' ? 'exchange' : 'trade';
-                }
-            });
-
-            toAccount.addEventListener('change', function() {
-                if (this.value && !fromAccount.value) {
-                    fromAccount.value = this.value === 'trade' ? 'exchange' : 'trade';
-                }
-            });
-        });
-    </script> --}}
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-
-            $("#transferForm").submit(function(e) {
-                e.preventDefault();
-
-                $.ajax({
-                    url: $(this).attr("action"),
-                    method: "POST",
-                    data: $(this).serialize(),
-                    success: function(response) {
-
-                        if (response.success) {
-                            let successHtml = `
-                    <div class="text-center">
-                        <i class="fa fa-check-circle text-success fa-2x mb-3"></i>
-                        <h5 class="text-white">Transfer Successful!</h5>
-                        <p class="text-white">
-                            $${response.transfer_details.amount_received.toFixed(2)} transferred to
-                            ${response.transfer_details.to_account} account
-                        </p>
-                    `;
-
-                            if (response.transfer_data.deduction_applied) {
-                                successHtml += `
-                            <div class="alert alert-warning mt-2">
-                                <small>
-                                    <i class="fa fa-exclamation-triangle"></i>
-                                    20% deduction applied:
-                                    -$${response.transfer_data.deduction_amount.toFixed(2)}<br>
-                                    <small>Volume completed: ${response.transfer_data.volume_completion}%</small>
-                                </small>
-                            </div>
-                        `;
-                            }
-
-                            successHtml += `
-                        <div class="balance-update mt-3 p-2 rounded" style="background: rgba(255,255,255,0.1);">
-                            <small class="text-muted d-block mb-1">Balance Update:</small>
-                            <div class="d-flex justify-content-between">
-                                <small>${response.transfer_details.from_account} Balance:</small>
-                                <small class="text-white">$${response.current_balances[response.transfer_details.from_account + '_balance'].toFixed(2)}</small>
-                            </div>
-                            <div class="d-flex justify-content-between">
-                                <small>${response.transfer_details.to_account} Balance:</small>
-                                <small class="text-white">$${response.current_balances[response.transfer_details.to_account + '_balance'].toFixed(2)}</small>
-                            </div>
-                        </div>
-                    `;
-
-                            successHtml += `</div>`;
-
-                            Swal.fire({
-                                html: successHtml,
-                                icon: 'success',
-                                confirmButtonText: 'OK',
-                                background: '#1a1a1a'
-                            }).then(() => {
-                                $("#transferModal").modal("hide");
-                                location.reload();
-                            });
-                        } else {
-                            Swal.fire({
-                                icon: "error",
-                                title: "Transfer Failed",
-                                text: response.message,
-                            });
-                        }
-
-                    }
-                });
-            });
-
-        });
-    </script>
 @endpush
