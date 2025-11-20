@@ -259,6 +259,51 @@
                                 Messages
                             </a>
                             @php
+                                $unread = auth()->user()->unreadNotifications()->count();
+                            @endphp
+                            <!-- Notification badge -->
+                            @if ($unread > 0)
+                                <span class="notif-badge">{{ $unread }}</span>
+                            @endif
+                        </li>
+
+                        <!-- Notification Panel Wrapper -->
+                        <div id="notificationPanel" class="notification-panel">
+                            <h5 class="title">Notifications</h5>
+                            @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
+                                <div class="notif-item {{ $notif->is_read ? '' : 'unread' }}">
+                                    <div class="notif-text">
+                                        <strong class="text-{{ $notif->type }}">
+                                            @if ($notif->type == 'success')
+                                                <i class="fa-solid fa-trophy me-1"></i>
+                                            @elseif($notif->type == 'danger')
+                                                <i class="fa-solid fa-exclamation-triangle me-1"></i>
+                                            @elseif($notif->type == 'warning')
+                                                <i class="fa-solid fa-clock me-1"></i>
+                                            @else
+                                                <i class="fa-solid fa-info-circle me-1"></i>
+                                            @endif
+                                            {{ $notif->title }}
+                                        </strong>
+                                        <p>{{ $notif->message }}</p>
+                                    </div>
+                                    <span class="time">{{ $notif->created_at->diffForHumans() }}</span>
+                                    <span class="delete-note" data-id="{{ $notif->id }}">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </span>
+                                </div>
+                            @empty
+                                <div id="emptyNoti" class="text-center py-4 text-muted">
+                                    <i class="fa-regular fa-bell-slash fs-1"></i>
+                                    <p>No notifications</p>
+                                </div>
+                            @endforelse
+                        </div>
+                        {{-- <li class="nav-item position-relative">
+                            <a class="nav-link active messages-btn" aria-current="page" href="javascript:void(0)">
+                                Messages
+                            </a>
+                            @php
                                 $unread = auth()->user()->notifications()->where('is_read', false)->count();
                             @endphp
                             <!-- Notification badge -->
@@ -288,7 +333,7 @@
                                     <p>No notifications</p>
                                 </div>
                             @endforelse
-                        </div>
+                        </div> --}}
 
                         {{-- <div id="notificationList">
                             @forelse (auth()->user()->notifications()->latest()->take(10)->get() as $note)
@@ -379,7 +424,7 @@
             </div>
         </div>
     </nav>
- 
+
     @yield('content')
 
     <footer class="brand-footer">
@@ -491,7 +536,6 @@
             toastr.info("{{ session('info') }}");
         @endif
     </script>
-
     <script>
         const messagesBtn = document.querySelector('.messages-btn');
         const panel = document.getElementById('notificationPanel');
@@ -499,6 +543,11 @@
         messagesBtn.addEventListener('click', function(e) {
             e.stopPropagation();
             panel.classList.toggle('show');
+
+            // Panel kholne par notifications refresh karen
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
         });
 
         // Click outside → hide panel
@@ -506,10 +555,83 @@
             panel.classList.remove('show');
         });
 
-        $(document).on('click', '.delete-note', function() {
+        // Real-time notifications load karne ka function
+        function loadNotifications() {
+            $.get('/user/notifications/latest', function(response) {
+                updateNotificationPanel(response.notifications);
+                updateNotificationBadge(response.unread_count);
+            });
+        }
+
+        // Notification panel update kare
+        function updateNotificationPanel(notifications) {
+            if (notifications.length === 0) {
+                panel.innerHTML = `
+            <h5 class="title">Notifications</h5>
+            <div id="emptyNoti" class="text-center py-4 text-muted">
+                <i class="fa-regular fa-bell-slash fs-1"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+                return;
+            }
+
+            let notificationsHtml = '<h5 class="title">Notifications</h5>';
+
+            notifications.forEach(notif => {
+                const typeClass = `text-${notif.type}`;
+                const icon = getNotificationIcon(notif.type);
+
+                notificationsHtml += `
+            <div class="notif-item ${notif.is_read ? '' : 'unread'}">
+                <div class="notif-text">
+                    <strong class="${typeClass}">
+                        <i class="fa-solid ${icon} me-1"></i>${notif.title}
+                    </strong>
+                    <p>${notif.message}</p>
+                </div>
+                <span class="time">${notif.time_ago}</span>
+                <span class="delete-note" data-id="${notif.id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </div>
+        `;
+            });
+
+            panel.innerHTML = notificationsHtml;
+        }
+
+        function getNotificationIcon(type) {
+            const icons = {
+                'success': 'fa-trophy',
+                'danger': 'fa-exclamation-triangle',
+                'warning': 'fa-clock',
+                'info': 'fa-info-circle'
+            };
+            return icons[type] || 'fa-bell';
+        }
+
+        // Notification badge update kare
+        function updateNotificationBadge(count) {
+            let badge = $('.notif-badge');
+
+            if (count > 0) {
+                if (badge.length === 0) {
+                    $('.messages-btn').append(`<span class="notif-badge">${count}</span>`);
+                } else {
+                    badge.text(count);
+                }
+            } else {
+                badge.remove();
+            }
+        }
+
+        // Delete notification (Aapka existing code)
+        $(document).on('click', '.delete-note', function(e) {
+            e.stopPropagation();
 
             let id = $(this).data('id');
-            let noteBox = $(this).closest('.notif-item'); // FIXED
+            let noteBox = $(this).closest('.notif-item');
 
             $.ajax({
                 url: "/notification/" + id,
@@ -517,28 +639,152 @@
                 data: {
                     _token: "{{ csrf_token() }}"
                 },
-
                 success: function(res) {
                     if (res.success) {
+                        noteBox.fadeOut(300, function() {
+                            $(this).remove();
+                            loadNotifications(); // Refresh notifications
+                        });
+                    }
+                }
+            });
+        });
 
+        // Auto-refresh notifications every 30 seconds
+        setInterval(function() {
+            // Badge count hamesha update kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+
+            // Agar panel open hai toh notifications refresh kare
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+        }, 30000);
+
+        // Initial load
+        $(document).ready(function() {
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        });
+    </script>
+
+    {{-- <script>
+        const messagesBtn = document.querySelector('.messages-btn');
+        const panel = document.getElementById('notificationPanel');
+
+        messagesBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            panel.classList.toggle('show');
+
+            // Panel kholne par notifications refresh karen
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+        });
+
+        // Click outside → hide panel
+        document.addEventListener('click', function() {
+            panel.classList.remove('show');
+        });
+
+        // Real-time notifications load karne ka function
+        function loadNotifications() {
+            $.get('/user/notifications', function(response) {
+                updateNotificationPanel(response.notifications);
+                updateNotificationBadge(response.unread_count);
+            });
+        }
+
+        // Notification panel update kare
+        function updateNotificationPanel(notifications) {
+            if (notifications.length === 0) {
+                panel.innerHTML = `
+            <h5 class="title">Notifications</h5>
+            <div id="emptyNoti" class="text-center py-4 text-muted">
+                <i class="fa-regular fa-bell-slash fs-1"></i>
+                <p>No notifications</p>
+            </div>
+        `;
+                return;
+            }
+
+            let notificationsHtml = '<h5 class="title">Notifications</h5>';
+
+            notifications.forEach(notif => {
+                const icon = notif.type === 'trade_win' ? 'fa-trophy' : 'fa-info-circle';
+                const textClass = notif.type === 'trade_win' ? 'text-success' : 'text-warning';
+
+                notificationsHtml += `
+            <div class="notif-item ${notif.is_read ? '' : 'unread'}">
+                <div class="notif-text">
+                    <strong class="${textClass}">
+                        <i class="fa-solid ${icon} me-1"></i>${notif.title}
+                    </strong>
+                    <p>${notif.message}</p>
+                </div>
+                <span class="time">${notif.created_at}</span>
+                <span class="delete-note" data-id="${notif.id}">
+                    <i class="fa-solid fa-xmark"></i>
+                </span>
+            </div>
+        `;
+            });
+
+            panel.innerHTML = notificationsHtml;
+        }
+
+        // Notification badge update kare
+        function updateNotificationBadge(count) {
+            let badge = $('.notif-badge');
+
+            if (count > 0) {
+                if (badge.length === 0) {
+                    // Agar badge nahi hai toh naya banaye
+                    $('.messages-btn').append(`<span class="notif-badge">${count}</span>`);
+                } else {
+                    badge.text(count);
+                }
+            } else {
+                badge.remove();
+            }
+        }
+
+        // Delete notification (Aapka existing code - perfect hai)
+        $(document).on('click', '.delete-note', function(e) {
+            e.stopPropagation(); // Panel band hone se bachaye
+
+            let id = $(this).data('id');
+            let noteBox = $(this).closest('.notif-item');
+
+            $.ajax({
+                url: "/notification/" + id,
+                type: "DELETE",
+                data: {
+                    _token: "{{ csrf_token() }}"
+                },
+                success: function(res) {
+                    if (res.success) {
                         noteBox.fadeOut(300, function() {
                             $(this).remove();
 
-                            // -------- UPDATE BADGE COUNT -------- //
+                            // Badge count update
                             let badge = $('.notif-badge');
                             if (badge.length) {
                                 let count = parseInt(badge.text()) - 1;
-
                                 if (count > 0) {
                                     badge.text(count);
                                 } else {
-                                    badge.remove(); // hide badge completely
+                                    badge.remove();
                                 }
                             }
 
-                            // -------- SHOW EMPTY MESSAGE -------- //
+                            // Empty message show kare
                             if ($('#notificationPanel .notif-item').length === 0) {
-                                $('#notificationPanel').append(`
+                                $('#notificationPanel').html(`
+                            <h5 class="title">Notifications</h5>
                             <div id="emptyNoti" class="text-center py-4 text-muted">
                                 <i class="fa-regular fa-bell-slash fs-1"></i>
                                 <p>No notifications</p>
@@ -550,7 +796,27 @@
                 }
             });
         });
-    </script>
+
+        // Auto-refresh notifications every 30 seconds
+        setInterval(function() {
+            if (panel.classList.contains('show')) {
+                loadNotifications();
+            }
+
+            // Badge count hamesha update kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        }, 30000);
+
+        // Initial load
+        $(document).ready(function() {
+            // Sirf badge count load kare
+            $.get('/user/notifications/count', function(response) {
+                updateNotificationBadge(response.unread_count);
+            });
+        });
+    </script> --}}
 
     @stack('scripts')
 

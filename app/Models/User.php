@@ -39,7 +39,7 @@ class User extends Authenticatable
         'wallet_address',
         'country',
         'referral_code',
-        'referred_by'
+        'referred_by',
     ];
 
     /**
@@ -78,6 +78,11 @@ class User extends Authenticatable
     public function notifications()
     {
         return $this->hasMany(UserNotification::class);
+    }
+
+    public function unreadNotifications()
+    {
+        return $this->notifications()->where('is_read', false);
     }
 
     // public static function boot()

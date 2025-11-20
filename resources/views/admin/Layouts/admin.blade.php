@@ -30,6 +30,7 @@
             background-color: #343a40;
         }
     </style>
+
 </head>
 
 <body>
@@ -68,8 +69,27 @@
                     </ul>
                 </li>
 
-                <li class="nav-item"><a href="{{ route('trade.dashboard') }}" class="nav-link text-white"><i
-                            class="bi bi-currency-bitcoin"></i> Trades</a></li>
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-currency-bitcoin"></i> Trades
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-dark">
+                        <li>
+                            <a class="dropdown-item" href="{{ route('trade.dashboard') }}">
+                                <i class="bi bi-graph-up me-2"></i> Trading Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="{{ route('admin.trades.pending') }}">
+                                <i class="bi bi-graph-up me-2"></i> Trading Approvals
+                            </a>
+                        </li>
+
+
+
+                    </ul>
+                </li>
                 <li class="nav-item dropdown">
                     <a href="#" class="nav-link text-white dropdown-toggle" data-bs-toggle="dropdown"
                         aria-expanded="false">

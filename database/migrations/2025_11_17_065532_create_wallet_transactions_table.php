@@ -18,7 +18,6 @@ return new class extends Migration
             $table->enum('from_wallet', ['exchange', 'trade'])->nullable();
             $table->enum('to_wallet', ['exchange', 'trade'])->nullable();
             $table->decimal('amount', 18, 8);
-            $table->decimal('fee', 18, 8)->default(0);
             $table->enum('status', ['pending', 'completed', 'failed'])->default('pending');
             $table->text('remark')->nullable();
             $table->foreignId('admin_id')->nullable()->constrained('users')->onDelete('set null');
