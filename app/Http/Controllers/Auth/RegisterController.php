@@ -83,7 +83,7 @@ class RegisterController extends Controller
         Invitation::create([
             'code' => $newReferalCode,
             'created_by' => $user->id,
-            'single_use' => true,
+            'single_use' => false,
         ]);
 
         // Auto-login and remember if requested

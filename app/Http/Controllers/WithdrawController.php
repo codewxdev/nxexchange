@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Notify;
 use App\Models\User;
+use App\Models\Wallet;
 use App\Models\Withdraw;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -13,7 +14,6 @@ class WithdrawController extends Controller
     public function index()
     {
         $withdraws = Withdraw::with('user')->latest()->get();
-
         return view('admin.transaction.withdraw', compact('withdraws'));
     }
 
@@ -25,8 +25,9 @@ class WithdrawController extends Controller
         ]);
 
         $user = auth()->user();
+        $wallet = Wallet::where('user_id',auth()->id())->first();
 
-        if ($user->balance < $request->amount) {
+        if ($wallet->exchange_balance < $request->amount) {
             return back()->with('error', 'Insufficient balance.');
         }
 
@@ -34,7 +35,8 @@ class WithdrawController extends Controller
         $net = $request->amount - $fee;
 
         // Deduct wallet balance
-        $user->balance -= $request->amount;
+        $wallet->exchange_balance -= $request->amount;
+        $wallet->save();
         $user->save();
 
         // Create withdrawal entry
@@ -101,7 +103,8 @@ class WithdrawController extends Controller
     public function updateStatus(Request $request, Withdraw $withdraw)
 {
     $user = $withdraw->user; // Withdraw ka owner
-
+   
+    $user = $withdraw->exchange_balance;
     // Update withdraw status and admin info if approved
     $withdraw->update([
         'status' => $request->status,
@@ -111,6 +114,8 @@ class WithdrawController extends Controller
 
     // Notification logic based on status
     if ($request->status === 'approved') {
+         $user->exchange += $withdraw->amount;
+        $user->save();
         Notify::send(
             $user->id,
             'Withdrawal Approved',

@@ -54,7 +54,25 @@
                             </div>
                             <div class="usd">
                                 @if ($wallet)
-                                    <h4>{{ $wallet->exchange_balance }}</h4>
+                                    <h4>{{ $wallet->exchange_balance + $wallet->trade_balance }}</h4>
+                                @else
+                                    <h4>0</h4>
+                                @endif
+
+                                <small>≈ USD</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6 account-box">
+                            <div class="content d-flex">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <div class="heading">
+                                    <h5>Trade Account</h5>
+                                    <span>USDT</span>
+                                </div>
+                            </div>
+                            <div class="usd">
+                                @if ($wallet)
+                                    <h4>{{ $wallet->trade_balance }}</h4>
                                 @else
                                     <h4>0</h4>
                                 @endif
@@ -63,6 +81,19 @@
                             </div>
                         </div>
 
+                        <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <div class="heading">
+                                <h5>Exchange Account</h5>
+                                <span>USDT</span>
+                            </div>
+                        </div>
+                        <div class="usd">
+                            <h4>{{ $wallet->exchange_balance }}</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
                         {{-- <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
                             <i class="fa-solid fa-coins"></i>
@@ -263,7 +294,7 @@
                             <input type="number" min="20" name="amount" id="withdrawAmount"
                                 class="form-control mb-3" placeholder="Minimum $20" required>
 
-                             
+
                             <label class="text-white mb-1">Fee (5%) Auto Applied</label>
                             <input type="text" class="form-control mb-3" id="withdrawFee" disabled
                                 placeholder="0.00">
@@ -512,27 +543,26 @@
 
 
         <script>
-    document.addEventListener("DOMContentLoaded", function () {
-        const amountInput = document.getElementById("withdrawAmount");
-        const feeInput = document.getElementById("withdrawFee");
-        const netInput = document.getElementById("withdrawNet");
+            document.addEventListener("DOMContentLoaded", function() {
+                const amountInput = document.getElementById("withdrawAmount");
+                const feeInput = document.getElementById("withdrawFee");
+                const netInput = document.getElementById("withdrawNet");
 
-        amountInput.addEventListener("input", function () {
-            let amount = parseFloat(amountInput.value);
+                amountInput.addEventListener("input", function() {
+                    let amount = parseFloat(amountInput.value);
 
-            if (isNaN(amount) || amount < 0) {
-                feeInput.value = "0.00";
-                netInput.value = "0.00";
-                return;
-            }
+                    if (isNaN(amount) || amount < 0) {
+                        feeInput.value = "0.00";
+                        netInput.value = "0.00";
+                        return;
+                    }
 
-            let fee = amount * 0.05; // 5% fee
-            let net = amount - fee;
+                    let fee = amount * 0.05; // 5% fee
+                    let net = amount - fee;
 
-            feeInput.value = fee.toFixed(2);
-            netInput.value = net.toFixed(2);
-        });
-    });
-</script>
-
+                    feeInput.value = fee.toFixed(2);
+                    netInput.value = net.toFixed(2);
+                });
+            });
+        </script>
     @endpush
