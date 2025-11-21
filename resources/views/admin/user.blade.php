@@ -4,6 +4,7 @@
 
 @section('content')
     <div class="container-fluid">
+            
         <h2 class="mb-4">Users Detail</h2>
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -218,7 +219,6 @@
                                     <span class="image-label">KYC Front Image</span>
                                     <img id="kyc_front_image"
                                         src="https://via.placeholder.com/400x250?text=No+Front+Image" class="kyc-image">
-
                                 </div>
                             </div>
                             <div class="col-md-6">
@@ -226,8 +226,6 @@
                                     <span class="image-label">KYC Back Image</span>
                                     <img id="kyc_back_image" src="https://via.placeholder.com/400x250?text=No+Back+Image"
                                         class="kyc-image">
-
-
                                 </div>
                             </div>
                         </div>

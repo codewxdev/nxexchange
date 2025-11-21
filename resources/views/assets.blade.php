@@ -263,11 +263,8 @@
                             <input type="number" min="20" name="amount" id="withdrawAmount"
                                 class="form-control mb-3" placeholder="Minimum $20" required>
 
-                            <label class="text-white mb-1">Withdrawal Address</label>
-                            <input type="text" name="address" class="form-control mb-3"
-                                placeholder="Your USDT wallet address" required>
-
-                            <label class="text-white mb-1">Fee (3%) Auto Applied</label>
+                             
+                            <label class="text-white mb-1">Fee (5%) Auto Applied</label>
                             <input type="text" class="form-control mb-3" id="withdrawFee" disabled
                                 placeholder="0.00">
 
@@ -436,7 +433,7 @@
             }
         </style>
     @endpush
-    @push('script')
+    @push('scripts')
         {{-- <script>
             document.addEventListener("DOMContentLoaded", function() {
 
@@ -512,4 +509,30 @@
 
             });
         </script> --}}
+
+
+        <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const amountInput = document.getElementById("withdrawAmount");
+        const feeInput = document.getElementById("withdrawFee");
+        const netInput = document.getElementById("withdrawNet");
+
+        amountInput.addEventListener("input", function () {
+            let amount = parseFloat(amountInput.value);
+
+            if (isNaN(amount) || amount < 0) {
+                feeInput.value = "0.00";
+                netInput.value = "0.00";
+                return;
+            }
+
+            let fee = amount * 0.05; // 5% fee
+            let net = amount - fee;
+
+            feeInput.value = fee.toFixed(2);
+            netInput.value = net.toFixed(2);
+        });
+    });
+</script>
+
     @endpush

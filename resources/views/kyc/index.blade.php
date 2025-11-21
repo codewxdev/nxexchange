@@ -23,17 +23,17 @@
                     <option value="USA">USA</option>
                 </select>
 
-                <label>ID Card Number / CNIC</label>
+                <label>National Identity Number</label>
                 <input type="text" name="cnic" required placeholder="e.g. 35202-1234567-8">
 
-                <label>CNIC Front Image</label>
+                <label>Front Side of ID Document</label>
                 <div class="upload-box" onclick="document.getElementById('front_img').click()">
                     <p>Click to upload front side</p>
                     <img id="front_preview" class="preview-img">
                 </div>
                 <input type="file" name="cnic_front" id="front_img" accept="image/*" style="display:none" required>
 
-                <label>CNIC Back Image</label>
+                <label>Back Side of ID Document</label>
                 <div class="upload-box" onclick="document.getElementById('back_img').click()">
                     <p>Click to upload back side</p>
                     <img id="back_preview" class="preview-img">

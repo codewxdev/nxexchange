@@ -67,7 +67,7 @@ a {
     color: var(--color-text-white);
     text-decoration: none;
     font-weight: 500;
-    font-family: 'Poppins';
+    font-family: 'Poppins' !important;
 }
 
 .heading .link i {
@@ -191,4 +191,6 @@ a {
     .verify-div button {
         width: 25%;
     }
+
+    
 }
