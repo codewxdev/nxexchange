@@ -8,14 +8,14 @@
             <a href="{{ url()->previous() }}"><i class="fa-solid fa-arrow-left-long"></i></a>
             <a href="#">Password Reset</a>
         </div>
-        <select id="dropdown">
+        {{-- <select id="dropdown">
             <option value="">English</option>
             <option value="">Urdu</option>
             <option value="">bangali</option>
             <option value="">pashto</option>
             <option value="">French</option>
             <option value="">Urdu</option>
-        </select>
+        </select> --}}
     </div>
 
     <!-- Form -->

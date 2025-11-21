@@ -17,7 +17,7 @@
                  <option value="">French</option>
                  <option value="">Urdu</option>
              </select> --}}
-             <select onchange="window.location.href=this.value">
+             {{-- <select onchange="window.location.href=this.value">
                  <option value="{{ route('change.lang', 'en') }}" {{ session('locale') == 'en' ? 'selected' : '' }}>English
                  </option>
                  <option value="{{ route('change.lang', 'ur') }}" {{ session('locale') == 'ur' ? 'selected' : '' }}>Urdu
@@ -26,7 +26,7 @@
                  </option>
                  <option value="{{ route('change.lang', 'es') }}" {{ session('locale') == 'es' ? 'selected' : '' }}>Spanish
                  </option>
-             </select>
+             </select> --}}
 
          </div>
 
