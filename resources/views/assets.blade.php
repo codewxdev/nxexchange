@@ -12,7 +12,6 @@
                 {{-- <span class="text-secondary">≈ 0.00 USD</span> --}}
             </div>
 
-
             <!-- ===== Quick Actions ===== -->
             <div class="col-12 col-md-10">
                 <div class="row g-3 text-center justify-content-center">
