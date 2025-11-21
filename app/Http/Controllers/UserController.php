@@ -9,10 +9,22 @@ use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $users = User::where('account_status', ['active', 'deactivated'])->get();
+            $query = User::query();
+
+            // KYC Status Filter
+            if ($request->has('kyc_status') && $request->kyc_status != 'all') {
+                $query->where('kyc_status', $request->kyc_status);
+            }
+
+            // Account Status Filter
+            if ($request->has('account_status') && $request->account_status != 'all') {
+                $query->where('account_status', $request->account_status);
+            }
+
+            $users = $query->get();
 
             return view('admin.user', compact('users'));
         } catch (\Exception $e) {

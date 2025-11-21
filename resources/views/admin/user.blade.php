@@ -5,6 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <h2 class="mb-4">Users Detail</h2>
+
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
@@ -12,9 +13,53 @@
         @if (session('error'))
             <div class="alert alert-danger">{{ session('error') }}</div>
         @endif
+
+        <!-- Filters Section -->
         <div class="card shadow mb-4">
             <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold">Filters</h6>
+            </div>
+            <div class="card-body">
+                <form method="GET" action="{{ route('admin.user') }}" id="filterForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <label class="form-label">KYC Status</label>
+                            <select class="form-select" name="kyc_status" id="kyc_status">
+                                <option value="all">All KYC Status</option>
+                                <option value="verified" {{ request('kyc_status') == 'verified' ? 'selected' : '' }}>
+                                    Verified</option>
+                                <option value="pending" {{ request('kyc_status') == 'pending' ? 'selected' : '' }}>Pending
+                                </option>
+                                <option value="rejected" {{ request('kyc_status') == 'rejected' ? 'selected' : '' }}>
+                                    Rejected</option>
+                                <option value="not_verified"
+                                    {{ request('kyc_status') == 'not_verified' ? 'selected' : '' }}>Not Verified</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label">Account Status</label>
+                            <select class="form-select" name="account_status" id="account_status">
+                                <option value="all">All Account Status</option>
+                                <option value="active" {{ request('account_status') == 'active' ? 'selected' : '' }}>Active
+                                </option>
+                                <option value="deactivated"
+                                    {{ request('account_status') == 'deactivated' ? 'selected' : '' }}>Deactivated</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="submit" class="btn btn-primary me-2">Apply Filters</button>
+                            <a href="{{ route('admin.user') }}" class="btn btn-secondary">Reset</a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex justify-content-between align-items-center">
                 <h6 class="m-0 font-weight-bold">Recent Platform Activity</h6>
+                <div class="text-muted">
+                    Total Users: {{ $users->count() }}
+                </div>
             </div>
 
 
@@ -33,15 +78,18 @@
                             </tr>
                         </thead>
                         <tbody>
+
                             @foreach ($users as $user)
                                 @php
-                                    $actionType = $user->account_status;
+                                    $actionType = strtolower($user->account_status ?? 'unknown');
                                     $badgeColor = match ($actionType) {
                                         'active' => 'bg-success',
                                         'deactivated' => 'bg-danger',
+                                        default => 'bg-secondary',
                                     };
 
-                                    $kycBadgeColor = match ($user->kyc_status) {
+                                    $kycStatus = strtolower($user->kyc_status ?? 'not_verified');
+                                    $kycBadgeColor = match ($kycStatus) {
                                         'verified' => 'bg-success',
                                         'pending' => 'bg-warning',
                                         'rejected' => 'bg-danger',
@@ -156,8 +204,8 @@
                             <label class="form-label">Account Status</label>
                             <div>
                                 <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="account_status" id="account_active"
-                                        value="active">
+                                    <input class="form-check-input" type="radio" name="account_status"
+                                        id="account_active" value="active">
                                     <label class="form-check-label" for="account_active">Active</label>
                                 </div>
                                 <div class="form-check">
