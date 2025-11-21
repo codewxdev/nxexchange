@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\ID;
 use App\Helpers\Referal;
 use App\Http\Controllers\Controller;
 use App\Models\Invitation;
@@ -65,6 +66,7 @@ class RegisterController extends Controller
         $newReferalCode = Referal::generateReferralCode(8);
         // Create new user
         $user = User::create([
+            'id'=> ID::generateUserId(7),
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),

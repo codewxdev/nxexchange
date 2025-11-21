@@ -112,7 +112,10 @@
                     @endif
                    
                 </div>
-                    <a href="{{ route('admin.dashboard') }}" class="admin-btn">Admin Panel</a>
+                   @if (auth()->user()->role == 'admin')
+                         <a href="{{ route('admin.dashboard') }}" class="admin-btn">Admin Panel</a>
+                   @endif
+                   
             </div>
 
         </div>

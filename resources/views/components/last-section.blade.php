@@ -13,12 +13,7 @@
                 <h2>Advanced Features</h2>
                 <h3>For professional traders and institutional users.</h3>
                 <p>
-                    TTU Exchange offers tailored services to meet the specific needs of professional traders,
-                    institutional investors and corporate customers. In addition to a full range of trading and charting
-                    tools,
-                    and access to comprehensive markets for all major pairs, we also offer unparalleled co-location
-                    services,
-                    enabling optimal, high-speed trading performance and connectivity.
+                   NXExchange delivers advanced trading solutions designed for professional traders, institutional investors, and corporate clients. Along with a complete suite of trading and charting tools and deep liquidity across major pairs, we provide exceptional co-location and high-speed connectivity options — ensuring ultra-fast execution and peak trading performance.
                 </p>
             </div>
 
@@ -76,3 +71,68 @@
 
         </div>
     </div>
+
+    @section('footer')
+         <footer class="brand-footer">
+        <div class="container py-5">
+            <div class="row">
+                <!-- Logo & Description -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <a href="#" class="footer-logo">
+                        <img src="{{ asset('assets/images/logo2.png') }}" alt="Logo" />
+                    </a>
+                    <p class="footer-desc mt-3">
+                        NxExchange is your one-stop cryptocurrency platform offering safe, high-yield investments and
+                        global coverage.
+                    </p>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Quick Links</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ route('market.index') }}">Market</a></li>
+                        <li><a href="{{ route('trade.index') }}">Trade</a></li>
+                        <li><a href="{{ route('asset.index') }}">Assets</a></li>
+                        {{-- <li><a href="#">Pricing</a></li>
+                        <li><a href="#">Support</a></li> --}}
+                    </ul>
+                </div>
+
+                <!-- Company -->
+                <div class="col-lg-2 col-md-6 mb-4">
+                    <h5 class="footer-title">Company</h5>
+                    <ul class="footer-links">
+                        <li><a href="{{ route('about.index') }}">About Us</a></li>
+                        {{-- <li><a href="#">Careers</a></li> --}}
+                        {{-- <li><a href="#">Blog</a></li> --}}
+                        <li><a href="{{ route('contact.index') }}">Contact</a></li>
+                        <li><a href="{{ route('help.terms') }}">Terms & Privacy</a></li>
+                    </ul>
+                </div>
+
+                <!-- Newsletter -->
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <h5 class="footer-title">Subscribe to Our Newsletter</h5>
+                    <p>Get the latest crypto updates, market news, and exclusive offers.</p>
+                    <form class="newsletter-form d-flex mt-3">
+                        <input type="email" placeholder="Enter your email" />
+                        <button type="submit">Subscribe</button>
+                    </form>
+                    <div class="social-icons mt-4">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-bottom text-center mt-4">
+                <p>&copy; 2025 NxExchange. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+    @endsection

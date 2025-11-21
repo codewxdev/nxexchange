@@ -65,7 +65,7 @@ Route::post('password/reset', [ForgetPasswordContoller::class, 'reset'])->name('
 // dashboard route start here
 Route::middleware(['isAdmin', 'auth', 'checkUserStatus'])->group(function () {
     Route::get('/admin/dashboard', [UserController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/admin/user', [UserController::class, 'index'])->name('admin.user');
+    Route::get('/admin/users_overview', [UserController::class, 'index'])->name('admin.user');
     Route::prefix('admin')->group(function () {
         Route::resource('signals', SignalController::class)->names('admin.signals');
     });
@@ -80,7 +80,7 @@ Route::middleware(['isAdmin', 'auth', 'checkUserStatus'])->group(function () {
     Route::post('withdraw', [WithdrawController::class, 'store'])->name('withdraw.store');
     Route::get('transfer', [TransferController::class, 'index'])->name('transfers.index');
     Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
-    Route::get('trade', [TradeController::class, 'history'])->name('trade.dashboard');
+    Route::get('trades_overview', [TradeController::class, 'history'])->name('trade.dashboard');
     Route::put('/admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
     Route::post('/admin/users/update-kyc', [UserController::class, 'updateKyc'])->name('admin.users.update-kyc');
     Route::delete('/users/del/{id}', [UserController::class, 'delete'])->name('admin.users.delete');

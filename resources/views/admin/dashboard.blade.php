@@ -132,7 +132,7 @@
                                                 </td>
                                                 <td class="pe-3">
                                                     <small
-                                                        class="text-muted">{{ $user->created_at->format('M d') }}</small>
+                                                        class="text-muted">{{ $user->created_at }}</small>
                                                 </td>
                                             </tr>
                                         @endforeach

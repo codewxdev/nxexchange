@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container-fluid">
-        <h2 class="mb-4">Trade History</h2>
+        <h2 class="mb-4">Trades Analytics</h2>
 
         <div class="card shadow mb-4">
             <div class="card-header py-3">
@@ -56,7 +56,7 @@
                                     <td>
                                         <span
                                             class="badge bg-{{ $trade->result == 'win' ? 'success' : ($trade->result == 'loss' ? 'danger' : 'warning') }}">
-                                            {{ $trade->status ?? 'pending' }}
+                                            {{ $trade->status }}
                                         </span>
                                     </td>
                                 </tr>

@@ -37,9 +37,9 @@
     {{-- Sidebar --}}
     <div class="d-flex" id="wrapper">
         <div class="bg-dark text-white p-3" id="sidebar">
-            <h4 class="text-center mb-4">NX Exchange</h4>
+            <img src="{{ asset('assets/images/logo3.png') }}" alt="" width="100px" height="60px">
             <ul class="nav flex-column">
-                <li class="nav-item"><a href="{{ route('admin.dashboard') }}" class="nav-link text-white"><i
+                <li class="nav-item mt-4"><a href="{{ route('admin.dashboard') }}" class="nav-link text-white"><i
                             class="bi bi-speedometer2"></i> Dashboard</a></li>
                 <li class="nav-item"><a href="{{ route('admin.user') }}" class="nav-link text-white"><i
                             class="bi bi-people"></i> Users</a></li>
@@ -48,7 +48,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle text-white" href="#" id="transactionDropdown"
                         role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="bi bi-lightning"></i> Transaction
+                        <i class="bi bi-lightning"></i> Transactions
                     </a>
                     <ul class="dropdown-menu dropdown-menu-dark" aria-labelledby="transactionDropdown">
                         <li>

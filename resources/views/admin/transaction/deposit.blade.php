@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h2 class="mb-0">Deposit Amount Detail</h2>
+            <h2 class="mb-0">Deposits</h2>
         </div>
 
         <!-- Filters Section -->
@@ -84,7 +84,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Total Amount</div>
+                                    Total Deposits Amount</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${{ number_format($totalAmount, 2) }}
                                 </div>
                             </div>
@@ -119,7 +119,7 @@
         <!-- Deposits Table -->
         <div class="card shadow mb-4">
             <div class="card-header py-3 d-flex justify-content-between align-items-center">
-                <h6 class="m-0 font-weight-bold text-primary">Deposit Transactions</h6>
+                <h6 class="m-0 font-weight-bold text-primary">Deposits History</h6>
                 <span class="text-muted">
                     Showing {{ $deposits->count() }} deposits
                 </span>

@@ -5,7 +5,7 @@
 @section('content')
     <div class="container-fluid">
             
-        <h2 class="mb-4">Users Detail</h2>
+        <h2 class="mb-4">Users</h2>
 
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
