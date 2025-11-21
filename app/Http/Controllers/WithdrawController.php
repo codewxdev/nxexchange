@@ -68,7 +68,7 @@ class WithdrawController extends Controller
         $user = auth()->user();
         $wallet = Wallet::where('user_id', auth()->id())->first();
 
-        if ($wallet->exchange_balance < $request->amount) {
+        if ($wallet->exchange_balance + $wallet->trade_balance < $request->amount) {
             return back()->with('error', 'Insufficient balance.');
         }
 

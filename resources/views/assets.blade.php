@@ -87,13 +87,13 @@
                             <div class="content d-flex">
                                 <i class="fa-solid fa-wallet"></i>
                                 <div class="heading">
-                                    <h5>Trade Balance</h5>
+                                    <h5>Exchange Account</h5>
                                     <span>USDT</span>
                                 </div>
                             </div>
                             <div class="usd">
                                 @if ($wallet)
-                                    <h4>{{ $wallet->trade_balance }}</h4>
+                                    <h4>{{ $wallet->exchange_balance }}</h4>
                                 @else
                                     <h4>0</h4>
                                 @endif
