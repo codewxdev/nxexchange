@@ -65,7 +65,7 @@
                             <h4>0</h4>
                             <small>≈ USD</small>
                         </div>
-                    </div> --}}
+                    </div>
 
                     <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
@@ -76,7 +76,10 @@
                             </div>
                         </div>
                         <div class="usd">
-                            <h4>{{ $wallet->trade_balance }}</h4>
+                            @if (!empty($wallet))
+                                 <h4>{{ $wallet->trade_balance }}</h4>
+                            @endif
+                            <h4>$00.00</h4>
                             <small>≈ USD</small>
                         </div>
                     </div>
@@ -111,12 +114,28 @@
                 <div class="modal-body">
                     <form action="{{ route('wallet.address.store') }}" method="POST">
                         @csrf
+                        @php
+                            $address = auth()->user()->address;
+                        @endphp
 
                         <label class="text-white mb-1">Wallet Address</label>
                         <input type="text" name="address" class="form-control mb-3" placeholder="Enter wallet address"
                             required>
 
+
                         <button type="submit" class="address-btn w-100">Save Address</button>
+                        @if (!empty($address))
+                            <label class="text-white mb-1">Wallet Address</label>
+                            <input type="text" name="address" value="{{ $address }}" class="form-control mb-3"
+                                placeholder="Enter wallet address" required>
+
+                            <button type="submit" class="address-btn w-100">Update Address</button>
+                        @else
+                            <label class="text-white mb-1">Wallet Address</label>
+                            <input type="text" name="address" class="form-control mb-3"
+                                placeholder="Enter wallet address" required>
+
+                            <button type="submit" class="address-btn w-100">Save Address</button>
                         @endif
                     </form>
                 </div>
