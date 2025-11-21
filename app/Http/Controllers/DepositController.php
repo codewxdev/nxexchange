@@ -12,6 +12,7 @@ class DepositController extends Controller
     public function index()
     {
         $deposits = Deposit::with('user')->latest()->get();
+
         return view('admin.transaction.deposit', compact('deposits'));
     }
 
@@ -26,6 +27,7 @@ class DepositController extends Controller
         $deposit = Auth::user()->deposits()->create([
             'amount' => $request->amount,
             'currency' => 'USDT',
+            'payment_gateway' => 'nowpayments',
             'status' => 'pending',
         ]);
 
@@ -49,7 +51,7 @@ class DepositController extends Controller
 
             return redirect()->route('deposits.show', $deposit)->with('success', 'Invoice created. Please complete payment.');
         } else {
-            return back()->with('error', 'Failed to create invoice: ' . ($response['message'] ?? 'Unknown error'));
+            return back()->with('error', 'Failed to create invoice: '.($response['message'] ?? 'Unknown error'));
         }
     }
 
@@ -88,7 +90,6 @@ class DepositController extends Controller
         return view('payment', compact('deposit'));
     }
 
-
     public function updateStatus(Request $request, Deposit $deposit)
     {
         $deposit->update([
@@ -100,23 +101,22 @@ class DepositController extends Controller
     }
 }
 
+//  public function store(Request $request)
+// {
+//     $request->validate([
+//         'user_id' => 'required|exists:users,id',
+//         'amount' => 'required|numeric|min:1',
+//         'payment_gateway' => 'required|string',
+//         'transaction_id' => 'nullable|string',
+//     ]);
 
-  //  public function store(Request $request)
-    // {
-    //     $request->validate([
-    //         'user_id' => 'required|exists:users,id',
-    //         'amount' => 'required|numeric|min:1',
-    //         'payment_gateway' => 'required|string',
-    //         'transaction_id' => 'nullable|string',
-    //     ]);
+//     $deposit = Deposit::create([
+//         'user_id' => $request->user_id,
+//         'amount' => $request->amount,
+//         'payment_gateway' => $request->payment_gateway,
+//         'transaction_id' => $request->transaction_id,
+//         'status' => 'pending',
+//     ]);
 
-    //     $deposit = Deposit::create([
-    //         'user_id' => $request->user_id,
-    //         'amount' => $request->amount,
-    //         'payment_gateway' => $request->payment_gateway,
-    //         'transaction_id' => $request->transaction_id,
-    //         'status' => 'pending',
-    //     ]);
-
-    //     return back()->with('success', 'Deposit request created successfully!');
-    // }
+//     return back()->with('success', 'Deposit request created successfully!');
+// }

@@ -5,11 +5,19 @@
 @section('content')
     <div class="container-fluid">
         <h2 class="mb-4">Users Detail</h2>
+        @if (session('success'))
+            <div class="alert alert-success">{{ session('success') }}</div>
+        @endif
 
+        @if (session('error'))
+            <div class="alert alert-danger">{{ session('error') }}</div>
+        @endif
         <div class="card shadow mb-4">
             <div class="card-header py-3">
                 <h6 class="m-0 font-weight-bold">Recent Platform Activity</h6>
             </div>
+
+
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover" id="activityTable">
@@ -19,10 +27,8 @@
                                 <th>Level</th>
                                 <th>Account Status</th>
                                 <th>KYC Status</th>
-                                <th class="text-end">Exchange Balance</th>
-                                <th class="text-end">Trade Balance</th>
                                 <th>Registered At</th>
-                                <th>Last Login</th>
+                                {{-- <th>Last Login</th> --}}
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -56,10 +62,8 @@
                                             {{ ucfirst(str_replace('_', ' ', $user->kyc_status)) }}
                                         </span>
                                     </td>
-                                    <td>${{ number_format($user->exchange_balance, 2) }}</td>
-                                    <td>${{ number_format($user->trade_balance, 2) }}</td>
                                     <td>{{ $user->registered_at->format('Y-m-d H:i') }}</td>
-                                    <td>{{ optional($user->last_login_at)?->format('Y-m-d H:i') ?? 'Never' }}</td>
+                                    {{-- <td>{{ optional($user->last_login_at)?->format('Y-m-d H:i') ?? 'Never' }}</td> --}}
                                     <td>
                                         <div class="dropdown">
                                             <button class="btn btn-light btn-sm p-2 rounded-circle" type="button"
@@ -79,11 +83,29 @@
                                                     </a>
                                                 </li>
 
+                                                <!-- Add View KYC Option -->
                                                 <li>
-                                                    <a class="dropdown-item text-danger delete-user" href="#"
-                                                        data-user-id="{{ $user->id }}">
-                                                        <i class="bi bi-trash me-2"></i> Delete
+                                                    <a class="dropdown-item view-kyc" href="#"
+                                                        data-user-id="{{ $user->id }}"
+                                                        data-user-email="{{ $user->email }}"
+                                                        data-user-kyc-status="{{ $user->kyc_status }}"
+                                                        data-user-country="{{ $user->country ?? 'Not provided' }}"
+                                                        data-user-id-card-number="{{ $user->id_card_number ?? 'Not provided' }}"
+                                                        data-user-kyc-front-image="{{ $user->kyc_front_image ?? '' }}"
+                                                        data-user-kyc-back-image="{{ $user->kyc_back_image ?? '' }}">
+                                                        <i class="bi bi-eye me-2 text-info"></i> View KYC
                                                     </a>
+                                                </li>
+                                                <li>
+                                                    <form action="{{ route('admin.users.delete', $user->id) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('کیا آپ یقینی ہیں؟ {{ $user->email }} کو delete کریں؟');">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="dropdown-item text-danger">
+                                                            <i class="bi bi-trash me-2"></i> Delete
+                                                        </button>
+                                                    </form>
                                                 </li>
                                             </ul>
                                         </div>
@@ -129,7 +151,6 @@
                                 <option value="6">Level 6</option>
                             </select>
                         </div>
-
                         <!-- Account Status Radio Buttons -->
                         <div class="mb-3">
                             <label class="form-label">Account Status</label>
@@ -146,39 +167,85 @@
                                 </div>
                             </div>
                         </div>
-
-                        <!-- KYC Status Radio Buttons -->
-                        <div class="mb-3">
-                            <label class="form-label">KYC Status</label>
-                            <div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kyc_status" id="kyc_verified"
-                                        value="verified">
-                                    <label class="form-check-label" for="kyc_verified">Verified</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kyc_status" id="kyc_not_verified"
-                                        value="not_verified">
-                                    <label class="form-check-label" for="kyc_not_verified">Not Verified</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kyc_status" id="kyc_pending"
-                                        value="pending">
-                                    <label class="form-check-label" for="kyc_pending">Pending</label>
-                                </div>
-                                <div class="form-check">
-                                    <input class="form-check-input" type="radio" name="kyc_status" id="kyc_rejected"
-                                        value="rejected">
-                                    <label class="form-check-label" for="kyc_rejected">Rejected</label>
-                                </div>
-                            </div>
-                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update User</button>
+                        <button type="submit" class="btn btn-primary">Update</button>
                     </div>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- View KYC Modal -->
+    <div class="modal fade" id="viewKycModal" tabindex="-1" aria-labelledby="viewKycModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewKycModalLabel">KYC Details - <span id="kyc_user_email"></span></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="updateKycForm" method="POST" action="{{ route('admin.users.update-kyc') }}">
+                        @csrf
+                        {{-- @method('PUT') --}}
+                        <input type="hidden" name="user_id" id="kyc_user_id">
+                        <input type="hidden" name="kyc_status" id="kyc_status_input">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">KYC Status</label>
+                                    <div class="form-control" id="current_kyc_status"></div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Country</label>
+                                    <div class="form-control" id="kyc_country"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label">ID Card Number</label>
+                            <div class="form-control" id="kyc_id_card_number"></div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="image-container">
+                                    <span class="image-label">KYC Front Image</span>
+                                    <img id="kyc_front_image"
+                                        src="https://via.placeholder.com/400x250?text=No+Front+Image" class="kyc-image">
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="image-container">
+                                    <span class="image-label">KYC Back Image</span>
+                                    <img id="kyc_back_image" src="https://via.placeholder.com/400x250?text=No+Back+Image"
+                                        class="kyc-image">
+
+
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="status-buttons mt-4">
+                            <button type="button" class="btn btn-success" id="verifyKycBtn">
+                                <i class="bi bi-check-circle me-2"></i> Verify
+                            </button>
+                            <button type="button" class="btn btn-danger" id="rejectKycBtn">
+                                <i class="bi bi-x-circle me-2"></i> Reject
+                            </button>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
             </div>
         </div>
     </div>
@@ -193,67 +260,95 @@
                 var userEmail = $(this).data('user-email');
                 var userLevel = $(this).data('user-level');
                 var userAccountStatus = $(this).data('user-account-status');
-                var userKycStatus = $(this).data('user-kyc-status');
 
                 $('#user_id').val(userId);
                 $('#user_email').val(userEmail);
                 $('#user_level').val(userLevel);
-
                 // Set account status radio
                 $('input[name="account_status"][value="' + userAccountStatus + '"]').prop('checked', true);
-
-                // Set KYC status radio
-                $('input[name="kyc_status"][value="' + userKycStatus + '"]').prop('checked', true);
-
                 // Show modal
                 $('#updateUserModal').modal('show');
             });
 
-            // Delete user confirmation with proper AJAX
-            $('.delete-user').on('click', function(e) {
+            // View KYC modal
+            $('.view-kyc').on('click', function(e) {
                 e.preventDefault();
+
                 var userId = $(this).data('user-id');
-                var userEmail = $(this).closest('tr').find('td:first').text();
+                var userEmail = $(this).data('user-email');
+                var kycStatus = $(this).data('user-kyc-status');
+                var country = $(this).data('user-country');
+                var idCardNumber = $(this).data('user-id-card-number');
+                var kycFrontImage = $(this).data('user-kyc-front-image');
+                var kycBackImage = $(this).data('user-kyc-back-image');
 
-                if (confirm('Are you sure you want to delete user: ' + userEmail + '?')) {
-                    var $button = $(this);
-                    $button.prop('disabled', true).html('<i class="bi bi-trash me-2"></i> Deleting...');
+                // Modal میں data fill کریں
+                $('#kyc_user_id').val(userId);
+                $('#kyc_user_email').text(userEmail);
+                $('#current_kyc_status').text(kycStatus.charAt(0).toUpperCase() + kycStatus.slice(1)
+                    .replace('_', ' '));
+                $('#kyc_country').text(country);
+                $('#kyc_id_card_number').text(idCardNumber);
 
-                    $.ajax({
-                        url: '/admin/users/' + userId,
-                        type: 'DELETE',
-                        data: {
-                            _token: '{{ csrf_token() }}'
-                        },
-                        success: function(response) {
-                            if (response.success) {
-                                // Remove the row from table
-                                $button.closest('tr').fadeOut(300, function() {
-                                    $(this).remove();
-                                });
-                                // Simple success message in console
-                                console.log('User deleted successfully:', response.message);
-                            } else {
-                                console.error('Delete failed:', response.message);
-                                $button.prop('disabled', false).html(
-                                    '<i class="bi bi-trash me-2"></i> Delete');
-                            }
-                        },
-                        error: function(xhr) {
-                            var errorMessage = 'Error deleting user';
-                            if (xhr.responseJSON && xhr.responseJSON.message) {
-                                errorMessage = xhr.responseJSON.message;
-                            }
-                            console.error('Delete error:', errorMessage);
-                            $button.prop('disabled', false).html(
-                                '<i class="bi bi-trash me-2"></i> Delete');
-                        }
-                    });
-                }
+                // Images کے paths بنائیں
+                var basePath = '{{ asset('kyc') }}';
+
+                var frontImageSrc = kycFrontImage && kycFrontImage.trim() !== '' ?
+                    basePath + '/' + kycFrontImage :
+                    'https://via.placeholder.com/400x250?text=No+Front+Image';
+
+                var backImageSrc = kycBackImage && kycBackImage.trim() !== '' ?
+                    basePath + '/' + kycBackImage :
+                    'https://via.placeholder.com/400x250?text=No+Back+Image';
+
+                // Images کو modal میں set کریں
+                $('#kyc_front_image').attr('src', frontImageSrc);
+                $('#kyc_back_image').attr('src', backImageSrc);
+
+                // Modal دکھائیں
+                $('#viewKycModal').modal('show');
             });
+
+            // KYC Status Buttons
+            $('#verifyKycBtn').on('click', function() {
+                $('#kyc_status_input').val('verified');
+                submitKycForm();
+            });
+
+            $('#rejectKycBtn').on('click', function() {
+                $('#kyc_status_input').val('rejected');
+                submitKycForm();
+            });
+
+            function submitKycForm() {
+                var formData = $('#updateKycForm').serialize();
+
+                $.ajax({
+                    url: '{{ route('admin.users.update-kyc') }}',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            alert('KYC status updated successfully!');
+                            $('#viewKycModal').modal('hide');
+                            location.reload();
+                        } else {
+                            alert('Error updating KYC status: ' + response.message);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = 'Error updating KYC status';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        alert(errorMessage);
+                    }
+                });
+            }
         });
     </script>
 @endsection
+
 <style>
     /* -- RESPONSIVE TABLE -- */
     @media (max-width: 768px) {
@@ -296,4 +391,94 @@
         background: #f1f1f1;
         border: none;
     }
+
+    /* KYC Modal Styles */
+    .kyc-image {
+        max-width: 100%;
+        height: auto;
+        border-radius: 4px;
+        border: 1px solid #dee2e6;
+    }
+
+    .image-container {
+        position: relative;
+        margin-bottom: 1rem;
+    }
+
+    .image-label {
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .status-buttons {
+        display: flex;
+        gap: 10px;
+        margin-top: 1rem;
+    }
+
+    .status-buttons .btn {
+        flex: 1;
+    }
+
+    @media (max-width: 576px) {
+        .status-buttons {
+            flex-direction: column;
+        }
+    }
 </style>
+<script>
+    $(document).ready(function() {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            }
+        });
+
+        $('.delete-user').on('click', function(e) {
+            e.preventDefault();
+
+            var userId = $(this).data('user-id');
+            var $button = $(this);
+            var userEmail = $(this).closest('tr').find('td:first').text();
+
+            if (confirm('Are You Sure, You want to Delete' + userEmail + 'User')) {
+                $button.prop('disabled', true).html('<i class="bi bi-trash me-2"></i> Deleting...');
+
+                $.ajax({
+                    url: '/users/del/' + userId,
+                    type: 'DELETE',
+                    success: function(response) {
+                        if (response.success) {
+                            // Success message
+                            alert(response.message);
+                            $button.closest('tr').fadeOut(300, function() {
+                                $(this).remove();
+
+                                // Optional: Check if table is empty
+                                if ($('#usersTable tbody tr').length === 0) {
+                                    $('#usersTable tbody').html(
+                                        '<tr><td colspan="10" class="text-center">No users found</td></tr>'
+                                    );
+                                }
+                            });
+                        } else {
+                            alert('Error: ' + response.message);
+                            $button.prop('disabled', false).html(
+                                '<i class="bi bi-trash me-2"></i> Delete');
+                        }
+                    },
+                    error: function(xhr) {
+                        var errorMessage = 'Error deleting user';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            errorMessage = xhr.responseJSON.message;
+                        }
+                        alert(errorMessage);
+                        $button.prop('disabled', false).html(
+                            '<i class="bi bi-trash me-2"></i> Delete');
+                    }
+                });
+            }
+        });
+    });
+</script>

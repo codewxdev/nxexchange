@@ -82,8 +82,8 @@ Route::middleware(['isAdmin', 'auth', 'checkUserStatus'])->group(function () {
     Route::post('/deposits/{deposit}/update-status', [DepositController::class, 'updateStatus'])->name('deposits.updateStatus');
     Route::get('trade', [TradeController::class, 'history'])->name('trade.dashboard');
     Route::put('/admin/users/update', [UserController::class, 'update'])->name('admin.users.update');
-
-    Route::delete('/admin/users/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
+    Route::post('/admin/users/update-kyc', [UserController::class, 'updateKyc'])->name('admin.users.update-kyc');
+    Route::delete('/users/del/{id}', [UserController::class, 'delete'])->name('admin.users.delete');
     Route::get('wallet', [WalletController::class, 'history'])->name('wallet.dashboard');
     Route::prefix('wallet/transaction')->group(function () {
         Route::get('/', [WalletController::class, 'wallet_history'])->name('wallet.transaction.index');

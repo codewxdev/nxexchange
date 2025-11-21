@@ -31,7 +31,7 @@ class UserController extends Controller
         // $uses = $invitation->uses;
 
         // Generate referral link
-        $referral_link = url('/register?ref=' . $user->referral_code);
+        $referral_link = url('/register?ref='.$user->referral_code);
 
         return view('share', [
             'user' => $user,
@@ -46,7 +46,7 @@ class UserController extends Controller
             'user_id' => 'required|exists:users,id',
             'level' => 'required|integer|between:0,6',
             'account_status' => 'required|in:active,deactivated',
-            'kyc_status' => 'required|in:verified,not_verified,pending,rejected',
+            // 'kyc_status' => 'required|in:verified,not_verified,pending,rejected',
         ]);
 
         $user = User::findOrFail($request->user_id);
@@ -60,10 +60,24 @@ class UserController extends Controller
         $user->update([
             'level' => $request->level,
             'account_status' => $request->account_status,
-            'kyc_status' => $request->kyc_status,
+            // 'kyc_status' => $request->kyc_status,
         ]);
 
         return redirect()->back()->with('success', 'User updated successfully!');
+    }
+
+    public function updateKyc(Request $request)
+    {
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+            'kyc_status' => 'required|in:verified,rejected,not_verified,pending',
+        ]);
+
+        $user = User::findOrFail($request->user_id);
+        $user->kyc_status = $request->kyc_status;
+        $user->save();
+
+        return response()->json(['success' => true, 'message' => 'KYC status updated successfully']);
     }
 
     // Controller
@@ -71,18 +85,17 @@ class UserController extends Controller
     public function delete($id)
     {
         try {
-            $user = User::findOrFail($id);
-            $user->delete(); // یہ soft delete ہوگا
+            $user = User::find($id);
+            if (! $user) {
+                return redirect()->back()->with('error', 'User not found');
+            }
 
-            return response()->json([
-                'success' => true,
-                'message' => 'User deleted successfully!',
-            ]);
+            $user->delete();
+
+            return redirect()->back()->with('success', 'User deleted successfully');
+
         } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Error deleting user: ' . $e->getMessage(),
-            ], 500);
+            return response()->json(['success' => false, 'message' => 'Error deleting user'], 500);
         }
     }
 
@@ -157,7 +170,7 @@ class UserController extends Controller
         }
     }
 
-    public function  profile()
+    public function profile()
     {
         return view('profile');
     }
