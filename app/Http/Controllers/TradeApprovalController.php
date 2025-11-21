@@ -55,6 +55,7 @@ class TradeApprovalController extends Controller
                         'profit_rate' => $request->profit_rate,
                         'profit_amount' => $profitAmount,
                         'end_time' => now(),
+                        'status' => 'confirm',
                     ]);
 
                     // Credit profit + stake back to user's wallet
@@ -79,6 +80,7 @@ class TradeApprovalController extends Controller
                         'profit_rate' => $request->profit_rate,
                         'profit_amount' => 0,
                         'end_time' => now(),
+                        'status' => 'confirm',
                     ]);
                     // Create loss notification using your existing system
                     UserNotification::create([

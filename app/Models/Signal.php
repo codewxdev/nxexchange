@@ -31,4 +31,9 @@ class Signal extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function trades()
+    {
+        return $this->hasMany(Trade::class);
+    }
 }

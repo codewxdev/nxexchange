@@ -1,6 +1,6 @@
  <div class="main row m-0">
      <div class="content col-7">
-         <a href="" class="small-head text-white">{{ t('Join NXExchange To Unlock Financial Freedom') }} </a>
+         <a href="" class="small-head text-white">{{ 'Join NXExchange To Unlock Financial Freedom' }} </a>
          <h1 class="mt-3">Trade Smarter. All in One Crypto Platform</h1>
          <p>The World's leading digital asset exchange, safe, efficiant, high-yeild, double the value of assets</p>
 

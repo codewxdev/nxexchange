@@ -8,8 +8,8 @@
             <div class="col-12 glass-card text-center py-4">
                 <h2 class="fw-bold text-white mb-1">Total Account Assets</h2>
                 <p class="text-muted mb-2">All balances converted to USD</p>
-                <h1 class="main-balance mb-0">${{ auth()->user()->balance }}</h1>
-                <span class="text-secondary">≈ {{ auth()->user()->balance }} USD</span>
+                <h1 class="main-balance mb-0">$00.00</h1>
+                <span class="text-secondary">≈ 0.00 USD</span>
             </div>
 
             <!-- ===== Quick Actions ===== -->
@@ -23,7 +23,6 @@
                         <i class="fa-solid fa-upload"></i>
                         <span>Withdraw</span>
                     </div>
-
                     <div class="col-6 col-md-3 action-box">
                         <i class="fa-solid fa-right-left"></i>
                         <span>Transfer</span>
@@ -54,7 +53,7 @@
                         </div>
                     </div>
 
-                    {{-- <div class="col-6 col-md-6 col-lg-6 account-box">
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
                             <i class="fa-solid fa-coins"></i>
                             <div class="heading">
@@ -77,12 +76,12 @@
                             </div>
                         </div>
                         <div class="usd">
-                            <h4>0</h4>
+                            <h4>{{ $wallet->trade_balance }}</h4>
                             <small>≈ USD</small>
                         </div>
                     </div>
 
-                    {{-- <div class="col-6 col-md-6 col-lg-6 account-box">
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
                             <i class="fa-solid fa-chart-line"></i>
                             <div class="heading">
@@ -94,13 +93,11 @@
                             <h4>0</h4>
                             <small>≈ USD</small>
                         </div>
-                    </div> --}}
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-
-
     <!-- ===== Wallet Address Modal ===== -->
     <div class="modal fade" id="addressModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
@@ -114,23 +111,12 @@
                 <div class="modal-body">
                     <form action="{{ route('wallet.address.store') }}" method="POST">
                         @csrf
-                        @php
-                            $address = auth()->user()->address;
 
-                        @endphp
+                        <label class="text-white mb-1">Wallet Address</label>
+                        <input type="text" name="address" class="form-control mb-3" placeholder="Enter wallet address"
+                            required>
 
-                        @if (!empty($address))
-                            <label class="text-white mb-1">Wallet Address</label>
-                            <input type="text" name="address" value="{{ $address }}" class="form-control mb-3"
-                                placeholder="Enter wallet address" required>
-
-                            <button type="submit" class="address-btn w-100">Update Address</button>
-                        @else
-                            <label class="text-white mb-1">Wallet Address</label>
-                            <input type="text" name="address" class="form-control mb-3"
-                                placeholder="Enter wallet address" required>
-
-                            <button type="submit" class="address-btn w-100">Save Address</button>
+                        <button type="submit" class="address-btn w-100">Save Address</button>
                         @endif
                     </form>
                 </div>
@@ -347,68 +333,4 @@
             }
         }
     </style>
-@endpush
-
-
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script>
-        const walletBalance = {{ auth()->user()->balance ?? 0 }}; // USER WALLET BALANCE
-
-        document.getElementById("withdrawAmount").addEventListener("input", function() {
-            let amount = parseFloat(this.value);
-
-            if (isNaN(amount)) return;
-
-            // Auto Fee 3%
-            let fee = amount * 0.03;
-            let net = amount - fee;
-
-            document.getElementById("withdrawFee").value = fee.toFixed(2);
-            document.getElementById("withdrawNet").value = net.toFixed(2);
-        });
-
-        // Form validation
-        document.getElementById("withdrawForm").addEventListener("submit", function(e) {
-            let amount = parseFloat(document.getElementById("withdrawAmount").value);
-
-            if (amount < 20) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops!',
-                    text: 'Minimum withdrawal amount is $20.',
-                    confirmButtonColor: '#F46523',
-                     timer: 5000,
-                });
-                return;
-                // e.preventDefault();
-                return;
-            }
-
-            if (amount > walletBalance) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops!',
-                    text: 'You do not have enough balance in your wallet.',
-                    confirmButtonColor: '#F46523',
-                     timer: 5000,
-                });
-                return;
-            }
-
-            // Success Pending Popup
-            Swal.fire({
-                icon: 'info',
-                title: 'Withdrawal Pending',
-                html: 'Your withdrawal request has been submitted successfully.<br>It is now pending for approval by the admin.',
-                confirmButtonColor: '#F46523',
-                 timer: 5000,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // Submit the form after user clicks OK
-                    e.target.submit();
-                }
-            });
-        });
-    </script>
 @endpush

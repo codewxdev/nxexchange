@@ -17,6 +17,8 @@ class TradeController extends Controller
      */
     public function index()
     {
+        $trades = Trade::where('user_id', auth()->id())->orderBy('created_at', 'desc')
+            ->get();
         $signalBuys = Signal::where('is_active', 1)->where('direction', 'Call')->get();
         $signalSells = Signal::where('is_active', 1)->where('direction', 'Put')->get();
         $wallet = Wallet::where('user_id', auth()->id())->first();
@@ -30,7 +32,7 @@ class TradeController extends Controller
             return $response->json();
         });
 
-        return view('trades', compact('currencies', 'signalBuys', 'wallet', 'signalSells'));
+        return view('trades', compact('currencies', 'signalBuys', 'wallet', 'signalSells', 'trades'));
     }
 
     public function history()
