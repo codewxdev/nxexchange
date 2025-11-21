@@ -54,7 +54,25 @@
                             </div>
                             <div class="usd">
                                 @if ($wallet)
-                                    <h4>{{ $wallet->exchange_balance }}</h4>
+                                    <h4>{{ $wallet->exchange_balance + $wallet->trade_balance }}</h4>
+                                @else
+                                    <h4>0</h4>
+                                @endif
+
+                                <small>≈ USD</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-md-6 col-lg-6 account-box">
+                            <div class="content d-flex">
+                                <i class="fa-solid fa-file-contract"></i>
+                                <div class="heading">
+                                    <h5>Trade Account</h5>
+                                    <span>USDT</span>
+                                </div>
+                            </div>
+                            <div class="usd">
+                                @if ($wallet)
+                                    <h4>{{ $wallet->trade_balance }}</h4>
                                 @else
                                     <h4>0</h4>
                                 @endif
@@ -273,6 +291,31 @@
                         <input type="number" min="20" name="amount" id="withdrawAmount"
                             class="form-control mb-3" placeholder="Minimum $20" required>
 
+
+                        <label class="text-white mb-1">Fee (5%) Auto Applied</label>
+                        <input type="text" class="form-control mb-3" id="withdrawFee" disabled placeholder="0.00">
+
+                        <label class="text-white mb-1">Net Amount You Will Receive</label>
+                        <input type="text" class="form-control mb-3" id="withdrawNet" disabled placeholder="0.00">
+
+                        <button type="submit" class="address-btn w-100">Submit Withdraw
+                            Request</button>
+                    </form>
+                </div>
+
+                <div class="modal-header border-0">
+                    <h5 class="modal-title text-white">Make a Withdrawal</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="withdrawForm" action="{{ route('withdraw.store') }}" method="POST">
+                        @csrf
+
+                        <label class="text-white mb-1">Amount (USD)</label>
+                        <input type="number" min="20" name="amount" id="withdrawAmount"
+                            class="form-control mb-3" placeholder="Minimum $20" required>
+
                         <label class="text-white mb-1">Withdrawal Address</label>
                         <input type="text" name="address" class="form-control mb-3"
                             placeholder="Your USDT wallet address" required>
@@ -446,6 +489,36 @@
 @endpush
 @push('script')
     {{-- <script>
+
+            /* Responsive Adjustments */
+            @media (max-width: 768px) {
+                .main-balance {
+                    font-size: 2rem;
+                }
+
+                .account-box {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .account-box .d-flex {
+                    display: flex !important;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
+                .account-box i {
+                    margin-bottom: 10px;
+                }
+
+                .account-box .usd {
+                    text-align: center;
+                }
+            }
+        </style>
+    @endpush
+    @push('scripts')
+        {{-- <script>
             document.addEventListener("DOMContentLoaded", function() {
 
                 $("#transferForm").submit(function(e) {
@@ -520,4 +593,30 @@
 
             });
         </script> --}}
+@endpush
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const amountInput = document.getElementById("withdrawAmount");
+        const feeInput = document.getElementById("withdrawFee");
+        const netInput = document.getElementById("withdrawNet");
+
+        amountInput.addEventListener("input", function() {
+            let amount = parseFloat(amountInput.value);
+
+            if (isNaN(amount) || amount < 0) {
+                feeInput.value = "0.00";
+                netInput.value = "0.00";
+                return;
+            }
+
+            let fee = amount * 0.05; // 5% fee
+            let net = amount - fee;
+
+            feeInput.value = fee.toFixed(2);
+            netInput.value = net.toFixed(2);
+        });
+    });
+</script>
 @endpush

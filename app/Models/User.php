@@ -91,6 +91,11 @@ class User extends Authenticatable
         return $this->hasMany(Trade::class); // Ya jo bhi aapka Trade model hai
     }
 
+     public function deposits()
+    {
+        return $this->hasMany(Deposit::class); // Ya jo bhi aapka Trade model hai
+    }
+
     public function getTradingVolumeData()
     {
         // Null safety - check if wallet exists

@@ -730,13 +730,13 @@
 
         /* ===== Fourth Row (Horizontal Scroll) ===== */
         .scroll-boxes {
-            overflow: hidden;
             position: relative;
             height: 220px;
         }
 
         .scroll-track {
             display: flex;
+            align-items: center;
             gap: 25px;
             animation: moveCards 20s linear infinite;
         }
@@ -756,12 +756,12 @@
             margin-bottom: 10px;
         }
 
-        .scroll-card.large {
+        .scroll-card {
             width: 280px;
             height: 180px;
         }
 
-        .scroll-card.medium {
+        /* .scroll-card.medium {
             width: 230px;
             height: 160px;
         }
@@ -769,7 +769,7 @@
         .scroll-card.small {
             width: 240px;
             height: 140px;
-        }
+        } */
 
         /* Add this animation */
         @keyframes floatMove {
