@@ -142,16 +142,15 @@ class WithdrawController extends Controller
     // }
 
     public function updateStatus(Request $request, Withdraw $withdraw)
-{
-    $user = $withdraw->user; // Withdraw ka owner
+    {
+        $user = $withdraw->user; // Withdraw ka owner
 
-    $user = $withdraw->exchange_balance;
-    // Update withdraw status and admin info if approved
-    $withdraw->update([
-        'status' => $request->status,
-        'approved_at' => $request->status === 'approved' ? now() : null,
-        'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
-    ]);
+        // Update withdraw status and admin info if approved
+        $withdraw->update([
+            'status' => $request->status,
+            'approved_at' => $request->status === 'approved' ? now() : null,
+            'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
+        ]);
 
     // Notification logic based on status
     if ($request->status === 'approved') {
@@ -163,6 +162,14 @@ class WithdrawController extends Controller
             "Your withdrawal request of $".$withdraw->amount." has been approved and is now being processed.",
             'info'
         );
+        // Notification logic based on status
+        if ($request->status === 'approved') {
+            Notify::send(
+                $user->id,
+                'Withdrawal Approved',
+                'Your withdrawal request of $'.$withdraw->amount.' has been approved and is now being processed.',
+                'info'
+            );
 
         } elseif ($request->status === 'completed') {
             Notify::send(
