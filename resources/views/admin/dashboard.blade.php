@@ -105,7 +105,13 @@
                                                 </span>
                                             </td>
                                             <td class="pe-3">
-                                                <small class="text-muted">{{ $user->created_at->format('M d') }}</small>
+                                                @if ($user)
+                                                      <small class="text-muted">{{ $user->created_at }}</small>
+
+                                                      @else
+                                                        <small class="text-muted">Not available</small>
+                                                @endif
+                                               
                                             </td>
                                         </tr>
                                     @endforeach
