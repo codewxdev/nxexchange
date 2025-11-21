@@ -185,7 +185,7 @@
                                 placeholder="Enter wallet address" required>
 
                             <button type="submit" class="address-btn w-100">Save Address</button>
-                            @endif
+
                         </form>
                     </div>
 
