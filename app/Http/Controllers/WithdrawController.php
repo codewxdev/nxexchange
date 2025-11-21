@@ -22,7 +22,6 @@ class WithdrawController extends Controller
     {
         $request->validate([
             'amount' => 'required|numeric|min:20',
-            'address' => 'required|string',
         ]);
 
         $user = auth()->user();
@@ -44,8 +43,7 @@ class WithdrawController extends Controller
             'email' => $user->email,
             'amount' => $request->amount,
             'fee' => $fee,
-            'net_amount' => $net,
-            'address' => $request->address,
+            'net_amount' => $net, 
             'transaction_id' => strtoupper(Str::random(12)),
             'status' => 'pending',
         ]);
@@ -55,7 +53,7 @@ class WithdrawController extends Controller
             "Your withdrawal request of $".$withdraw->amount." has been approved and is now being processed.",
             'info'
         );
-        
+
         return back()->with('success', 'Your withdrawal request is now pending for approval.');
     }
 

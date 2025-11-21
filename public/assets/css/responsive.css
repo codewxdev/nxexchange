@@ -195,4 +195,9 @@
     .brand-footer .footer-logo img {
         width: 80px;
     }
+
+      .notification-panel { 
+            right: 12px;
+            
+        }
 }

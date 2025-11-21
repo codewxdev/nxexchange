@@ -730,24 +730,73 @@
         @endif
     </script>
     <script>
-        const messagesBtn = document.querySelector('.messages-btn');
-        const panel = document.getElementById('notificationPanel');
+        // const messagesBtn = document.querySelector('.messages-btn');
+        // const panel = document.getElementById('notificationPanel');
 
-        messagesBtn.addEventListener('click', function(e) {
+        // messagesBtn.addEventListener('click', function(e) {
+        //     e.stopPropagation();
+        //     panel.classList.toggle('show');
+
+        //     // Panel kholne par notifications refresh karen
+        //     if (panel.classList.contains('show')) {
+        //         loadNotifications();
+        //     }
+        // });
+        // // Close only when clicking outside
+        // document.addEventListener('click', function(e) {
+        //     if (!panel.contains(e.target) && !e.target.closest('.messages-btn')) {
+        //         panel.classList.remove('show');
+        //     }
+        // });
+
+         // Use event delegation so all current & future .messages-btn elements work
+    const panel = document.getElementById('notificationPanel');
+
+    // Toggle panel when any .messages-btn is clicked
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.messages-btn');
+        if (btn) {
+            e.preventDefault();
             e.stopPropagation();
+
+            // toggle
             panel.classList.toggle('show');
 
-            // Panel kholne par notifications refresh karen
             if (panel.classList.contains('show')) {
-                loadNotifications();
+                loadNotifications(); // your existing function
+            }
+            return;
+        }
+
+        // Click outside -> close panel
+        if (!panel.contains(e.target)) {
+            panel.classList.remove('show');
+        }
+    });
+
+    // Keep delete handler (it already uses event delegation)
+    $(document).on('click', '.delete-note', function(e) {
+        e.stopPropagation();
+
+        let id = $(this).data('id');
+        let noteBox = $(this).closest('.notif-item');
+
+        $.ajax({
+            url: "/notification/" + id,
+            type: "DELETE",
+            data: {
+                _token: "{{ csrf_token() }}"
+            },
+            success: function(res) {
+                if (res.success) {
+                    noteBox.fadeOut(300, function() {
+                        $(this).remove();
+                        loadNotifications();
+                    });
+                }
             }
         });
-        // Close only when clicking outside
-        document.addEventListener('click', function(e) {
-            if (!panel.contains(e.target) && !e.target.closest('.messages-btn')) {
-                panel.classList.remove('show');
-            }
-        });
+    });
 
         // Real-time notifications load karne ka function
         function loadNotifications() {
