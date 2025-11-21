@@ -197,7 +197,7 @@
                         <input type="text" name="address" class="form-control mb-3"
                             placeholder="Your USDT wallet address" required> --}}
 
-                        <label class="text-white mb-1">Fee (3%) Auto Applied</label>
+                        <label class="text-white mb-1">Fee (5%) Auto Applied</label>
                         <input type="text" class="form-control mb-3" id="withdrawFee" disabled placeholder="0.00">
 
                         <label class="text-white mb-1">Net Amount You Will Receive</label>

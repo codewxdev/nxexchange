@@ -30,7 +30,7 @@ class WithdrawController extends Controller
             return back()->with('error', 'Insufficient balance.');
         }
 
-        $fee = $request->amount * 0.03;
+        $fee = $request->amount * 0.05;
         $net = $request->amount - $fee;
 
         // Deduct wallet balance
@@ -46,6 +46,7 @@ class WithdrawController extends Controller
             'net_amount' => $net, 
             'transaction_id' => strtoupper(Str::random(12)),
             'status' => 'pending',
+            'address'=>auth()->user()->address,
         ]);
            Notify::send(
             $user->id,
