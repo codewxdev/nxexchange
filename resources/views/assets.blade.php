@@ -8,7 +8,12 @@
             <div class="col-12 glass-card text-center py-4">
                 <h2 class="fw-bold text-white mb-1">Total Account Assets</h2>
                 <p class="text-muted mb-2">All balances converted to USD</p>
-                <h1 class="main-balance mb-0">${{ $wallet->exchange_balance + $wallet->trade_balance }}</h1>
+                @if (!empty($wallet))
+                    <h1 class="main-balance mb-0">${{ $wallet->exchange_balance + $wallet->trade_balance }}</h1>
+                @else
+                    <h1 class="main-balance mb-0">$00.00</h1>
+                @endif
+
                 {{-- <span class="text-secondary">≈ 0.00 USD</span> --}}
             </div>
 
@@ -48,7 +53,12 @@
                                 </div>
                             </div>
                             <div class="usd">
-                                <h4>{{ $wallet->exchange_balance }}</h4>
+                                @if ($wallet)
+                                    <h4>{{ $wallet->exchange_balance }}</h4>
+                                @else
+                                    <h4>0</h4>
+                                @endif
+
                                 <small>≈ USD</small>
                             </div>
                         </div>
@@ -148,13 +158,23 @@
                             <div class="balance-info mb-3 p-2 rounded" style="background: rgba(255,255,255,0.1);">
                                 <div class="d-flex justify-content-between">
                                     <small class="text-muted">Trade Balance:</small>
-                                    <small class="text-white"
-                                        id="tradeBalance">${{ number_format($wallet->trade_balance, 2) }}</small>
+                                    @if ($wallet)
+                                        <small class="text-white"
+                                            id="tradeBalance">${{ number_format($wallet->trade_balance, 2) }}</small>
+                                    @else
+                                        <small class="text-white" id="tradeBalance">$0</small>
+                                    @endif
+
                                 </div>
                                 <div class="d-flex justify-content-between">
                                     <small class="text-muted">Exchange Balance:</small>
-                                    <small class="text-white"
-                                        id="exchangeBalance">${{ number_format($wallet->exchange_balance, 2) }}</small>
+                                    @if ($wallet)
+                                        <small class="text-white"
+                                            id="exchangeBalance">${{ number_format($wallet->exchange_balance, 2) }}</small>
+                                    @else
+                                        <small class="text-white" id="exchangeBalance">$0.0</small>
+                                    @endif
+
                                 </div>
                             </div>
                             <button type="submit" class="address-btn w-100">
@@ -400,8 +420,18 @@
                     text-align: center;
                 }
 
+                .account-box .d-flex {
+                    display: flex !important;
+                    flex-direction: column;
+                    align-items: center;
+                }
+
                 .account-box i {
                     margin-bottom: 10px;
+                }
+
+                .account-box .usd {
+                    text-align: center;
                 }
             }
         </style>

@@ -6,7 +6,7 @@
     <div class="heading">
         <div class="link">
             <a href="{{ url()->previous()  }}"><i class="fa-solid fa-arrow-left-long"></i></a>
-            <a href="#">Login</a>
+            <a href="#">Reset Password</a>
         </div>
 
     </div>
@@ -17,7 +17,7 @@
             @csrf
             {{-- Email --}}
             <div class="mb-3">
-                <label class="form-label">Your Mailbox</label>
+                <label class="form-label">Email Address</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email"
                     value="{{ old('email') }}" placeholder="Enter your email">
                 @error('email')
@@ -26,7 +26,7 @@
             </div>
 
 
-            <button type="submit" class="formbtn1">Process</button>
+            <button type="submit" class="formbtn1">Reset Password</button>
 
         </form>
     </div>

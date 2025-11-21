@@ -110,7 +110,9 @@
                             Verify Identity
                         </a>
                     @endif
+                   
                 </div>
+                    <a href="{{ route('admin.dashboard') }}" class="admin-btn">Admin Panel</a>
             </div>
 
         </div>
@@ -122,10 +124,10 @@
             <i class="fa-solid fa-angle-right"></i>
         </a>
 
-        <a href=" " class="option-row" style="text-decoration:none; color:white;">
+        {{-- <a href=" " class="option-row" style="text-decoration:none; color:white;">
             <span>Payment Password</span>
             <i class="fa-solid fa-angle-right"></i>
-        </a>
+        </a> --}}
 
 
         <!-- Logout -->
