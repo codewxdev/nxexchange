@@ -105,7 +105,7 @@
                                                 </span>
                                             </td>
                                             <td class="pe-3">
-                                                {{-- <small class="text-muted">{{ $user->created_at->format('M d') }}</small> --}}
+                                                <small class="text-muted">{{ $user->created_at->format('M d') }}</small>
                                             </td>
                                         </tr>
                                     @endforeach

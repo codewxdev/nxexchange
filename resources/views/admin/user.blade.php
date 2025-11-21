@@ -330,7 +330,7 @@
                 var kycFrontImage = $(this).data('user-kyc-front-image');
                 var kycBackImage = $(this).data('user-kyc-back-image');
 
-                // Modal میں data fill کریں
+                // Fill modal data
                 $('#kyc_user_id').val(userId);
                 $('#kyc_user_email').text(userEmail);
                 $('#current_kyc_status').text(kycStatus.charAt(0).toUpperCase() + kycStatus.slice(1)
@@ -338,24 +338,28 @@
                 $('#kyc_country').text(country);
                 $('#kyc_id_card_number').text(idCardNumber);
 
-                // Images کے paths بنائیں
-                var basePath = '{{ asset('kyc') }}';
+                // Setup images with better handling
+                setupKycImages(kycFrontImage, kycBackImage);
 
-                var frontImageSrc = kycFrontImage && kycFrontImage.trim() !== '' ?
-                    basePath + '/' + kycFrontImage :
-                    'https://via.placeholder.com/400x250?text=No+Front+Image';
-
-                var backImageSrc = kycBackImage && kycBackImage.trim() !== '' ?
-                    basePath + '/' + kycBackImage :
-                    'https://via.placeholder.com/400x250?text=No+Back+Image';
-
-                // Images کو modal میں set کریں
-                $('#kyc_front_image').attr('src', frontImageSrc);
-                $('#kyc_back_image').attr('src', backImageSrc);
-
-                // Modal دکھائیں
                 $('#viewKycModal').modal('show');
             });
+
+            function setupKycImages(frontImage, backImage) {
+                var basePath = '{{ asset('kyc') }}';
+
+                // Front Image
+                var frontImageSrc = frontImage && frontImage.trim() !== '' ?
+                    basePath + '/' + frontImage :
+                    'https://via.placeholder.com/400x250/ffffff/007bff?text=No+Front+Image';
+
+                // Back Image
+                var backImageSrc = backImage && backImage.trim() !== '' ?
+                    basePath + '/' + backImage :
+                    'https://via.placeholder.com/400x250/ffffff/dc3545?text=No+Back+Image';
+
+                $('#kyc_front_image').attr('src', frontImageSrc);
+                $('#kyc_back_image').attr('src', backImageSrc);
+            }
 
             // KYC Status Buttons
             $('#verifyKycBtn').on('click', function() {

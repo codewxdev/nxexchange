@@ -1,97 +1,185 @@
 @extends('Layouts.FrontLayout')
 
+@section('title', 'Transaction History')
+
 @section('content')
-<div class="container py-5">
-    <!-- Back link -->
-    <a href="{{ route('home') }}" class="text-primary mb-4 d-inline-block">
-        &larr; Back
-    </a>
-
-    {{-- <div class="text-center mb-5">
-        <img src="{{ asset('assets/images/logo3.png') }}" alt="NxExchange" style="width:120px;">
-        <h2 class="mt-3 text-white">Transaction Records</h2>
-        <p class="text-muted">View all your past transactions here.</p>
-    </div> --}}
-
-    <!-- Empty state -->
-    <div id="emptyTransactions" class="text-center py-5">
-        <i class="fa-regular fa-folder-open fa-4x mb-3" style="color:#ff783a;"></i>
-        <h4 class="text-white">No transactions found</h4>
-        <p class="text-muted">Once you make transactions, those will appear here.</p>
-    </div>
-
-    <!-- Transactions table (hidden/commented for future use) -->
-    {{-- 
-    <div id="transactionTable" class="table-responsive d-none">
-        <table class="table table-dark table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Transaction ID</th>
-                    <th>Date</th>
-                    <th>Type</th>
-                    <th>Amount</th>
-                    <th>Status</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach($transactions as $txn)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $txn->transaction_id }}</td>
-                    <td>{{ $txn->created_at->format('d M, Y H:i') }}</td>
-                    <td>{{ $txn->type }}</td>
-                    <td>{{ $txn->amount }} {{ $txn->currency }}</td>
-                    <td>
-                        @if($txn->status == 'completed')
-                            <span class="badge bg-success">Completed</span>
-                        @elseif($txn->status == 'pending')
-                            <span class="badge bg-warning text-dark">Pending</span>
+    <div class="container-fluid py-4 px-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card shadow-sm" style="background: #000000; border: 1px solid #000000;">
+                    <div class="card-header bg-transparent border-bottom" style="border-color: #000000!important;">
+                        <h4 class="mb-0" style="color: #ff783a">Transaction History</h4>
+                    </div>
+                    <div class="card-body p-0">
+                        @if ($transactions->count() > 0)
+                            <div class="table-responsive">
+                                <table class="table table-borderless mb-0" style="background: transparent;">
+                                    <thead>
+                                        <tr style="background: #000000; color: #ff783a; border-bottom: 2px solid #2a2f42;">
+                                            <th class="ps-4 py-3" style="font-weight: 600; font-size: 0.875rem;">#</th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 0.875rem;">Type</th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 0.875rem;">From Wallet
+                                            </th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 0.875rem;">To Wallet</th>
+                                            <th class="text-end py-3" style="font-weight: 600; font-size: 0.875rem;">Amount
+                                            </th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 0.875rem;">Status</th>
+                                            <th class="py-3" style="font-weight: 600; font-size: 0.875rem;">Remark</th>
+                                            <th class="pe-4 py-3" style="font-weight: 600; font-size: 0.875rem;">Date & Time
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($transactions as $transaction)
+                                            <tr
+                                                style="border-bottom: 1px solid #2a2f42; transition: background-color 0.2s ease;">
+                                                <td class="ps-4 py-3 text-white">{{ $loop->iteration }}</td>
+                                                <td class="py-3">
+                                                    <span
+                                                        class="badge
+                                            @if ($transaction->type == 'deposit') bg-success
+                                            @elseif($transaction->type == 'withdrawal')
+                                                bg-danger
+                                            @elseif($transaction->type == 'transfer')
+                                                bg-info
+                                            @else
+                                                bg-warning @endif"
+                                                        style="font-size: 0.75rem; padding: 0.4rem 0.7rem;">
+                                                        {{ ucfirst($transaction->type) }}
+                                                    </span>
+                                                </td>
+                                                <td class="py-3">
+                                                    @if ($transaction->from_wallet)
+                                                        <span class="badge bg-secondary"
+                                                            style="font-size: 0.75rem; padding: 0.4rem 0.7rem;">
+                                                            {{ ucfirst($transaction->from_wallet) }}
+                                                        </span>
+                                                    @else
+                                                        <span class="text-muted" style="font-size: 0.875rem;">-</span>
+                                                    @endif
+                                                </td>
+                                                <td class="py-3">
+                                                    @if ($transaction->to_wallet)
+                                                        <span class="badge bg-secondary"
+                                                            style="font-size: 0.75rem; padding: 0.4rem 0.7rem;">
+                                                            {{ ucfirst($transaction->to_wallet) }}
+                                                        </span>
+                                                    @else
+                                                        <span class="text-muted" style="font-size: 0.875rem;">-</span>
+                                                    @endif
+                                                </td>
+                                                <td class="text-end py-3">
+                                                    <span
+                                                        class="fw-bold
+                                            @if ($transaction->type == 'deposit') text-success
+                                            @elseif($transaction->type == 'withdrawal')
+                                                text-danger
+                                            @else
+                                                text-white @endif"
+                                                        style="font-size: 0.875rem;">
+                                                        {{ number_format($transaction->amount, 8) }}
+                                                    </span>
+                                                </td>
+                                                <td class="py-3">
+                                                    <span
+                                                        class="badge
+                                            @if ($transaction->status == 'completed') bg-success
+                                            @elseif($transaction->status == 'pending')
+                                                bg-warning
+                                            @else
+                                                bg-danger @endif"
+                                                        style="font-size: 0.75rem; padding: 0.4rem 0.7rem;">
+                                                        {{ ucfirst($transaction->status) }}
+                                                    </span>
+                                                </td>
+                                                <td class="py-3">
+                                                    @if ($transaction->remark)
+                                                        <span class="text-white" style="font-size: 0.875rem;"
+                                                            title="{{ $transaction->remark }}">
+                                                            {{ Str::limit($transaction->remark, 25) }}
+                                                        </span>
+                                                    @else
+                                                        <span class="text-muted" style="font-size: 0.875rem;">-</span>
+                                                    @endif
+                                                </td>
+                                                <td class="pe-4 py-3 text-white" style="font-size: 0.875rem;">
+                                                    {{ $transaction->created_at->format('Y-m-d H:i') }}
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
                         @else
-                            <span class="badge bg-danger">Failed</span>
+                            <div id="emptyTransactions" class="text-center py-5">
+                                <i class="fa-regular fa-folder-open fa-4x mb-3" style="color:#ff783a;"></i>
+                                <h4 class="text-white">No transactions found</h4>
+                                <p class="text-muted">Once you make transactions, those will appear here.</p>
+                            </div>
                         @endif
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    --}}
-</div>
 @endsection
 
-@push('style')
-<style>
-    body {
-        background-color: #1c1c1e;
-    }
-    .fa-folder-open {
-        transition: transform 0.3s ease;
-    }
-    .fa-folder-open:hover {
-        transform: scale(1.1);
-    }
-    .table-dark {
-        background-color: rgba(255,255,255,0.05);
-        backdrop-filter: blur(10px);
-        border-radius: 10px;
-    }
-    .table-dark th, .table-dark td {
-        color: #fff;
-        vertical-align: middle;
-    }
-</style>
-@endpush
+@section('styles')
+    <style>
+        .card {
+            background: #32343b;
+            border: 1px solid #2a2f42;
+            border-radius: 8px;
+        }
 
-@push('scripts')
-<script>
-    // Example: dynamically show transaction table when data exists
-    // $(document).ready(function(){
-    //     let transactionsExist = false; // Replace with actual check
-    //     if(transactionsExist){
-    //         $('#emptyTransactions').hide();
-    //         $('#transactionTable').removeClass('d-none');
-    //     }
-    // });
-</script>
-@endpush
+        .table {
+            margin-bottom: 0;
+        }
+
+        .table tbody tr:hover {
+            background-color: #32343b !important;
+        }
+
+        .badge {
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .bg-success {
+            background-color: #00b894 !important;
+        }
+
+        .bg-danger {
+            background-color: #ff7675 !important;
+        }
+
+        .bg-warning {
+            background-color: #fdcb6e !important;
+            color: #2d3436 !important;
+        }
+
+        .bg-info {
+            background-color: #74b9ff !important;
+        }
+
+        .bg-secondary {
+            background-color: #636e72 !important;
+        }
+
+        .text-success {
+            color: #00b894 !important;
+        }
+
+        .text-danger {
+            color: #ff7675 !important;
+        }
+
+        .text-muted {
+            color: #6c757d !important;
+        }
+
+        body {
+            background-color: #0f1117 !important;
+        }
+    </style>
+@endsection

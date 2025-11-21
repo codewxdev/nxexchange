@@ -10,13 +10,53 @@ use Illuminate\Support\Str;
 
 class WithdrawController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $withdraws = Withdraw::with('user')->latest()->get();
+        $query = Withdraw::with('user')->latest();
 
-        return view('admin.transaction.withdraw', compact('withdraws'));
+        // Status filter
+        if ($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // From date filter
+        if ($request->has('from_date') && $request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        // To date filter
+        if ($request->has('to_date') && $request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $withdraws = $query->get();
+
+        // Statistics - Apply same filters for accurate stats
+        $statsQuery = Withdraw::query();
+
+        if ($request->has('status') && $request->status != 'all') {
+            $statsQuery->where('status', $request->status);
+        }
+        if ($request->has('from_date') && $request->from_date) {
+            $statsQuery->whereDate('created_at', '>=', $request->from_date);
+        }
+        if ($request->has('to_date') && $request->to_date) {
+            $statsQuery->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $totalWithdrawals = $statsQuery->count();
+        $totalAmount = $statsQuery->sum('amount');
+        $totalFees = $statsQuery->sum('withdrawal_fee');
+        $pendingWithdrawals = $statsQuery->where('status', 'pending')->count();
+
+        return view('admin.transaction.withdraw', compact(
+            'withdraws',
+            'totalWithdrawals',
+            'totalAmount',
+            'totalFees',
+            'pendingWithdrawals'
+        ));
     }
-
 
     public function store(Request $request)
     {
@@ -38,20 +78,20 @@ class WithdrawController extends Controller
         $user->save();
 
         // Create withdrawal entry
-     $withdraw =   Withdraw::create([
+        $withdraw = Withdraw::create([
             'user_id' => $user->id,
             'email' => $user->email,
             'amount' => $request->amount,
             'fee' => $fee,
-            'net_amount' => $net, 
+            'net_amount' => $net,
             'transaction_id' => strtoupper(Str::random(12)),
             'status' => 'pending',
-            'address'=>auth()->user()->address,
+            'address' => auth()->user()->address,
         ]);
-           Notify::send(
+        Notify::send(
             $user->id,
             'Withdrawal in Pending',
-            "Your withdrawal request of $".$withdraw->amount." has been approved and is now being processed.",
+            'Your withdrawal request of $'.$withdraw->amount.' has been approved and is now being processed.',
             'info'
         );
 
@@ -99,68 +139,67 @@ class WithdrawController extends Controller
     // }
 
     public function updateStatus(Request $request, Withdraw $withdraw)
-{
-    $user = $withdraw->user; // Withdraw ka owner
+    {
+        $user = $withdraw->user; // Withdraw ka owner
 
-    // Update withdraw status and admin info if approved
-    $withdraw->update([
-        'status' => $request->status,
-        'approved_at' => $request->status === 'approved' ? now() : null,
-        'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
-    ]);
+        // Update withdraw status and admin info if approved
+        $withdraw->update([
+            'status' => $request->status,
+            'approved_at' => $request->status === 'approved' ? now() : null,
+            'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
+        ]);
 
-    // Notification logic based on status
-    if ($request->status === 'approved') {
-        Notify::send(
-            $user->id,
-            'Withdrawal Approved',
-            "Your withdrawal request of $".$withdraw->amount." has been approved and is now being processed.",
-            'info'
-        );
+        // Notification logic based on status
+        if ($request->status === 'approved') {
+            Notify::send(
+                $user->id,
+                'Withdrawal Approved',
+                'Your withdrawal request of $'.$withdraw->amount.' has been approved and is now being processed.',
+                'info'
+            );
 
-    } elseif ($request->status === 'completed') {
-        Notify::send(
-            $user->id,
-            'Withdrawal Completed',
-            "Your withdrawal request of $".$withdraw->amount." has been successfully completed.",
-            'success'
-        );
+        } elseif ($request->status === 'completed') {
+            Notify::send(
+                $user->id,
+                'Withdrawal Completed',
+                'Your withdrawal request of $'.$withdraw->amount.' has been successfully completed.',
+                'success'
+            );
 
-    } elseif ($request->status === 'rejected') {
-        // Refund amount to user wallet
-        $user->balance += $withdraw->amount;
-        $user->save();
+        } elseif ($request->status === 'rejected') {
+            // Refund amount to user wallet
+            $user->balance += $withdraw->amount;
+            $user->save();
 
-        Notify::send(
-            $user->id,
-            'Withdrawal Rejected',
-            "Your withdrawal request of $".$withdraw->amount." has been rejected and the amount refunded to your wallet.",
-            'error'
-        );
+            Notify::send(
+                $user->id,
+                'Withdrawal Rejected',
+                'Your withdrawal request of $'.$withdraw->amount.' has been rejected and the amount refunded to your wallet.',
+                'error'
+            );
+        }
+
+        return redirect()->back()->with('success', 'Withdraw status updated successfully!');
     }
 
-    return redirect()->back()->with('success', 'Withdraw status updated successfully!');
-}
+    //     public function update(Request $request, $id)
+    //     {
+    //         $withdraw = Withdraw::findOrFail($id);
 
+    //         $withdraw->status = $request->status;
 
-//     public function update(Request $request, $id)
-//     {
-//         $withdraw = Withdraw::findOrFail($id);
+    //         // If admin rejects then refund the amount
+    //         if ($request->status === 'rejected') {
+    //             $user = User::find($withdraw->user_id);
+    //             $user->balance += $withdraw->amount;
+    //             $user->save();
+    //         }
 
-//         $withdraw->status = $request->status;
+    //         // If admin marks as completed then do nothing
 
-//         // If admin rejects then refund the amount
-//         if ($request->status === 'rejected') {
-//             $user = User::find($withdraw->user_id);
-//             $user->balance += $withdraw->amount;
-//             $user->save();
-//         }
+    //         $withdraw->save();
+    //          Notify::send(auth()->user()->id,'Withdraw Pending','Your withdrawal request is now pending for approval.','success');
 
-//         // If admin marks as completed then do nothing
-
-//         $withdraw->save();
-//          Notify::send(auth()->user()->id,'Withdraw Pending','Your withdrawal request is now pending for approval.','success');
-
-//         return back()->with('success', 'Withdrawal status updated successfully.');
-//     }
+    //         return back()->with('success', 'Withdrawal status updated successfully.');
+    //     }
 }

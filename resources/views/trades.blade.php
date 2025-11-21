@@ -561,10 +561,8 @@
                             <div class="text-center">
                                 <i class="bi bi-clock-history fs-1 text-primary mb-3"></i>
                                 <h4>Trade Status: Pending</h4>
-                                <p>Your trade has been placed successfully and is waiting for admin approval.</p>
-                                <div class="alert alert-info mt-3">
-                                    <small>Admin will review and set the result shortly.</small>
-                                </div>
+                                <p>Your trade has been placed successfully and is waiting for approval.</p>
+
                             </div>
                         `,
                             confirmButtonText: 'OK',

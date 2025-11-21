@@ -9,11 +9,60 @@ use Illuminate\Support\Facades\Auth;
 
 class DepositController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $deposits = Deposit::with('user')->latest()->get();
+        $query = Deposit::with('user')->latest();
 
-        return view('admin.transaction.deposit', compact('deposits'));
+        // Status filter
+        if ($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Payment gateway filter
+        if ($request->has('payment_gateway') && $request->payment_gateway != 'all') {
+            $query->where('payment_gateway', $request->payment_gateway);
+        }
+
+        // From date filter
+        if ($request->has('from_date') && $request->from_date) {
+            $query->whereDate('created_at', '>=', $request->from_date);
+        }
+
+        // To date filter
+        if ($request->has('to_date') && $request->to_date) {
+            $query->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $deposits = $query->get();
+
+        // Statistics - Apply same filters for accurate stats
+        $statsQuery = Deposit::query();
+
+        if ($request->has('status') && $request->status != 'all') {
+            $statsQuery->where('status', $request->status);
+        }
+        if ($request->has('payment_gateway') && $request->payment_gateway != 'all') {
+            $statsQuery->where('payment_gateway', $request->payment_gateway);
+        }
+        if ($request->has('from_date') && $request->from_date) {
+            $statsQuery->whereDate('created_at', '>=', $request->from_date);
+        }
+        if ($request->has('to_date') && $request->to_date) {
+            $statsQuery->whereDate('created_at', '<=', $request->to_date);
+        }
+
+        $totalDeposits = $statsQuery->count();
+        $totalAmount = $statsQuery->sum('amount');
+        $pendingDeposits = $statsQuery->where('status', 'pending')->count();
+        $confirmedDeposits = $statsQuery->where('status', 'confirmed')->count();
+
+        return view('admin.transaction.deposit', compact(
+            'deposits',
+            'totalDeposits',
+            'totalAmount',
+            'pendingDeposits',
+            'confirmedDeposits'
+        ));
     }
 
     public function store(Request $request, NowPaymentsService $nowPayments)

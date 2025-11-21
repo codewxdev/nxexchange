@@ -8,13 +8,50 @@ use Illuminate\Support\Facades\Auth;
 
 class SignalController extends Controller
 {
-    // --- READ (Index) ---
-    public function index()
+    public function index(Request $request)
     {
-        // Display list of all signals, ordered by creation date
-        $signals = Signal::with('admin')->latest()->get();
+        $query = Signal::with('admin')->latest();
 
-        return view('admin.signals.index', compact('signals'));
+        // Direction filter
+        if ($request->has('direction') && $request->direction != 'all') {
+            $query->where('direction', $request->direction);
+        }
+
+        // Status filter
+        if ($request->has('status') && $request->status != 'all') {
+            $isActive = $request->status == 'active' ? true : false;
+            $query->where('is_active', $isActive);
+        }
+
+        // Crypto symbol filter
+        if ($request->has('crypto_symbol') && $request->crypto_symbol != 'all') {
+            $query->where('crypto_symbol', $request->crypto_symbol);
+        }
+
+        // Date filter
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('created_at', $request->date);
+        }
+
+        $signals = $query->get();
+
+        // Get unique crypto symbols for filter dropdown
+        $cryptoList = Signal::distinct()->pluck('crypto_symbol')->sort();
+
+        // Statistics
+        $totalSignals = Signal::count();
+        $callSignals = Signal::where('direction', 'Call')->count();
+        $putSignals = Signal::where('direction', 'Put')->count();
+        $activeSignals = Signal::where('is_active', true)->count();
+
+        return view('admin.signals.index', compact(
+            'signals',
+            'cryptoList',
+            'totalSignals',
+            'callSignals',
+            'putSignals',
+            'activeSignals'
+        ));
     }
 
     public function create()

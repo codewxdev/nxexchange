@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Wallet;
 use App\Models\WalletTransaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class WalletController extends Controller
@@ -23,41 +24,47 @@ class WalletController extends Controller
     // }
 
     public function store(Request $request)
-{
-    $request->validate([
-        'address' => 'required|string|max:255',
-    ]);
-
-    $user = auth()->user();
-
-    // Check if address already exists
-    if ($user->address) {
-        // ----- UPDATE LOGIC -----
-        $user->update([
-            'address' => $request->address,
+    {
+        $request->validate([
+            'address' => 'required|string|max:255',
         ]);
 
-        return back()->with('success', 'Wallet address updated successfully!');
-    } else {
-        // ----- CREATE LOGIC -----
-        $user->update([
-            'address' => $request->address,
-        ]);
+        $user = auth()->user();
 
-        return back()->with('success', 'Wallet address saved successfully!');
+        // Check if address already exists
+        if ($user->address) {
+            // ----- UPDATE LOGIC -----
+            $user->update([
+                'address' => $request->address,
+            ]);
+
+            return back()->with('success', 'Wallet address updated successfully!');
+        } else {
+            // ----- CREATE LOGIC -----
+            $user->update([
+                'address' => $request->address,
+            ]);
+
+            return back()->with('success', 'Wallet address saved successfully!');
+        }
     }
-}
 
     public function transaction()
     {
-        return view('transactions');
+        // Get authenticated user's wallet transactions
+        $transactions = WalletTransaction::where('user_id', auth()->id())
+            ->with(['user'])
+            ->latest()
+            ->get();
+
+        return view('transactions', compact('transactions'));
     }
 
     public function history()
     {
         try {
             $wallets = Wallet::with(['user'])->get();
-              
+
             return view('admin.wallet', compact('wallets'));
 
         } catch (\Exception $e) {

@@ -10,11 +10,60 @@ use Illuminate\Support\Facades\DB;
 
 class TransferController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $transfers = Transfer::with('user')->latest()->get();
+        $query = Transfer::with('user')->latest();
 
-        return view('admin.transaction.transfer', compact('transfers'));
+        // From Account filter
+        if ($request->has('from_account') && $request->from_account != 'all') {
+            $query->where('from_account', $request->from_account);
+        }
+
+        // To Account filter
+        if ($request->has('to_account') && $request->to_account != 'all') {
+            $query->where('to_account', $request->to_account);
+        }
+
+        // Status filter
+        if ($request->has('status') && $request->status != 'all') {
+            $query->where('status', $request->status);
+        }
+
+        // Date filter
+        if ($request->has('date') && $request->date) {
+            $query->whereDate('date_time', $request->date);
+        }
+
+        $transfers = $query->get();
+
+        // Statistics - Apply same filters for accurate stats
+        $statsQuery = Transfer::query();
+
+        if ($request->has('from_account') && $request->from_account != 'all') {
+            $statsQuery->where('from_account', $request->from_account);
+        }
+        if ($request->has('to_account') && $request->to_account != 'all') {
+            $statsQuery->where('to_account', $request->to_account);
+        }
+        if ($request->has('status') && $request->status != 'all') {
+            $statsQuery->where('status', $request->status);
+        }
+        if ($request->has('date') && $request->date) {
+            $statsQuery->whereDate('date_time', $request->date);
+        }
+
+        $totalTransfers = $statsQuery->count();
+        $totalAmount = $statsQuery->sum('amount');
+        $totalDeduction = $statsQuery->sum('deduction');
+        $pendingTransfers = $statsQuery->where('status', 'pending')->count();
+
+        return view('admin.transaction.transfer', compact(
+            'transfers',
+            'totalTransfers',
+            'totalAmount',
+            'totalDeduction',
+            'pendingTransfers'
+        ));
     }
 
     public function processTransfer(Request $request)

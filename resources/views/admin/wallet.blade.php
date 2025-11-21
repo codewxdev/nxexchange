@@ -20,6 +20,8 @@
                                 <th>Exchange Balance</th>
                                 <th>Trade Balance</th>
                                 <th>Wallet Address</th>
+                                <th>Net Amount</th>
+
 
                             </tr>
                         </thead>
@@ -27,10 +29,11 @@
                             @forelse ($wallets as $wallet)
                                 <tr>
                                     <td>{{ $wallet->user->id ?? 'N/A' }}</td>
-                                    <td>{{ $trade->user->email ?? 'N/A' }}</td>
+                                    <td>{{ $wallet->user->email ?? 'N/A' }}</td>
                                     <td>{{ $wallet->exchange_balance }}</td>
                                     <td>{{ $wallet->trade_balance }}</td>
-                                     <td>{{ auth()->user()->address }}</td>
+                                    <td>{{ auth()->user()->address }}</td>
+                                    <td>{{ $wallet->exchange_balance + $wallet->trade_balance }}</td>
                                 </tr>
                             @empty
                                 <tr>

@@ -38,7 +38,7 @@
                                         </span>
                                     </td>
                                     <td>{{ $trade->trade_type ?? 'N/A' }}</td>
-                                    <td>{{ $trade->signal->crypto_symbol ?? 'N/A' }}</td>
+                                    <td>{{ $trade->crypto_symbol ?? 'N/A' }}</td>
                                     <td>${{ number_format($trade->crypto_price, 2) }}</td>
                                     <td>${{ number_format($trade->stake_amount, 2) }}</td>
                                     <td>
