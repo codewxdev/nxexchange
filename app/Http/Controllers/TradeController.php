@@ -72,7 +72,7 @@ class TradeController extends Controller
             }
 
             DB::transaction(function () use ($request) {
-                // Get user's wallet
+                // Get user'sx wallet
                 $wallet = Wallet::where('user_id', auth()->id())->first();
 
                 if (! $wallet) {

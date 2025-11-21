@@ -145,7 +145,7 @@
             /* important: not absolute inside collapsed container */
             top: 64px;
             /* adjust as needed for navbar height */
-            right: 12px;
+            right: 200px;
             /* distance from right edge (adjust) */
             width: 320px;
             max-width: calc(100% - 24px);

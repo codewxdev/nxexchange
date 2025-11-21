@@ -65,21 +65,21 @@
                             <h4>0</h4>
                             <small>≈ USD</small>
                         </div>
-                    </div> --}}
+                    </div>
 
-                        <div class="col-6 col-md-6 col-lg-6 account-box">
-                            <div class="content d-flex">
-                                <i class="fa-solid fa-file-contract"></i>
-                                <div class="heading">
-                                    <h5>Trade Account</h5>
-                                    <span>USDT</span>
-                                </div>
-                            </div>
-                            <div class="usd">
-                                <h4>{{ $wallet->trade_balance }}</h4>
-                                <small>≈ USD</small>
+                    <div class="col-6 col-md-6 col-lg-6 account-box">
+                        <div class="content d-flex">
+                            <i class="fa-solid fa-file-contract"></i>
+                            <div class="heading">
+                                <h5>Trade Account</h5>
+                                <span>USDT</span>
                             </div>
                         </div>
+                        <div class="usd">
+                            <h4>{{ $wallet->trade_balance }}</h4>
+                            <small>≈ USD</small>
+                        </div>
+                    </div>
 
                         {{-- <div class="col-6 col-md-6 col-lg-6 account-box">
                         <div class="content d-flex">
@@ -185,7 +185,7 @@
                                 placeholder="Enter wallet address" required>
 
                             <button type="submit" class="address-btn w-100">Save Address</button>
-
+                            @endif
                         </form>
                     </div>
 
