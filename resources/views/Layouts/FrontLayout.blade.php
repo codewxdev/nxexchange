@@ -325,16 +325,18 @@
                     style="font-size:14px">
                     <i class="fa-solid fa-bell" style="font-size:17px"></i>
                     <!-- Badge count -->
-                    @php
-                        $notifications = count(auth()->user()->notifications()->latest()->take(10)->get());
-                    @endphp
-                    @if (auth()->user())
-                     @foreach (auth()->user()->notifications()->latest()->take(10)->get() as $notif)
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-                            {{ $notifications }}
-                        </span>
-                        @endforeach
-                    @endif
+                    @auth
+                        @php
+                            $user = auth()->user();
+                            $notificationCount = $user->notifications()->count();
+                        @endphp
+
+                        @if ($notificationCount > 0)
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                {{ $notificationCount }}
+                            </span>
+                        @endif
+                    @endauth
                 </a>
 
                 <a href="{{ route('share.index') }}" class="text-white text-center" style="font-size:14px">
