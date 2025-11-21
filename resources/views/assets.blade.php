@@ -117,13 +117,13 @@
                         @php
                             $address = auth()->user()->address;
                         @endphp
-
+{{--          
                         <label class="text-white mb-1">Wallet Address</label>
                         <input type="text" name="address" class="form-control mb-3" placeholder="Enter wallet address"
                             required>
 
 
-                        <button type="submit" class="address-btn w-100">Save Address</button>
+                        <button type="submit" class="address-btn w-100">Save Address</button> --}}
                         @if (!empty($address))
                             <label class="text-white mb-1">Wallet Address</label>
                             <input type="text" name="address" value="{{ $address }}" class="form-control mb-3"
