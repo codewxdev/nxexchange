@@ -66,7 +66,7 @@ class WithdrawController extends Controller
         ]);
 
         $user = auth()->user();
-        $wallet = Wallet::where('user_id',auth()->id())->first();
+        $wallet = Wallet::where('user_id', auth()->id())->first();
 
         if ($wallet->exchange_balance < $request->amount) {
             return back()->with('error', 'Insufficient balance.');
@@ -145,6 +145,7 @@ class WithdrawController extends Controller
     {
         $user = $withdraw->user; // Withdraw ka owner
 
+        $user = $withdraw->exchange_balance;
         // Update withdraw status and admin info if approved
         $withdraw->update([
             'status' => $request->status,
@@ -152,18 +153,10 @@ class WithdrawController extends Controller
             'approved_by_admin_id' => $request->status === 'approved' ? auth()->id() : null,
         ]);
 
-    // Notification logic based on status
-    if ($request->status === 'approved') {
-         $user->exchange += $withdraw->amount;
-        $user->save();
-        Notify::send(
-            $user->id,
-            'Withdrawal Approved',
-            "Your withdrawal request of $".$withdraw->amount." has been approved and is now being processed.",
-            'info'
-        );
         // Notification logic based on status
         if ($request->status === 'approved') {
+            $user->exchange += $withdraw->amount;
+            $user->save();
             Notify::send(
                 $user->id,
                 'Withdrawal Approved',
@@ -194,25 +187,4 @@ class WithdrawController extends Controller
 
         return redirect()->back()->with('success', 'Withdraw status updated successfully!');
     }
-
-    //     public function update(Request $request, $id)
-    //     {
-    //         $withdraw = Withdraw::findOrFail($id);
-
-    //         $withdraw->status = $request->status;
-
-    //         // If admin rejects then refund the amount
-    //         if ($request->status === 'rejected') {
-    //             $user = User::find($withdraw->user_id);
-    //             $user->balance += $withdraw->amount;
-    //             $user->save();
-    //         }
-
-    //         // If admin marks as completed then do nothing
-
-    //         $withdraw->save();
-    //          Notify::send(auth()->user()->id,'Withdraw Pending','Your withdrawal request is now pending for approval.','success');
-
-    //         return back()->with('success', 'Withdrawal status updated successfully.');
-    //     }
 }
