@@ -303,33 +303,9 @@
                     </form>
                 </div>
 
-                <div class="modal-header border-0">
-                    <h5 class="modal-title text-white">Make a Withdrawal</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
+               
 
-                <div class="modal-body">
-                    <form id="withdrawForm" action="{{ route('withdraw.store') }}" method="POST">
-                        @csrf
-
-                        <label class="text-white mb-1">Amount (USD)</label>
-                        <input type="number" min="20" name="amount" id="withdrawAmount"
-                            class="form-control mb-3" placeholder="Minimum $20" required>
-
-                        <label class="text-white mb-1">Withdrawal Address</label>
-                        <input type="text" name="address" class="form-control mb-3"
-                            placeholder="Your USDT wallet address" required>
-
-                        <label class="text-white mb-1">Fee (3%) Auto Applied</label>
-                        <input type="text" class="form-control mb-3" id="withdrawFee" disabled placeholder="0.00">
-
-                        <label class="text-white mb-1">Net Amount You Will Receive</label>
-                        <input type="text" class="form-control mb-3" id="withdrawNet" disabled placeholder="0.00">
-
-                        <button type="submit" class="address-btn w-100">Submit Withdraw
-                            Request</button>
-                    </form>
-                </div>
+                
 
             </div>
         </div>

@@ -27,7 +27,7 @@ Route::get('/', function () {
 })->name('home');
 
 Route::middleware(['auth', 'checkUserStatus'])->group(function () {
-    Route::get('/trade-page', [TradeController::class, 'index'])->name('trade.index');
+    Route::get('/trades', [TradeController::class, 'index'])->name('trade.index');
     Route::get('/asset', [AssetController::class, 'index'])->name('asset.index');
     Route::get('/market', [MarketController::class, 'index'])->name('market.index');
     Route::get('/crypto-market', [MarketController::class, 'cryptoData'])->name('crypto-market');
