@@ -45,8 +45,9 @@ class TradeApprovalController extends Controller
 
         try {
             DB::transaction(function () use ($request) {
+                // dd($request->all());
                 $trade = Trade::with('user')->findOrFail($request->trade_id);
-
+           
                 if ($request->result === 'win') {
                     $profitAmount = ($trade->stake_amount * $request->profit_rate) / 100;
 
@@ -57,7 +58,7 @@ class TradeApprovalController extends Controller
                         'end_time' => now(),
                         'status' => 'confirm',
                     ]);
-
+               
                     // Credit profit + stake back to user's wallet
                     $wallet = Wallet::where('user_id', $trade->user_id)->first();
                     if ($wallet) {

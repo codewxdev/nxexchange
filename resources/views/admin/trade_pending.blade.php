@@ -1,4 +1,4 @@
-@extends('admin.layouts.admin')
+@extends('admin.Layouts.admin')
 
 @section('title', 'Pending Trades Approval')
 
