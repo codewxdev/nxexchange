@@ -32,7 +32,7 @@
                         <i class="fa-solid fa-right-left"></i>
                         <span>Transfer</span>
                     </div>
-                    <div class="col-6 col-md-3 action-box" data-bs-toggle="modal" data-bs-target="#addressModal">
+                    <div class="col-6 col-md-3 action-box" onclick="window.location='{{ route('address.index') }}'">
                         <i class="fa-solid fa-link"></i>
                         <span>Address</span>
                     </div>
@@ -303,9 +303,9 @@
                     </form>
                 </div>
 
-               
 
-                
+
+
 
             </div>
         </div>

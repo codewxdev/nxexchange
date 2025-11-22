@@ -127,10 +127,10 @@
             <i class="fa-solid fa-angle-right"></i>
         </a>
 
-        {{-- <a href=" " class="option-row" style="text-decoration:none; color:white;">
+        <a href="{{ route('payment.password') }}" class="option-row" style="text-decoration:none; color:white;">
             <span>Payment Password</span>
             <i class="fa-solid fa-angle-right"></i>
-        </a> --}}
+        </a>
 
 
         <!-- Logout -->

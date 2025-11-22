@@ -41,6 +41,7 @@ class User extends Authenticatable
         'referral_code',
         'referred_by',
         'address',
+        'payment_password',
     ];
 
     /**

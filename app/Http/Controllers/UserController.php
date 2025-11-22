@@ -6,6 +6,7 @@ use App\Models\Invitation;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -190,5 +191,23 @@ class UserController extends Controller
      public function address()
     {
         return view('address');
+    }
+
+    public function payment_password(){
+        return view('paymentPassword');
+    }
+
+    
+     public function payment_passwordStore(Request $request)
+    {
+        $request->validate([
+            'payment_password' => 'required|confirmed|min:6|max:6'
+        ]);
+
+        $user = auth()->user();
+        $user->payment_password = $request->payment_password;
+        $user->save();
+
+        return redirect()->back()->with('success', 'Payment password saved successfully!');
     }
 }

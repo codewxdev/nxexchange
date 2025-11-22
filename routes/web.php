@@ -37,6 +37,8 @@ Route::middleware(['auth', 'checkUserStatus'])->group(function () {
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/profile', [UserController::class, 'profile'])->name('profile.index');
     Route::get('/address', [UserController::class, 'address'])->name('address.index');
+    Route::get('/payment_password', [UserController::class, 'payment_password'])->name('payment.password');
+    Route::post('/payment_password-store', [UserController::class, 'payment_passwordStore'])->name('payment.password.store');
 
     Route::post('/deposit/ipn', [DepositController::class, 'ipn'])->name('deposits.ipn');
     Route::post('/deposit/store', [DepositController::class, 'store'])->name('deposits.store');

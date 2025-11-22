@@ -252,20 +252,57 @@
     }
 
     .address-page-wrapper {
-    background: radial-gradient(circle at top left, #010101, #0f0f0f);
-    min-height: 0 !important;
-    display: flex;
-    justify-content: center;
-    padding: 0;
-}
+        background: radial-gradient(circle at top left, #010101, #0f0f0f);
+        min-height: 0 !important;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+    }
 
-.glass-card {
-    padding: 10px !important;
-}
+    .glass-card {
+        padding: 10px !important;
+    }
 
-.address-container {
-    width: auto; 
-    max-width: none !important;
-    margin: 0;
-}
+    .address-container {
+        width: auto;
+        max-width: none !important;
+        margin: 0;
+    }
+
+    .title {
+        font-size: 17px !important;
+    }
+
+    .subtitle {
+        font-size: 12px !important;
+
+    }
+
+    .payment-page {
+        display: block !important;
+    }
+
+    .payment-page .glass-box {
+        padding: 12px;
+    }
+
+    .input-field {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .payment-page label {
+
+        font-size: 12px;
+        float: inline-start;
+
+    }
+
+    .payment-page .glass-box .submit-btn {
+
+        padding: 10px;
+        font-size: 12px;
+
+
+    }
 }
